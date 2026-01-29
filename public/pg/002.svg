@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="209.903mm" height="297.039mm"
+ viewBox="0 0 2381 3367"
+ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  version="1.2" baseProfile="tiny">
+<title>Prompting Games</title>
+<desc>Generated with Qt</desc>
+<defs>
+</defs>
+<g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel" >
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,0,0)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<image x="254" y="4748" width="4105" height="710" preserveAspectRatio="none" xlink:href="data:image/png;base64,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TOjXrx/GxsavbIX12bNn2bdvHxERESxevJhatWoREhLC48eP2bFjh86YdW3LSVv19OlTnJ2di5QrUZIkYmJicHR0LNKxFbW9JEnExcVRqVKlIr1uccn5HXiRQqHQ+x3W17XsXUZGBklJSa/9e5NQchRKpbLUFdWVJImzZ8/Stm1bzp49S5MmTfI8Z/v27dy7d48RI0YUuq0+DRkyBAsLC2bPni0/1q1bN4YOHUr37t31GFnpdPDgQX7++WeWLl2aq1Pdp08fxo4dq+/wDJKu1FDp6em5Pvxz7qTpO9egrph1bSuqvXv3MnbsWGrUqKEx/2hgYCDe3t60aNGiSO212bZtG//73/9wc3MTVTl0iI6O5qOPPqJt27bMmDGjRF5T22dOcZk1axazZ89m3LhxDB8+/JW8hvDmKZVzAl8mYfDLJAkOCgpi4MCBhYy2cHx8fNi+fTsbN27kypUrjBs3jjp16mjN6i/otmvXLho1akStWrXklEeVKlXCxcVF36EZLF2poczNzXP93ZQpU0bvHUDQHXN+qa6KokePHri7u2stq6atHFtB22vj4+NDixYt5MUugmYvU/ZOm/zK4RUkSf3L+O6776hWrVqxHpMglMrhYCh6wuCCtNXm/PnzxMXFFapNYbVv357g4GDOnDnDjRs3+OKLL6hVq1ah95OWloZKpaJ8+fIat6WlpWkdsomOji7yh+bLDpEVNx8fH7744guaNGlC/fr12bJli+hUC8VCW6JtyC7HpolKpZLb6Gqvi7m5+WuZgiUnXU1Rj+35cwtFL3unzZ49e6hfv77W7bo+c4rixeT2kP2zf7ETqFarRVJuochK9W9OYRIGF7QtZN/x8/LyombNmnTv3p34+Hju3bvH6dOnuXXrFt99990rnQhfvXp1Pv74Y/r27VukDuCIESOwt7cnODg4z7aJEyfi6OiYK6FujpetJbt3715cXFz46quvitS+MGJiYgq0ijenU61QKOROdU55QQG5Eo9QeM8n2r5+/ToffPABGzZs0FiO7fz583z44Yd06NABOzs7Tpw4obX9i9LT05k+fTqenp40aNCAv/76S+7saEp6PXbsWFxdXeWO6KhRo3BxcWHnzp2EhITQrVs3evXqRa9evbC1taVPnz6cOnWKRo0a4ejoWOIViOLj4xk+fDhdu3alWrVqjB07VuNxaStVFxsbS79+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" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,0,0)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,113.209,112.832)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,113.209,112.832)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="0" y="63.3438" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >2</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,113.209,112.832)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,0,0)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="0" y="63.3438" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >Player 1:</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="233.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Bass drum, rock tuned, 22&quot; or 20&quot; preferred.</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="318.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Snare drum, dry tuned or semi-muffled, no harmonics.</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="403.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Floor tom 16&quot;, tuned low (preferably, if not 14&quot;)</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="488.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Hi-hat</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="573.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Crash cymbal 18&quot; (preferably, if not 16&quot;)</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="658.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 2 wood-blocks, high-pitched and low-pitched</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="743.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 2 bongos, high-pitched and low-pitched</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="828.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 1 triangle, small, high-pitched</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="913.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 1 vibraslap</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="998.344" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 1 concert bass drum (as large as possible)</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="1168.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Drum sticks</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="1253.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Jazz brushes</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="1338.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- A big cooking knife (composer provides)</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="1423.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Triangle beater</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="1508.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- A cloth napkin (composer provides)</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="0" y="1678.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >Player 2:</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="1848.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Bass drum, rock tuned.</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="1933.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Snare drum, dry tuned or semi-muffled, no harmonics.</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="2018.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Floor tom 16&quot;, tuned low (preferably, if not 14&quot;)</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="2103.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Hi-hat</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="2188.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Crash cymbal |8&quot; (preferably, if not 16&quot;)</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="2273.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 2 wood-blocks, high-pitched and low-pitched</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="2358.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 2 bongos, high-pitched and low-pitched</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="2443.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 1 triangle, medium, medium-pitched</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="2528.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 1 vibraslap</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="2698.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Drum sticks</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="2783.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Triangle beater</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="0" y="3038.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >Other requirements:</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="3123.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 1 beamer</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="3208.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- Stereo sound system</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="3293.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 2 in-ear monitoring system</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="3378.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 1 audio interface / 4 outs</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="3463.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 2 LED spotlights</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="3548.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 2 LED pars</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="3633.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- USB DMX Encoder</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="80" y="3718.34" font-family="Palatino" font-size="77" font-weight="400" font-style="normal" 
+ >- 1 laptop running Ableton Live 12</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,208.878,173.954)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(0.531496,0,0,0.531496,0,0)"
+font-family=".AppleSystemUIFont" font-size="13" font-weight="400" font-style="normal" 
+>
+</g>
+</g>
+</svg>
