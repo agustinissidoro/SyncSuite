@@ -1,1 +1,3 @@
-public/
+.DS_Store
+ableton-project/Ableton Project Info/
+*.asd
