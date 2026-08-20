@@ -1,0 +1,27 @@
+{
+    "name": "syncSuite",
+    "displayname": "",
+    "version": "1.0.0",
+    "author": "",
+    "authors": [],
+    "description": "",
+    "tags": [],
+    "website": "",
+    "extends": "",
+    "extensible": 0,
+    "max_version_min": "9.0",
+    "max_version_max": "none",
+    "os": {
+        "macintosh": {
+            "min_version": "none",
+            "platform": [ "x64", "aarch64" ]
+        },
+        "windows": {
+            "min_version": "none",
+            "platform": [ "x64" ]
+        }
+    },
+    "homepatcher": "",
+    "package_extra": {},
+    "c74install": 0
+}
