@@ -1,3 +1,15 @@
 .DS_Store
 ableton-project/Ableton Project Info/
 *.asd
+
+# Ableton auto-backups and autosaves
+**/Backup/
+*-help[0-9].als
+*-help[0-9].alc
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Max/Live temp files
+*.amxd.bak

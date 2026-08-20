@@ -9,7 +9,7 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 591.0, 126.0, 914.0, 853.0 ],
+        "rect": [ 34.0, 95.0, 1095.0, 853.0 ],
         "description": "Wrapper around jit.world with extended mapping and compositing functionalities.",
         "digest": "Wrapper around jit.world",
         "showontab": 1,
@@ -41,432 +41,18 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 591.0, 152.0, 914.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 1095.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
                                 "box": {
-                                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
-                                    "fontname": "Arial Bold",
-                                    "hint": "",
-                                    "id": "obj-25",
-                                    "ignoreclick": 1,
-                                    "legacytextcolor": 1,
-                                    "maxclass": "textbutton",
-                                    "numinlets": 1,
-                                    "numoutlets": 3,
-                                    "outlettype": [ "", "", "int" ],
-                                    "parameter_enable": 0,
-                                    "patching_rect": [ 31.5, 637.0, 20.0, 20.0 ],
-                                    "rounded": 60.0,
-                                    "text": "4",
-                                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
-                                }
-                            },
-                            {
-                                "box": {
-                                    "bubble": 1,
-                                    "id": "obj-31",
-                                    "maxclass": "comment",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 58.5, 635.0, 200.0, 24.0 ],
-                                    "text": "Play the Ableton Live's Transport"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-22",
-                                    "maxclass": "button",
-                                    "numinlets": 1,
-                                    "numoutlets": 1,
-                                    "outlettype": [ "bang" ],
-                                    "parameter_enable": 0,
-                                    "patching_rect": [ 141.5, 341.0, 24.0, 24.0 ]
-                                }
-                            },
-                            {
-                                "box": {
-                                    "bubble": 1,
-                                    "id": "obj-29",
-                                    "maxclass": "comment",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 631.0, 190.0, 227.0, 24.0 ],
-                                    "text": "You can also test connection this way."
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-27",
-                                    "maxclass": "newobj",
-                                    "numinlets": 3,
-                                    "numoutlets": 3,
-                                    "outlettype": [ "", "", "" ],
-                                    "patching_rect": [ 61.5, 310.0, 179.0, 22.0 ],
-                                    "text": "route connection_received bang"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-26",
-                                    "maxclass": "message",
-                                    "numinlets": 2,
-                                    "numoutlets": 1,
-                                    "outlettype": [ "" ],
-                                    "patching_rect": [ 574.0, 191.0, 51.0, 22.0 ],
-                                    "text": "connect"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-24",
-                                    "maxclass": "newobj",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 574.0, 225.0, 135.0, 22.0 ],
-                                    "text": "udpsend localhost 9992"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-23",
-                                    "maxclass": "comment",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 551.5, 192.0, 19.0, 20.0 ],
-                                    "text": "b"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
-                                    "fontname": "Arial Bold",
-                                    "hint": "",
-                                    "id": "obj-20",
-                                    "ignoreclick": 1,
-                                    "legacytextcolor": 1,
-                                    "maxclass": "textbutton",
-                                    "numinlets": 1,
-                                    "numoutlets": 3,
-                                    "outlettype": [ "", "", "int" ],
-                                    "parameter_enable": 0,
-                                    "patching_rect": [ 535.5, 192.0, 20.0, 20.0 ],
-                                    "rounded": 60.0,
-                                    "text": "2",
-                                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-17",
-                                    "maxclass": "comment",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 624.5, 355.0, 177.0, 20.0 ],
-                                    "text": "Playback control messages"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-16",
-                                    "linecount": 4,
-                                    "maxclass": "comment",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 332.5, 403.0, 177.0, 60.0 ],
-                                    "text": "Movies in the Live Project are automatically added to the source via the addMovie message."
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-15",
-                                    "maxclass": "newobj",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 501.5, 354.0, 119.0, 22.0 ],
-                                    "text": "s sync.source.help-5"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
-                                    "fontname": "Arial Bold",
-                                    "hint": "",
-                                    "id": "obj-14",
-                                    "ignoreclick": 1,
-                                    "legacytextcolor": 1,
-                                    "maxclass": "textbutton",
-                                    "numinlets": 1,
-                                    "numoutlets": 3,
-                                    "outlettype": [ "", "", "int" ],
-                                    "parameter_enable": 0,
-                                    "patching_rect": [ 22.0, 192.0, 20.0, 20.0 ],
-                                    "rounded": 60.0,
-                                    "text": "2",
-                                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
-                                }
-                            },
-                            {
-                                "box": {
-                                    "bubble": 1,
-                                    "id": "obj-12",
-                                    "maxclass": "comment",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 47.5, 190.0, 406.0, 24.0 ],
-                                    "text": "Check that connection is established between the device and the patch."
-                                }
-                            },
-                            {
-                                "box": {
-                                    "bubble": 1,
-                                    "id": "obj-11",
-                                    "maxclass": "comment",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 44.0, 130.0, 628.0, 24.0 ],
-                                    "text": "Open the \"syncSuite-help1.als\" Live Project contained in the ableton-project folder of the SyncSuite master folder "
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-9",
+                                    "id": "obj-32",
                                     "maxclass": "newobj",
                                     "numinlets": 0,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 250.5, 536.0, 117.0, 22.0 ],
-                                    "text": "r sync.source.help-5"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-37",
-                                    "maxclass": "newobj",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 208.5, 416.0, 119.0, 22.0 ],
-                                    "text": "s sync.source.help-5"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-21",
-                                    "maxclass": "comment",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 87.5, 386.5, 64.0, 20.0 ],
-                                    "text": "connected"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-3",
-                                    "ignoreclick": 1,
-                                    "maxclass": "toggle",
-                                    "numinlets": 1,
-                                    "numoutlets": 1,
-                                    "outlettype": [ "int" ],
-                                    "parameter_enable": 0,
-                                    "patching_rect": [ 61.5, 384.5, 24.0, 24.0 ]
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-13",
-                                    "maxclass": "newobj",
-                                    "numinlets": 2,
-                                    "numoutlets": 1,
-                                    "outlettype": [ "" ],
-                                    "patcher": {
-                                        "fileversion": 1,
-                                        "appversion": {
-                                            "major": 9,
-                                            "minor": 1,
-                                            "revision": 5,
-                                            "architecture": "x64",
-                                            "modernui": 1
-                                        },
-                                        "classnamespace": "box",
-                                        "rect": [ 59.0, 114.0, 1000.0, 759.0 ],
-                                        "boxes": [
-                                            {
-                                                "box": {
-                                                    "id": "obj-9",
-                                                    "linecount": 7,
-                                                    "maxclass": "comment",
-                                                    "numinlets": 1,
-                                                    "numoutlets": 0,
-                                                    "patching_rect": [ 12.0, 51.0, 151.0, 100.0 ],
-                                                    "text": "This is used simply to change the path to the \"movies\" folder contained in the Live Project. This is not necessary at all and is done only to facilitate the tutorial."
-                                                }
-                                            },
-                                            {
-                                                "box": {
-                                                    "id": "obj-8",
-                                                    "maxclass": "newobj",
-                                                    "numinlets": 1,
-                                                    "numoutlets": 1,
-                                                    "outlettype": [ "" ],
-                                                    "patching_rect": [ 204.0, 245.0, 57.0, 22.0 ],
-                                                    "text": "tosymbol"
-                                                }
-                                            },
-                                            {
-                                                "box": {
-                                                    "id": "obj-7",
-                                                    "maxclass": "newobj",
-                                                    "numinlets": 1,
-                                                    "numoutlets": 1,
-                                                    "outlettype": [ "" ],
-                                                    "patching_rect": [ 204.0, 119.0, 57.0, 22.0 ],
-                                                    "text": "tosymbol"
-                                                }
-                                            },
-                                            {
-                                                "box": {
-                                                    "id": "obj-6",
-                                                    "maxclass": "newobj",
-                                                    "numinlets": 1,
-                                                    "numoutlets": 1,
-                                                    "outlettype": [ "" ],
-                                                    "patching_rect": [ 204.0, 311.0, 108.0, 22.0 ],
-                                                    "text": "prepend addMovie"
-                                                }
-                                            },
-                                            {
-                                                "box": {
-                                                    "comment": "",
-                                                    "id": "obj-5",
-                                                    "index": 1,
-                                                    "maxclass": "outlet",
-                                                    "numinlets": 1,
-                                                    "numoutlets": 0,
-                                                    "patching_rect": [ 204.0, 365.0, 30.0, 30.0 ]
-                                                }
-                                            },
-                                            {
-                                                "box": {
-                                                    "id": "obj-4",
-                                                    "maxclass": "newobj",
-                                                    "numinlets": 3,
-                                                    "numoutlets": 2,
-                                                    "outlettype": [ "", "" ],
-                                                    "patching_rect": [ 204.0, 185.0, 523.0, 22.0 ],
-                                                    "text": "combine folder movies/ movie @triggers 2"
-                                                }
-                                            },
-                                            {
-                                                "box": {
-                                                    "fontname": "Arial",
-                                                    "fontsize": 13.0,
-                                                    "id": "obj-17",
-                                                    "maxclass": "newobj",
-                                                    "numinlets": 1,
-                                                    "numoutlets": 5,
-                                                    "outlettype": [ "", "", "", "", "" ],
-                                                    "patching_rect": [ 690.0, 131.0, 90.0, 23.0 ],
-                                                    "saved_object_attributes": {
-                                                        "legacyoutputorder": 1
-                                                    },
-                                                    "text": "regexp .+/(.+)"
-                                                }
-                                            },
-                                            {
-                                                "box": {
-                                                    "comment": "",
-                                                    "id": "obj-2",
-                                                    "index": 2,
-                                                    "maxclass": "inlet",
-                                                    "numinlets": 0,
-                                                    "numoutlets": 1,
-                                                    "outlettype": [ "" ],
-                                                    "patching_rect": [ 690.0, 58.0, 30.0, 30.0 ]
-                                                }
-                                            },
-                                            {
-                                                "box": {
-                                                    "comment": "",
-                                                    "id": "obj-1",
-                                                    "index": 1,
-                                                    "maxclass": "inlet",
-                                                    "numinlets": 0,
-                                                    "numoutlets": 1,
-                                                    "outlettype": [ "" ],
-                                                    "patching_rect": [ 204.0, 51.0, 30.0, 30.0 ]
-                                                }
-                                            }
-                                        ],
-                                        "lines": [
-                                            {
-                                                "patchline": {
-                                                    "destination": [ "obj-7", 0 ],
-                                                    "source": [ "obj-1", 0 ]
-                                                }
-                                            },
-                                            {
-                                                "patchline": {
-                                                    "destination": [ "obj-4", 2 ],
-                                                    "source": [ "obj-17", 1 ]
-                                                }
-                                            },
-                                            {
-                                                "patchline": {
-                                                    "destination": [ "obj-17", 0 ],
-                                                    "source": [ "obj-2", 0 ]
-                                                }
-                                            },
-                                            {
-                                                "patchline": {
-                                                    "destination": [ "obj-8", 0 ],
-                                                    "source": [ "obj-4", 0 ]
-                                                }
-                                            },
-                                            {
-                                                "patchline": {
-                                                    "destination": [ "obj-5", 0 ],
-                                                    "source": [ "obj-6", 0 ]
-                                                }
-                                            },
-                                            {
-                                                "patchline": {
-                                                    "destination": [ "obj-4", 0 ],
-                                                    "source": [ "obj-7", 0 ]
-                                                }
-                                            },
-                                            {
-                                                "patchline": {
-                                                    "destination": [ "obj-6", 0 ],
-                                                    "source": [ "obj-8", 0 ]
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "patching_rect": [ 208.5, 359.0, 165.33333333333331, 22.0 ],
-                                    "text": "p change_movies_folder"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-4",
-                                    "maxclass": "newobj",
-                                    "numinlets": 4,
-                                    "numoutlets": 4,
-                                    "outlettype": [ "", "", "", "" ],
-                                    "patching_rect": [ 61.5, 275.0, 459.0, 22.0 ],
-                                    "text": "route connect live_project_path addMovie"
-                                }
-                            },
-                            {
-                                "box": {
-                                    "id": "obj-8",
-                                    "maxclass": "newobj",
-                                    "numinlets": 1,
-                                    "numoutlets": 1,
-                                    "outlettype": [ "" ],
-                                    "patching_rect": [ 61.5, 232.0, 97.0, 22.0 ],
-                                    "text": "udpreceive 9991"
+                                    "patching_rect": [ 241.0, 572.0, 117.0, 22.0 ],
+                                    "text": "r sync.source.help-2"
                                 }
                             },
                             {
@@ -482,20 +68,21 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 31.5, 464.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 364.0, 573.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
-                                    "text": "3",
+                                    "text": "2",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
                                 }
                             },
                             {
                                 "box": {
                                     "id": "obj-30",
+                                    "linecount": 3,
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 13.0, 65.0, 668.0, 20.0 ],
-                                    "text": "A simple way of using the SyncSuite environment to synchronize video playback with Ableton Live's Transport."
+                                    "patching_rect": [ 13.0, 65.0, 668.0, 47.0 ],
+                                    "text": "The object has a playlist funcionality to preload video sequences and change video files with zero delay during playback. Under the hood, the object is swapping two video players with loaded movies. This is meant to work seamlessly with the Max4Live device and syncronize Live's transport with video playback."
                                 }
                             },
                             {
@@ -505,7 +92,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 58.5, 462.0, 125.0, 24.0 ],
+                                    "patching_rect": [ 75.0, 531.0, 125.0, 24.0 ],
                                     "text": "Enable the context"
                                 }
                             },
@@ -522,7 +109,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 22.0, 134.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 53.0, 533.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
                                     "text": "1",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -535,8 +122,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 250.5, 576.0, 320.0, 22.0 ],
-                                    "text": "videoSync.source source-help-5 @autoRatio 1 @scale 0.5"
+                                    "patching_rect": [ 241.0, 612.0, 228.0, 22.0 ],
+                                    "text": "videoSync.source source-help-5 @loop 1"
                                 }
                             },
                             {
@@ -562,7 +149,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 29.5, 495.0, 24.0, 24.0 ]
+                                    "patching_rect": [ 20.0, 531.0, 24.0, 24.0 ]
                                 }
                             },
                             {
@@ -572,8 +159,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 29.5, 536.0, 118.0, 22.0 ],
-                                    "text": "enable $1, visible $1"
+                                    "patching_rect": [ 20.0, 572.0, 180.0, 22.0 ],
+                                    "text": "enable $1, visible $1, floating $1"
                                 }
                             },
                             {
@@ -583,7 +170,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 29.5, 576.0, 183.0, 22.0 ],
+                                    "patching_rect": [ 20.0, 612.0, 183.0, 22.0 ],
                                     "text": "videoSync.context source-help-5"
                                 }
                             }
@@ -591,63 +178,14 @@
                         "lines": [
                             {
                                 "patchline": {
-                                    "destination": [ "obj-37", 0 ],
-                                    "source": [ "obj-13", 0 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-3", 0 ],
-                                    "midpoints": [ 151.0, 377.9375, 71.0, 377.9375 ],
-                                    "source": [ "obj-22", 0 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-24", 0 ],
-                                    "source": [ "obj-26", 0 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-22", 0 ],
-                                    "source": [ "obj-27", 1 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-3", 0 ],
-                                    "source": [ "obj-27", 0 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-13", 1 ],
-                                    "source": [ "obj-4", 2 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-13", 0 ],
-                                    "source": [ "obj-4", 1 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-15", 0 ],
-                                    "source": [ "obj-4", 3 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-27", 0 ],
-                                    "source": [ "obj-4", 0 ]
+                                    "destination": [ "obj-19", 0 ],
+                                    "source": [ "obj-32", 0 ]
                                 }
                             },
                             {
                                 "patchline": {
                                     "destination": [ "obj-1", 0 ],
-                                    "midpoints": [ 39.0, 563.5, 39.0, 563.5 ],
+                                    "midpoints": [ 29.5, 599.5, 29.5, 599.5 ],
                                     "source": [ "obj-5", 0 ]
                                 }
                             },
@@ -655,18 +193,6 @@
                                 "patchline": {
                                     "destination": [ "obj-5", 0 ],
                                     "source": [ "obj-7", 0 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-4", 0 ],
-                                    "source": [ "obj-8", 0 ]
-                                }
-                            },
-                            {
-                                "patchline": {
-                                    "destination": [ "obj-19", 0 ],
-                                    "source": [ "obj-9", 0 ]
                                 }
                             }
                         ]
@@ -691,7 +217,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 914.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1095.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1241,7 +767,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 914.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1095.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1767,7 +1293,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 914.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1095.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
