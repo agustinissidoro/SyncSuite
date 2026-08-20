@@ -13,6 +13,17 @@
         "boxes": [
             {
                 "box": {
+                    "id": "obj-16",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 1872.0, 258.0, 61.0, 22.0 ],
+                    "text": "drawto $1"
+                }
+            },
+            {
+                "box": {
                     "id": "obj-11",
                     "maxclass": "newobj",
                     "numinlets": 1,
@@ -232,7 +243,7 @@
                     "numoutlets": 2,
                     "outlettype": [ "", "" ],
                     "patching_rect": [ 1872.0, 191.0, 365.0, 35.0 ],
-                    "text": "patcherargs @drawto compositing @dimComposite 1920 1080 @matrixoutput 0 @capture"
+                    "text": "patcherargs @dimComposite 1920 1080 @matrixoutput 0 @capture"
                 }
             },
             {
@@ -852,6 +863,13 @@
             },
             {
                 "patchline": {
+                    "destination": [ "obj-36", 0 ],
+                    "midpoints": [ 1881.5, 297.0, 2274.5, 297.0 ],
+                    "source": [ "obj-16", 0 ]
+                }
+            },
+            {
+                "patchline": {
                     "destination": [ "obj-25", 0 ],
                     "midpoints": [ 195.5, 324.0, 412.5, 324.0 ],
                     "source": [ "obj-18", 0 ]
@@ -958,6 +976,12 @@
                     "destination": [ "obj-29", 0 ],
                     "midpoints": [ 1426.078947368421, 323.751708984375, 1208.8157894736842, 323.751708984375 ],
                     "source": [ "obj-33", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-16", 0 ],
+                    "source": [ "obj-35", 0 ]
                 }
             },
             {
