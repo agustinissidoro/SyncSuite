@@ -1,0 +1,16 @@
+CUE 0 FIRST-CUE
+
+///this message has no delay
+pepe pipi will receive a message after 10 seconds
+
+///this message has delay
+10000 pipi here i am!
+///this message has the same delay!
+popo you were not expecting me!
+pupu me neither!
+
+
+CUE 1 SECOND-CUE
+
+pipi will ever come out?
+

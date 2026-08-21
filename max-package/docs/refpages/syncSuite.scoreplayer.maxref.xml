@@ -4,11 +4,11 @@
 <c74object name="syncSuite.video.subs">
 
     <digest>
-        Utility for rendering text in the SyncSuite video context.
+        Utility for designing, managing and triggering cues.
     </digest>
 
     <description>
-        This object is designed as a wrapper around jit.gl.text and works together with the SubSync M4L device.
+        This abstraction is based on the qlist object, allowing for simpler score writing and also more complex functionalities.
     </description>
 
     <!--METADATA-->

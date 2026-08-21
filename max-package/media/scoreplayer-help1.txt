@@ -1,0 +1,18 @@
+CUE 1 FIRST-CUE
+papa hello!
+
+CUE 2 SECOND-CUE
+papa second message
+
+CUE 3 THIRD-CUE
+
+CUE 4 FOURTH-CUE
+
+CUE 5 FIFTH-CUE
+
+1500 papa delayed message!
+
+CUE 6 SIXTH-CUE
+
+DO-LINE papa 0. 1. 2000
+

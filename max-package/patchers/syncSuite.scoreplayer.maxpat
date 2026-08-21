@@ -127,7 +127,7 @@
                             {
                                 "box": {
                                     "id": "obj-3",
-                                    "items": [ "RESET", ",", "INIT", ",", "INTRO-VIDEOS", ",", "LIVE-START", ",", "END" ],
+                                    "items": [ "RESET", ",", "FIRST-CUE", ",", "SECOND-CUE", ",", "THIRD-CUE", ",", "FOURTH-CUE", ",", "FIFTH-CUE", ",", "SIXTH-CUE" ],
                                     "maxclass": "umenu",
                                     "numinlets": 1,
                                     "numoutlets": 3,
@@ -249,7 +249,7 @@
                 "box": {
                     "comment": "fill umenu with event names",
                     "id": "obj-35",
-                    "index": 0,
+                    "index": 4,
                     "maxclass": "outlet",
                     "numinlets": 1,
                     "numoutlets": 0,
@@ -272,7 +272,7 @@
                 "box": {
                     "comment": "Delay monitor (0 = no delay playing, 1 = delay playing)",
                     "id": "obj-78",
-                    "index": 0,
+                    "index": 3,
                     "maxclass": "outlet",
                     "numinlets": 1,
                     "numoutlets": 0,
@@ -283,7 +283,7 @@
                 "box": {
                     "comment": "Event or cue name",
                     "id": "obj-77",
-                    "index": 0,
+                    "index": 2,
                     "maxclass": "outlet",
                     "numinlets": 1,
                     "numoutlets": 0,
@@ -294,7 +294,7 @@
                 "box": {
                     "comment": "Event or cue number/index",
                     "id": "obj-76",
-                    "index": 0,
+                    "index": 1,
                     "maxclass": "outlet",
                     "numinlets": 1,
                     "numoutlets": 0,
@@ -396,7 +396,7 @@
                     "comment": "",
                     "hint": "read (bang or path), open, autowatch (flag, 1 by default), next, rewind, skip (flag, 1 by default), cue (int or symbol), event (int or symbol)",
                     "id": "obj-39",
-                    "index": 0,
+                    "index": 1,
                     "maxclass": "inlet",
                     "numinlets": 0,
                     "numoutlets": 1,
@@ -513,7 +513,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 490.0, 156.0, 1109.0, 789.0 ],
+                        "rect": [ 369.0, 156.0, 1109.0, 789.0 ],
                         "boxes": [
                             {
                                 "box": {
@@ -6391,7 +6391,7 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 939.0, 1135.0, 95.0, 22.0 ],
-                    "text": "INTRO-VIDEOS"
+                    "text": "FIRST-CUE"
                 }
             },
             {
@@ -6473,7 +6473,7 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 808.0, 1135.0, 50.0, 22.0 ],
-                    "text": "1"
+                    "text": "0"
                 }
             },
             {
@@ -6656,7 +6656,7 @@
             {
                 "box": {
                     "id": "obj-14",
-                    "items": [ "RESET", ",", "INIT", ",", "INTRO-VIDEOS", ",", "LIVE-START", ",", "END" ],
+                    "items": [ "RESET", ",", "FIRST-CUE", ",", "SECOND-CUE", ",", "THIRD-CUE", ",", "FOURTH-CUE", ",", "FIFTH-CUE", ",", "SIXTH-CUE" ],
                     "maxclass": "umenu",
                     "numinlets": 1,
                     "numoutlets": 3,
@@ -6684,8 +6684,18 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 95.0, 1444.0, 853.0 ],
+                        "rect": [ 604.0, 200.0, 1444.0, 853.0 ],
                         "boxes": [
+                            {
+                                "box": {
+                                    "id": "obj-33",
+                                    "maxclass": "newobj",
+                                    "numinlets": 1,
+                                    "numoutlets": 0,
+                                    "patching_rect": [ 239.0, 1004.0, 147.0, 22.0 ],
+                                    "text": "print scoreplayer @level 2"
+                                }
+                            },
                             {
                                 "box": {
                                     "id": "obj-46",
@@ -6867,8 +6877,8 @@
                                     "maxclass": "newobj",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 169.0, 1108.0, 65.0, 22.0 ],
-                                    "text": "print score"
+                                    "patching_rect": [ 169.0, 1108.0, 97.0, 22.0 ],
+                                    "text": "print scoreplayer"
                                 }
                             },
                             {
@@ -6884,7 +6894,7 @@
                             },
                             {
                                 "box": {
-                                    "code": "const fs     = require(\"fs\");\nconst path   = require(\"path\");\nconst os     = require(\"os\");\nconst maxAPI = require(\"max-api\");\n\nconst expandTilde = (p) => {\n  if (p.startsWith(\"~\")) return path.join(os.homedir(), p.slice(1));\n  return p;\n};\n\nconst normalizeMaxPath = (p) => {\n  p = p.replace(/^[^:]+:/, \"\");\n  if (!p.startsWith(\"/\")) p = \"/\" + p;\n  return p.replace(/\\/+/g, \"/\");\n};\n\nfunction parseCues(lines) {\n  const cueRegex = /^(CUE|EVENT)\\s+(\\d+)\\s*(.*)/i;\n  const cues = [];\n  for (let i = 0; i < lines.length; i++) {\n    const m = lines[i].match(cueRegex);\n    if (m) {\n      cues.push({\n        lineIndex:   i,\n        keyword:     m[1].toUpperCase(),\n        parsedIndex: parseInt(m[2], 10),\n        name:        m[3].trim(),\n      });\n    }\n  }\n  return cues;\n}\n\nfunction hasProblems(cues) {\n  if (cues.length === 0) return false;\n  if (cues[0].parsedIndex !== 0) return true;\n  const seen = new Set();\n  for (let i = 0; i < cues.length; i++) {\n    const idx = cues[i].parsedIndex;\n    if (seen.has(idx)) return true;\n    seen.add(idx);\n    if (i > 0 && idx !== cues[i - 1].parsedIndex + 1) return true;\n  }\n  return false;\n}\n\nfunction reindex(lines, cues) {\n  const changes = [];\n  for (let i = 0; i < cues.length; i++) {\n    const c       = cues[i];\n    const oldLine = lines[c.lineIndex];\n    const newLine = oldLine.replace(\n      /^(CUE|EVENT)\\s+\\d+/i,\n      `${c.keyword} ${i}`\n    );\n    if (newLine !== oldLine) {\n      changes.push(`${c.keyword} ${c.name}: ${c.parsedIndex} -> ${i}`);\n      lines[c.lineIndex] = newLine;\n    }\n  }\n  return changes;\n}\n\nconst handlers = {\n  read: async (...args) => {\n    if (!args.length) {\n      maxAPI.outlet(\"error missing_path\");\n      return;\n    }\n\n    try {\n      let filePath = args.join(\" \").trim();\n      filePath = expandTilde(normalizeMaxPath(filePath));\n\n      if (!fs.existsSync(filePath)) {\n        maxAPI.outlet(`error file_not_found ${filePath}`);\n        return;\n      }\n\n      const raw   = fs.readFileSync(filePath, \"utf8\");\n      const lines = raw.split(/\\r?\\n/);\n      const cues  = parseCues(lines);\n\n      if (cues.length === 0) {\n        maxAPI.outlet(\"error no_cues_found\");\n        return;\n      }\n\n      if (!hasProblems(cues)) {\n        maxAPI.outlet(\"ok\");\n        maxAPI.outlet(`path ${filePath}`);\n        return;\n      }\n\n      const changes = reindex(lines, cues);\n      fs.writeFileSync(filePath, lines.join(\"\\n\"), \"utf8\");\n\n      maxAPI.outlet(`reindex Score has an indexing problem. Cues were rewritten as follows: ${changes.join(\", \")}.`);\n      maxAPI.outlet(`path ${filePath}`);\n\n    } catch (err) {\n      maxAPI.outlet(`error ${err.message}`);\n    }\n  },\n};\n\nmaxAPI.addHandlers(handlers);",
+                                    "code": "const fs     = require(\"fs\");\nconst path   = require(\"path\");\nconst os     = require(\"os\");\nconst maxAPI = require(\"max-api\");\n\nconst expandTilde = (p) => {\n  if (p.startsWith(\"~\")) return path.join(os.homedir(), p.slice(1));\n  return p;\n};\n\nconst normalizeMaxPath = (p) => {\n  p = p.replace(/^[^:]+:/, \"\");\n  if (!p.startsWith(\"/\")) p = \"/\" + p;\n  return p.replace(/\\/+/g, \"/\");\n};\n\nfunction parseCues(lines) {\n  const cueRegex = /^(CUE|EVENT)\\s+(\\d+)\\s*(.*)/i;\n  const cues = [];\n  for (let i = 0; i < lines.length; i++) {\n    const m = lines[i].match(cueRegex);\n    if (m) {\n      cues.push({\n        lineIndex:   i,\n        keyword:     m[1].toUpperCase(),\n        parsedIndex: parseInt(m[2], 10),\n        name:        m[3].trim(),\n      });\n    }\n  }\n  return cues;\n}\n\nfunction hasProblems(cues) {\n  if (cues.length === 0) return false;\n  if (cues[0].parsedIndex !== 1) return true;\n  const seen = new Set();\n  for (let i = 0; i < cues.length; i++) {\n    const idx = cues[i].parsedIndex;\n    if (seen.has(idx)) return true;\n    seen.add(idx);\n    if (i > 0 && idx !== cues[i - 1].parsedIndex + 1) return true;\n  }\n  return false;\n}\n\nfunction reindex(lines, cues) {\n  const changes = [];\n  for (let i = 0; i < cues.length; i++) {\n    const c       = cues[i];\n    const newIdx  = i + 1;\n    const oldLine = lines[c.lineIndex];\n    const newLine = oldLine.replace(\n      /^(CUE|EVENT)\\s+\\d+/i,\n      `${c.keyword} ${newIdx}`\n    );\n    if (newLine !== oldLine) {\n      changes.push(`${c.keyword} ${c.name}: ${c.parsedIndex} -> ${newIdx}`);\n      lines[c.lineIndex] = newLine;\n    }\n  }\n  return changes;\n}\n\nconst handlers = {\n  read: async (...args) => {\n    if (!args.length) {\n      maxAPI.outlet(\"error missing_path\");\n      return;\n    }\n    try {\n      let filePath = args.join(\" \").trim();\n      filePath = expandTilde(normalizeMaxPath(filePath));\n      if (!fs.existsSync(filePath)) {\n        maxAPI.outlet(`error file_not_found ${filePath}`);\n        return;\n      }\n      const raw   = fs.readFileSync(filePath, \"utf8\");\n      const lines = raw.split(/\\r?\\n/);\n      const cues  = parseCues(lines);\n      if (cues.length === 0) {\n        maxAPI.outlet(\"error no_cues_found\");\n        return;\n      }\n      if (!hasProblems(cues)) {\n        maxAPI.outlet(\"ok\");\n        maxAPI.outlet(`path ${filePath}`);\n        return;\n      }\n      const changes = reindex(lines, cues);\n      fs.writeFileSync(filePath, lines.join(\"\\n\"), \"utf8\");\n      maxAPI.outlet(`reindex Score has an indexing problem. Cues were rewritten as follows: ${changes.join(\", \")}.`);\n      maxAPI.outlet(`path ${filePath}`);\n    } catch (err) {\n      maxAPI.outlet(`error ${err.message}`);\n    }\n  },\n};\n\nmaxAPI.addHandlers(handlers);",
                                     "fontface": 0,
                                     "fontname": "<Monospaced>",
                                     "fontsize": 12.0,
@@ -6897,6 +6907,8 @@
                                     "saved_object_attributes": {
                                         "autostart": 1,
                                         "defer": 0,
+                                        "node_bin_path": "",
+                                        "npm_bin_path": "",
                                         "watch": 0
                                     }
                                 }
@@ -7058,8 +7070,8 @@
                                                     "maxclass": "newobj",
                                                     "numinlets": 1,
                                                     "numoutlets": 0,
-                                                    "patching_rect": [ 50.0, 353.0, 115.0, 22.0 ],
-                                                    "text": "print score @level 0"
+                                                    "patching_rect": [ 50.0, 353.0, 147.0, 22.0 ],
+                                                    "text": "print scoreplayer @level 0"
                                                 }
                                             },
                                             {
@@ -7215,7 +7227,7 @@
                                             "modernui": 1
                                         },
                                         "classnamespace": "box",
-                                        "rect": [ 34.0, 87.0, 1724.0, 907.0 ],
+                                        "rect": [ 34.0, 95.0, 1444.0, 853.0 ],
                                         "boxes": [
                                             {
                                                 "box": {
@@ -8414,6 +8426,12 @@
                             },
                             {
                                 "patchline": {
+                                    "destination": [ "obj-33", 0 ],
+                                    "source": [ "obj-39", 3 ]
+                                }
+                            },
+                            {
+                                "patchline": {
                                     "destination": [ "obj-43", 0 ],
                                     "source": [ "obj-39", 2 ]
                                 }
@@ -8681,8 +8699,8 @@
                     "maxclass": "newobj",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 931.0, 974.0, 115.0, 22.0 ],
-                    "text": "print score @level 1"
+                    "patching_rect": [ 931.0, 974.0, 147.0, 22.0 ],
+                    "text": "print scoreplayer @level 1"
                 }
             },
             {
@@ -10266,7 +10284,7 @@
                     "numoutlets": 3,
                     "outlettype": [ "", "bang", "bang" ],
                     "patching_rect": [ 839.0, 861.0, 203.0, 50.0 ],
-                    "save": [ "#N", "qlist", ";", "#X", "insert", "CUE", 0, "INIT", ";", ";", "#X", "insert", "clock", 0, ";", ";", "#X", "insert", "liveSync", "loop", 0, ";", ";", "#X", "insert", "liveSync", "cue", "INIT", ";", ";", "#X", "insert", "unreal", "/game/cue/name", "INIT", ";", ";", "#X", "insert", "lights", "/light", "reset", ";", ";", "#X", "insert", "audio", "/audio/all", "stop", ";", ";", "#X", "insert", "unreal", "/UI/player1/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/UI/player2/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/UI/player3/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/UI/player4/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/game/player1/relocate/value", "Soprano_0", ";", ";", "#X", "insert", "unreal", "/game/player3/relocate/value", "Tenor_0", ";", ";", "#X", "insert", "player_controller_test", "bang", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 1, "INTRO-VIDEOS", ";", ";", "#X", "insert", "clock", 0, ";", ";", "#X", "insert", "clock", 1, ";", ";", "#X", "insert", "unreal", "/UI/player1/video/load/value", "waitingvideo_soprano", ";", ";", "#X", "insert", "unreal", "/UI/player1/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player1/video/play/value", 0, 0, ";", ";", "#X", "insert", "unreal", "/UI/player2/video/load/value", "waitingvideo_alto", ";", ";", "#X", "insert", "unreal", "/UI/player2/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player2/video/play/value", 0, 0, ";", ";", "#X", "insert", "unreal", "/UI/player3/video/load/value", "waitingvideo_tenor", ";", ";", "#X", "insert", "unreal", "/UI/player3/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player3/video/play/value", 0, 0, ";", ";", "#X", "insert", "unreal", "/UI/player4/video/load/value", "waitingvideo_bass", ";", ";", "#X", "insert", "unreal", "/UI/player4/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player4/video/play/value", 0, 0, ";", ";", "#X", "insert", "audio", "/audio/player1/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 0, ";", ";", "#X", "insert", "audio", "/audio/player2/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 500, ";", ";", "#X", "insert", "audio", "/audio/player3/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 1000, ";", ";", "#X", "insert", "audio", "/audio/player4/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 1500, ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 2, "LIVE-START", ";", ";", "#X", "insert", "clock", 0, ";", ";", "#X", "insert", "clock", 1, ";", ";", "#X", "insert", "liveSync", "play", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 3, "END", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 0, "INIT", ";", ";", "#X", "insert", "clock", 0, ";", ";", "#X", "insert", "liveSync", "loop", 0, ";", ";", "#X", "insert", "liveSync", "cue", "INIT", ";", ";", "#X", "insert", "unreal", "/game/cue/name", "INIT", ";", ";", "#X", "insert", "lights", "/light", "reset", ";", ";", "#X", "insert", "audio", "/audio/all", "stop", ";", ";", "#X", "insert", "unreal", "/UI/player1/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/UI/player2/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/UI/player3/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/UI/player4/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/game/player1/relocate/value", "Soprano_0", ";", ";", "#X", "insert", "unreal", "/game/player3/relocate/value", "Tenor_0", ";", ";", "#X", "insert", "player_controller_test", "bang", ";", ";", "#X", "insert", "jeje", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 1, "INTRO-VIDEOS", ";", ";", "#X", "insert", "clock", 0, ";", ";", "#X", "insert", "clock", 1, ";", ";", "#X", "insert", "unreal", "/UI/player1/video/load/value", "waitingvideo_soprano", ";", ";", "#X", "insert", "unreal", "/UI/player1/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player1/video/play/value", 0, 0, ";", ";", "#X", "insert", "unreal", "/UI/player2/video/load/value", "waitingvideo_alto", ";", ";", "#X", "insert", "unreal", "/UI/player2/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player2/video/play/value", 0, 0, ";", ";", "#X", "insert", "unreal", "/UI/player3/video/load/value", "waitingvideo_tenor", ";", ";", "#X", "insert", "unreal", "/UI/player3/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player3/video/play/value", 0, 0, ";", ";", "#X", "insert", "unreal", "/UI/player4/video/load/value", "waitingvideo_bass", ";", ";", "#X", "insert", "unreal", "/UI/player4/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player4/video/play/value", 0, 0, ";", ";", "#X", "insert", "audio", "/audio/player1/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 0, ";", ";", "#X", "insert", "audio", "/audio/player2/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 500, ";", ";", "#X", "insert", "audio", "/audio/player3/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 1000, ";", ";", "#X", "insert", "audio", "/audio/player4/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 1500, ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 2, "LIVE-START", ";", ";", "#X", "insert", "clock", 0, ";", ";", "#X", "insert", "clock", 1, ";", ";", "#X", "insert", "liveSync", "play", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 3, "END", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 0, "INIT", ";", ";", "#X", "insert", "clock", 0, ";", ";", "#X", "insert", "liveSync", "loop", 0, ";", ";", "#X", "insert", "liveSync", "cue", "INIT", ";", ";", "#X", "insert", "unreal", "/game/cue/name", "INIT", ";", ";", "#X", "insert", "lights", "/light", "reset", ";", ";", "#X", "insert", "audio", "/audio/all", "stop", ";", ";", "#X", "insert", "unreal", "/UI/player1/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/UI/player2/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/UI/player3/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/UI/player4/video/display/value", 0, ";", ";", "#X", "insert", "unreal", "/game/player1/relocate/value", "Soprano_0", ";", ";", "#X", "insert", "unreal", "/game/player3/relocate/value", "Tenor_0", ";", ";", "#X", "insert", "player_controller_test", "bang", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 1, "INTRO-VIDEOS", ";", ";", "#X", "insert", "clock", 0, ";", ";", "#X", "insert", "clock", 1, ";", ";", "#X", "insert", "unreal", "/UI/player1/video/load/value", "waitingvideo_soprano", ";", ";", "#X", "insert", "unreal", "/UI/player1/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player1/video/play/value", 0, 0, ";", ";", "#X", "insert", "unreal", "/UI/player2/video/load/value", "waitingvideo_alto", ";", ";", "#X", "insert", "unreal", "/UI/player2/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player2/video/play/value", 0, 0, ";", ";", "#X", "insert", "unreal", "/UI/player3/video/load/value", "waitingvideo_tenor", ";", ";", "#X", "insert", "unreal", "/UI/player3/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player3/video/play/value", 0, 0, ";", ";", "#X", "insert", "unreal", "/UI/player4/video/load/value", "waitingvideo_bass", ";", ";", "#X", "insert", "unreal", "/UI/player4/video/display/value", 1, ";", ";", "#X", "insert", "unreal", "/UI/player4/video/play/value", 0, 0, ";", ";", "#X", "insert", "audio", "/audio/player1/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 0, ";", ";", "#X", "insert", "audio", "/audio/player2/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 500, ";", ";", "#X", "insert", "audio", "/audio/player3/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 1000, ";", ";", "#X", "insert", "audio", "/audio/player4/2D/play", "video_intro.wav", 1, 1, 0, 0, -12, 0, 1500, ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 2, "LIVE-START", ";", ";", "#X", "insert", "clock", 0, ";", ";", "#X", "insert", "clock", 1, ";", ";", "#X", "insert", "liveSync", "play", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 3, "END", ";", ";" ],
+                    "save": [ "#N", "qlist", ";", "#X", "insert", "CUE", 0, "FIRST-CUE", ";", ";", "#X", "insert", "papa", "hello!", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 1, "SECOND-CUE", ";", ";", "#X", "insert", "papa", "second", "message", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 2, "THIRD-CUE", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 3, "FOURTH-CUE", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 4, "FIFTH-CUE", ";", ";", "#X", "insert", 1500, "papa", "delayed", "message!", ";", ";", "#X", "insert", 0, ";", ";", "#X", "insert", "CUE", 5, "SIXTH-CUE", ";", ";", "#X", "insert", "DO-LINE", "papa", 0.0, 1.0, 2000, ";", ";", "#X", "insert", 0, ";", ";" ],
                     "text": "qlist"
                 }
             }
@@ -10635,7 +10653,6 @@
                     "source": [ "obj-9", 0 ]
                 }
             }
-        ],
-        "autosave": 0
+        ]
     }
 }
