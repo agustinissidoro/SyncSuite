@@ -1,0 +1,64 @@
+{
+    "pattrstorage": {
+        "name": "010styles",
+        "slots": {
+            "1": {
+                "id": 1,
+                "data": {
+                    "font": [ 0 ],
+                    "color_r": [ 1.0 ],
+                    "color_g": [ 0.99 ],
+                    "color_b[1]": [ 0.0 ],
+                    "color_a[1]": [ 1.0 ],
+                    "fontsize": [ 30.0 ],
+                    "align": [ 1.0 ],
+                    "line_length": [ 1300.0 ],
+                    "tracking": [ 1.0 ],
+                    "leading": [ 0.0 ],
+                    "slant": [ 0.0 ],
+                    "weight": [ 1.0 ],
+                    "pos_x": [ 0.0 ],
+                    "pos_y": [ -0.3 ]
+                }
+            },
+            "2": {
+                "id": 2,
+                "data": {
+                    "font": [ 1 ],
+                    "color_r": [ 0.0 ],
+                    "color_g": [ 1.0 ],
+                    "color_b[1]": [ 0.0 ],
+                    "color_a[1]": [ 1.0 ],
+                    "fontsize": [ 30.0 ],
+                    "align": [ 1.0 ],
+                    "line_length": [ 1300.0 ],
+                    "tracking": [ 1.0 ],
+                    "leading": [ 0.0 ],
+                    "slant": [ 0.0 ],
+                    "weight": [ 1.0 ],
+                    "pos_x": [ 0.0 ],
+                    "pos_y": [ -0.3 ]
+                }
+            },
+            "3": {
+                "id": 3,
+                "data": {
+                    "font": [ 0 ],
+                    "color_r": [ 1.0 ],
+                    "color_g": [ 0.0 ],
+                    "color_b[1]": [ 0.0 ],
+                    "color_a[1]": [ 1.0 ],
+                    "fontsize": [ 35.0 ],
+                    "align": [ 1.0 ],
+                    "line_length": [ 1300.0 ],
+                    "tracking": [ 1.0 ],
+                    "leading": [ 0.0 ],
+                    "slant": [ 0.0 ],
+                    "weight": [ 1.0 ],
+                    "pos_x": [ 0.0 ],
+                    "pos_y": [ 0.5 ]
+                }
+            }
+        }
+    }
+}

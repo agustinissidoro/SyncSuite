@@ -4,7 +4,7 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 5,
+            "revision": 4,
             "architecture": "x64",
             "modernui": 1
         },
@@ -62,7 +62,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 1761.0, 452.0, 49.0, 22.0 ],
+                    "patching_rect": [ 1761.0, 456.0, 49.0, 22.0 ],
                     "text": "capture"
                 }
             },
@@ -138,7 +138,7 @@
                     "comment": "texture out (if enabled)",
                     "hint": "texture out (if enabled)",
                     "id": "obj-41",
-                    "index": 0,
+                    "index": 1,
                     "maxclass": "outlet",
                     "numinlets": 1,
                     "numoutlets": 0,
@@ -204,7 +204,7 @@
                 "box": {
                     "comment": "",
                     "id": "obj-5",
-                    "index": 0,
+                    "index": 1,
                     "maxclass": "inlet",
                     "numinlets": 0,
                     "numoutlets": 1,
@@ -436,7 +436,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -794,7 +794,7 @@
                     "numinlets": 0,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 160.0, 667.0, 85.0, 22.0 ],
+                    "patching_rect": [ 1761.0, 531.0, 85.0, 22.0 ],
                     "text": "r #0_to_text"
                 }
             },
@@ -811,12 +811,13 @@
             },
             {
                 "box": {
+                    "fontsize": 12.0,
                     "id": "obj-1",
                     "maxclass": "newobj",
                     "numinlets": 1,
                     "numoutlets": 2,
                     "outlettype": [ "", "" ],
-                    "patching_rect": [ 160.0, 710.0, 66.0, 22.0 ],
+                    "patching_rect": [ 1761.0, 574.0, 66.0, 22.0 ],
                     "text": "jit.gl.text2d"
                 }
             }
@@ -1236,7 +1237,6 @@
                     "source": [ "obj-9", 0 ]
                 }
             }
-        ],
-        "autosave": 0
+        ]
     }
 }

@@ -4,12 +4,12 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 5,
+            "revision": 4,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 591.0, 126.0, 914.0, 853.0 ],
+        "rect": [ 100.0, 95.0, 914.0, 853.0 ],
         "description": "Wrapper around jit.world with extended mapping and compositing functionalities.",
         "digest": "Wrapper around jit.world",
         "showontab": 1,
@@ -36,12 +36,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 591.0, 152.0, 914.0, 827.0 ],
+                        "rect": [ 100.0, 121.0, 914.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -130,16 +130,6 @@
                             },
                             {
                                 "box": {
-                                    "id": "obj-23",
-                                    "maxclass": "comment",
-                                    "numinlets": 1,
-                                    "numoutlets": 0,
-                                    "patching_rect": [ 551.5, 192.0, 19.0, 20.0 ],
-                                    "text": "b"
-                                }
-                            },
-                            {
-                                "box": {
                                     "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
                                     "fontname": "Arial Bold",
                                     "hint": "",
@@ -151,9 +141,9 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 535.5, 192.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 549.5, 191.5, 23.0, 21.0 ],
                                     "rounded": 60.0,
-                                    "text": "2",
+                                    "text": "2b",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
                                 }
                             },
@@ -284,7 +274,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 5,
+                                            "revision": 4,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -686,7 +676,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -750,7 +740,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 5,
+                                            "revision": 4,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1236,7 +1226,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -1762,7 +1752,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
