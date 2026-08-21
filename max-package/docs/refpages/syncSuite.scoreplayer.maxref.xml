@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
 
-<c74object name="videoSync.context">
+<c74object name="syncSuite.video.subs">
 
     <digest>
-        Video rendering context. Wrapper around jit.world for easier and extended functionalities.
+        Utility for rendering text in the SyncSuite video context.
     </digest>
 
     <description>
-        It allows out-of-the-box advanced video output, including compositing and exact-pixel mapping.
-        videoSync.context works seemlessly with the SyncSuite package and Max4Live devices.
+        This object is designed as a wrapper around jit.gl.text and works together with the SubSync M4L device.
     </description>
 
     <!--METADATA-->

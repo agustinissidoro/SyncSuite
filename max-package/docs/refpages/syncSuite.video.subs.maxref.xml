@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
 
-<c74object name="videoSync.subs">
+<c74object name="syncSuite.video.subs">
 
     <digest>
         Utility for rendering text in the SyncSuite video context.

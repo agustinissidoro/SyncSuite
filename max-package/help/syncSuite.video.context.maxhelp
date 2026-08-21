@@ -4,12 +4,12 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 4,
+            "revision": 5,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 100.0, 95.0, 1069.0, 853.0 ],
+        "rect": [ 34.0, 95.0, 1051.0, 853.0 ],
         "description": "Wrapper around jit.world with extended mapping and compositing functionalities.",
         "digest": "Wrapper around jit.world",
         "showontab": 1,
@@ -25,12 +25,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 1069.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1051.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -192,13 +192,12 @@
                             {
                                 "box": {
                                     "id": "obj-45",
-                                    "linecount": 2,
                                     "maxclass": "newobj",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 177.0, 781.0, 350.0, 35.0 ],
-                                    "text": "videoSync.source @context context-help-4 @source external @scale 0.2 @position 0.5 0.5 @enable 0"
+                                    "patching_rect": [ 177.0, 781.0, 585.0, 22.0 ],
+                                    "text": "syncSuite.video.source @context context-help-4 @source external @scale 0.2 @position 0.5 0.5 @enable 0"
                                 }
                             },
                             {
@@ -231,7 +230,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 393.0, 369.5, 309.0, 33.0 ],
+                                    "patching_rect": [ 429.0, 369.5, 309.0, 33.0 ],
                                     "text": "projectionMode has to be enabled to enable the camera rendering context"
                                 }
                             },
@@ -275,7 +274,7 @@
                                     "filename": "helpdetails.js",
                                     "id": "obj-3",
                                     "ignoreclick": 1,
-                                    "jsarguments": [ "videoSync.context" ],
+                                    "jsarguments": [ "syncSuite.video.context" ],
                                     "maxclass": "jsui",
                                     "numinlets": 1,
                                     "numoutlets": 1,
@@ -448,8 +447,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 532.0, 560.0, 499.0, 35.0 ],
-                                    "text": "videoSync.source @context context-help-cam @source external @positionInPixels 100 100 @projectionMode 1"
+                                    "patching_rect": [ 532.0, 560.0, 505.0, 35.0 ],
+                                    "text": "syncSuite.video.source @context context-help-cam @source external @positionInPixels 100 100 @projectionMode 1"
                                 }
                             },
                             {
@@ -492,8 +491,8 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 34.0, 375.0, 357.0, 22.0 ],
-                                    "text": "videoSync.context context-help-4 @floating 1 @projectionMode 1"
+                                    "patching_rect": [ 34.0, 375.0, 386.0, 22.0 ],
+                                    "text": "syncSuite.video.context context-help-4 @floating 1 @projectionMode 1"
                                 }
                             },
                             {
@@ -591,7 +590,7 @@
                             }
                         ]
                     },
-                    "patching_rect": [ 256.0, 728.0, 59.0, 22.0 ],
+                    "patching_rect": [ 285.0, 728.0, 59.0, 22.0 ],
                     "text": "p camera"
                 }
             },
@@ -606,12 +605,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 100.0, 121.0, 1069.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1051.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -674,7 +673,7 @@
                                     "filename": "helpdetails.js",
                                     "id": "obj-3",
                                     "ignoreclick": 1,
-                                    "jsarguments": [ "videoSync.context" ],
+                                    "jsarguments": [ "syncSuite.video.context" ],
                                     "maxclass": "jsui",
                                     "numinlets": 1,
                                     "numoutlets": 1,
@@ -890,8 +889,8 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 898.0, 557.0, 139.0, 47.0 ],
-                                    "text": "videoSync.source has dedicated messages for both spaces."
+                                    "patching_rect": [ 898.0, 557.0, 141.0, 47.0 ],
+                                    "text": "syncSuite.video.source has dedicated messages for both spaces."
                                 }
                             },
                             {
@@ -978,7 +977,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 301.0, 346.0, 373.0, 47.0 ],
+                                    "patching_rect": [ 322.0, 346.5, 373.0, 47.0 ],
                                     "text": "Turning projectionMode 1 means that the texture will occupy exactly its size in pixels in the canvas. This is useful when mapping to a single screen or to multiple screens, such as a led wall. "
                                 }
                             },
@@ -1000,8 +999,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 472.0, 639.0, 431.0, 22.0 ],
-                                    "text": "videoSync.source @context context-help-3 @source external @position 0.5 0.5"
+                                    "patching_rect": [ 472.0, 639.0, 460.0, 22.0 ],
+                                    "text": "syncSuite.video.source @context context-help-3 @source external @position 0.5 0.5"
                                 }
                             },
                             {
@@ -1044,8 +1043,8 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 35.0, 359.0, 249.0, 22.0 ],
-                                    "text": "videoSync.context context-help-3 @floating 1"
+                                    "patching_rect": [ 35.0, 359.0, 278.0, 22.0 ],
+                                    "text": "syncSuite.video.context context-help-3 @floating 1"
                                 }
                             },
                             {
@@ -1174,7 +1173,7 @@
                             }
                         ]
                     },
-                    "patching_rect": [ 138.0, 728.0, 110.0, 22.0 ],
+                    "patching_rect": [ 167.0, 728.0, 110.0, 22.0 ],
                     "text": "p projection modes"
                 }
             },
@@ -1200,12 +1199,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 1069.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1051.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1215,7 +1214,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 624.0, 180.0, 70.0, 22.0 ],
+                                    "patching_rect": [ 638.0, 180.0, 70.0, 22.0 ],
                                     "text": "loadmess 1"
                                 }
                             },
@@ -1308,7 +1307,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 676.0, 221.0, 130.0, 24.0 ],
+                                    "patching_rect": [ 690.0, 221.0, 130.0, 24.0 ],
                                     "text": "Disable the source"
                                 }
                             },
@@ -1325,7 +1324,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 652.0, 223.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 666.0, 223.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
                                     "text": "3",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1339,7 +1338,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 624.0, 221.0, 24.0, 24.0 ]
+                                    "patching_rect": [ 638.0, 221.0, 24.0, 24.0 ]
                                 }
                             },
                             {
@@ -1349,7 +1348,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 624.0, 263.0, 61.0, 22.0 ],
+                                    "patching_rect": [ 638.0, 263.0, 61.0, 22.0 ],
                                     "text": "enable $1"
                                 }
                             },
@@ -1360,7 +1359,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 489.0, 261.0, 111.0, 24.0 ],
+                                    "patching_rect": [ 503.0, 261.0, 111.0, 24.0 ],
                                     "text": "Play the movie"
                                 }
                             },
@@ -1377,7 +1376,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 465.0, 261.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 479.0, 261.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
                                     "text": "2",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1493,8 +1492,8 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 308.0, 198.0, 300.0, 47.0 ],
-                                    "text": "videoSync.source accepts rendering matrices and textures. It also has its own smart video player, which might be its most advantageous feature."
+                                    "patching_rect": [ 322.0, 198.0, 300.0, 47.0 ],
+                                    "text": "syncSuite.video.source accepts rendering matrices and textures. It also has its own smart video player, which might be its most advantageous feature."
                                 }
                             },
                             {
@@ -1522,7 +1521,7 @@
                                     "outlettype": [ "jit_matrix", "", "dictionary" ],
                                     "output_texture": 0,
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 308.0, 251.0, 150.0, 30.0 ],
+                                    "patching_rect": [ 322.0, 251.0, 150.0, 30.0 ],
                                     "saved_attribute_attributes": {
                                         "candicane2": {
                                             "expression": ""
@@ -1555,8 +1554,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 308.0, 325.0, 334.0, 22.0 ],
-                                    "text": "videoSync.source @context context-help-2 @source external"
+                                    "patching_rect": [ 322.0, 325.0, 363.0, 22.0 ],
+                                    "text": "syncSuite.video.source @context context-help-2 @source external"
                                 }
                             },
                             {
@@ -1599,8 +1598,8 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 33.0, 325.0, 249.0, 22.0 ],
-                                    "text": "videoSync.context context-help-2 @floating 1"
+                                    "patching_rect": [ 33.0, 325.0, 278.0, 22.0 ],
+                                    "text": "syncSuite.video.context context-help-2 @floating 1"
                                 }
                             },
                             {
@@ -1611,7 +1610,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 6.0, 73.0, 621.0, 47.0 ],
-                                    "text": "By itself, videoSync.context is not very useful. It is designed to be used together with sources via videoSync.source\n\nCheck videoSync.source help for further and advanced uses."
+                                    "text": "By itself, video.context is not very useful. It is designed to be used together with sources via syncSuite.video.source\n\nCheck syncSuite.video.source help for further and advanced uses."
                                 }
                             },
                             {
@@ -1620,7 +1619,7 @@
                                     "filename": "helpdetails.js",
                                     "id": "obj-3",
                                     "ignoreclick": 1,
-                                    "jsarguments": [ "videoSync.context" ],
+                                    "jsarguments": [ "syncSuite.video.context" ],
                                     "maxclass": "jsui",
                                     "numinlets": 1,
                                     "numoutlets": 1,
@@ -1678,7 +1677,7 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-2", 0 ],
-                                    "midpoints": [ 633.5, 311.0, 317.5, 311.0 ],
+                                    "midpoints": [ 647.5, 311.0, 331.5, 311.0 ],
                                     "source": [ "obj-17", 0 ]
                                 }
                             },
@@ -1709,8 +1708,8 @@
                             }
                         ]
                     },
-                    "patching_rect": [ 17.0, 728.0, 115.0, 22.0 ],
-                    "text": "p videoSync.Source"
+                    "patching_rect": [ 17.0, 728.0, 142.0, 22.0 ],
+                    "text": "p syncSuite.video.source"
                 }
             },
             {
@@ -1729,7 +1728,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 338.0, 428.0, 235.0, 20.0 ],
+                    "patching_rect": [ 351.5, 428.0, 235.0, 20.0 ],
                     "text": "Second outlet outputs bangs at frame rate."
                 }
             },
@@ -1739,7 +1738,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 655.0, 436.0, 183.0, 20.0 ],
+                    "patching_rect": [ 683.0, 436.0, 183.0, 20.0 ],
                     "text": "Third outlet outputs window size."
                 }
             },
@@ -1785,7 +1784,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 600.0, 428.0, 50.0, 35.0 ],
+                    "patching_rect": [ 628.0, 428.0, 50.0, 35.0 ],
                     "text": "640 477"
                 }
             },
@@ -1796,7 +1795,7 @@
                     "numinlets": 2,
                     "numoutlets": 2,
                     "outlettype": [ "", "" ],
-                    "patching_rect": [ 631.0, 369.0, 101.0, 22.0 ],
+                    "patching_rect": [ 659.0, 369.0, 101.0, 22.0 ],
                     "text": "route windowsize"
                 }
             },
@@ -1810,7 +1809,7 @@
                     "numinlets": 1,
                     "numoutlets": 2,
                     "outlettype": [ "", "" ],
-                    "patching_rect": [ 462.5, 384.0, 80.0, 35.0 ]
+                    "patching_rect": [ 476.5, 384.0, 80.0, 35.0 ]
                 }
             },
             {
@@ -1907,7 +1906,7 @@
                     "filename": "helpdetails.js",
                     "id": "obj-3",
                     "ignoreclick": 1,
-                    "jsarguments": [ "videoSync.context" ],
+                    "jsarguments": [ "syncSuite.video.context" ],
                     "maxclass": "jsui",
                     "numinlets": 1,
                     "numoutlets": 1,
@@ -1925,8 +1924,8 @@
                     "numinlets": 1,
                     "numoutlets": 3,
                     "outlettype": [ "jit_matrix", "bang", "" ],
-                    "patching_rect": [ 294.0, 317.0, 356.0, 22.0 ],
-                    "text": "videoSync.context context-help-1 @cameraContext other-context"
+                    "patching_rect": [ 294.0, 317.0, 384.0, 22.0 ],
+                    "text": "syncSuite.video.context context-help-1 @cameraContext other-context"
                 }
             }
         ],

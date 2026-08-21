@@ -4,12 +4,12 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 4,
+            "revision": 5,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 209.0, 236.0, 1069.0, 853.0 ],
+        "rect": [ 209.0, 95.0, 1069.0, 853.0 ],
         "description": "Wrapper around jit.world with extended mapping and compositing functionalities.",
         "digest": "Wrapper around jit.world",
         "showontab": 1,
@@ -25,12 +25,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 1069.0, 827.0 ],
+                        "rect": [ 209.0, 121.0, 1069.0, 827.0 ],
                         "showontab": 1,
                         "boxes": [
                             {
@@ -102,7 +102,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 498.0, 559.0, 123.0, 47.0 ],
+                                    "patching_rect": [ 520.0, 559.5, 123.0, 47.0 ],
                                     "text": "Text style is sent from the M4L device. How cool is that?"
                                 }
                             },
@@ -236,7 +236,7 @@
                                     "filename": "helpdetails.js",
                                     "id": "obj-13",
                                     "ignoreclick": 1,
-                                    "jsarguments": [ "videoSync.subs" ],
+                                    "jsarguments": [ "syncSuite.video.subs" ],
                                     "maxclass": "jsui",
                                     "numinlets": 1,
                                     "numoutlets": 1,
@@ -312,8 +312,8 @@
                                     "numinlets": 1,
                                     "numoutlets": 1,
                                     "outlettype": [ "jit_gl_texture" ],
-                                    "patching_rect": [ 329.0, 572.0, 159.0, 22.0 ],
-                                    "text": "videoSync.subs subs-help-2"
+                                    "patching_rect": [ 329.0, 572.0, 187.0, 22.0 ],
+                                    "text": "syncSuite.video.subs subs-help-2"
                                 }
                             },
                             {
@@ -345,8 +345,8 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 77.0, 572.0, 172.0, 22.0 ],
-                                    "text": "videoSync.context subs-help-2"
+                                    "patching_rect": [ 77.0, 572.0, 201.0, 22.0 ],
+                                    "text": "syncSuite.video.context subs-help-2"
                                 }
                             }
                         ],
@@ -422,7 +422,7 @@
                     "filename": "helpdetails.js",
                     "id": "obj-13",
                     "ignoreclick": 1,
-                    "jsarguments": [ "videoSync.subs" ],
+                    "jsarguments": [ "syncSuite.video.subs" ],
                     "maxclass": "jsui",
                     "numinlets": 1,
                     "numoutlets": 1,
@@ -509,8 +509,8 @@
                     "numinlets": 1,
                     "numoutlets": 1,
                     "outlettype": [ "jit_gl_texture" ],
-                    "patching_rect": [ 238.0, 218.0, 337.0, 22.0 ],
-                    "text": "videoSync.subs subs-help-1 @fontsize 80 @color 0.5 0.5 0 1."
+                    "patching_rect": [ 238.0, 218.0, 366.0, 22.0 ],
+                    "text": "syncSuite.video.subs subs-help-1 @fontsize 80 @color 0.5 0.5 0 1."
                 }
             },
             {
@@ -542,8 +542,8 @@
                     "numinlets": 1,
                     "numoutlets": 3,
                     "outlettype": [ "jit_matrix", "bang", "" ],
-                    "patching_rect": [ 16.82242977619171, 217.7570076584816, 172.0, 22.0 ],
-                    "text": "videoSync.context subs-help-1"
+                    "patching_rect": [ 16.82242977619171, 217.7570076584816, 201.0, 22.0 ],
+                    "text": "syncSuite.video.context subs-help-1"
                 }
             }
         ],

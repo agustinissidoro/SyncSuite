@@ -4,7 +4,7 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 4,
+            "revision": 5,
             "architecture": "x64",
             "modernui": 1
         },
@@ -36,12 +36,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 100.0, 121.0, 914.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 914.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -274,7 +274,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 4,
+                                            "revision": 5,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -525,8 +525,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 250.5, 576.0, 320.0, 22.0 ],
-                                    "text": "videoSync.source source-help-5 @autoRatio 1 @scale 0.5"
+                                    "patching_rect": [ 250.5, 576.0, 349.0, 22.0 ],
+                                    "text": "syncSuite.video.source source-help-5 @autoRatio 1 @scale 0.5"
                                 }
                             },
                             {
@@ -535,7 +535,7 @@
                                     "filename": "helpdetails.js",
                                     "id": "obj-2",
                                     "ignoreclick": 1,
-                                    "jsarguments": [ "videoSync.source" ],
+                                    "jsarguments": [ "syncSuite.video.source" ],
                                     "maxclass": "jsui",
                                     "numinlets": 1,
                                     "numoutlets": 1,
@@ -573,8 +573,8 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 29.5, 576.0, 183.0, 22.0 ],
-                                    "text": "videoSync.context source-help-5"
+                                    "patching_rect": [ 29.5, 576.0, 211.0, 22.0 ],
+                                    "text": "syncSuite.video.context source-help-5"
                                 }
                             }
                         ],
@@ -676,7 +676,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -714,7 +714,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 85.0, 605.0, 655.0, 20.0 ],
-                                    "text": "For a more complex implementation using simultaneously both projection modes, refer to the help of videoSync.context."
+                                    "text": "For a more complex implementation using simultaneously both projection modes, refer to the help of syncSuite.video.context."
                                 }
                             },
                             {
@@ -740,7 +740,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 4,
+                                            "revision": 5,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1043,7 +1043,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 13.0, 65.0, 671.0, 33.0 ],
-                                    "text": "Projection modes are the core feature of videoSync.source since it allows for complex and precise compositing in a pixel space. This is useful for video mapping to screens, multiple screens or video wall-controllers."
+                                    "text": "Projection modes are the core feature of syncSuite.video.source since it allows for complex and precise compositing in a pixel space. This is useful for video mapping to screens, multiple screens or video wall-controllers."
                                 }
                             },
                             {
@@ -1083,8 +1083,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 506.0, 478.0, 277.0, 22.0 ],
-                                    "text": "videoSync.source source-help-4 @source external"
+                                    "patching_rect": [ 506.0, 478.0, 306.0, 22.0 ],
+                                    "text": "syncSuite.video.source source-help-4 @source external"
                                 }
                             },
                             {
@@ -1093,7 +1093,7 @@
                                     "filename": "helpdetails.js",
                                     "id": "obj-2",
                                     "ignoreclick": 1,
-                                    "jsarguments": [ "videoSync.source" ],
+                                    "jsarguments": [ "syncSuite.video.source" ],
                                     "maxclass": "jsui",
                                     "numinlets": 1,
                                     "numoutlets": 1,
@@ -1131,8 +1131,8 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 90.0, 288.0, 183.0, 22.0 ],
-                                    "text": "videoSync.context source-help-4"
+                                    "patching_rect": [ 90.0, 288.0, 211.0, 22.0 ],
+                                    "text": "syncSuite.video.context source-help-4"
                                 }
                             }
                         ],
@@ -1226,7 +1226,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -1520,7 +1520,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 13.0, 65.0, 670.0, 33.0 ],
-                                    "text": "Since jit.gl.layer is under the hood, the videoSync.source inherits all compositing and processing features plus some custom ones."
+                                    "text": "Since jit.gl.layer is under the hood, the syncSuite.video.source inherits all compositing and processing features plus some custom ones."
                                 }
                             },
                             {
@@ -1556,13 +1556,12 @@
                             {
                                 "box": {
                                     "id": "obj-19",
-                                    "linecount": 2,
                                     "maxclass": "newobj",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 315.0, 243.0, 299.0, 35.0 ],
-                                    "text": "videoSync.source source-help-3 @loop 1 @source external @autoRatio 1 @scale 0.4"
+                                    "patching_rect": [ 315.0, 243.0, 495.0, 22.0 ],
+                                    "text": "syncSuite.video.source source-help-3 @loop 1 @source external @autoRatio 1 @scale 0.4"
                                 }
                             },
                             {
@@ -1571,7 +1570,7 @@
                                     "filename": "helpdetails.js",
                                     "id": "obj-2",
                                     "ignoreclick": 1,
-                                    "jsarguments": [ "videoSync.source" ],
+                                    "jsarguments": [ "syncSuite.video.source" ],
                                     "maxclass": "jsui",
                                     "numinlets": 1,
                                     "numoutlets": 1,
@@ -1609,8 +1608,8 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 38.0, 243.0, 183.0, 22.0 ],
-                                    "text": "videoSync.context source-help-3"
+                                    "patching_rect": [ 38.0, 243.0, 211.0, 22.0 ],
+                                    "text": "syncSuite.video.context source-help-3"
                                 }
                             }
                         ],
@@ -1752,7 +1751,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -2122,8 +2121,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 241.0, 657.0, 228.0, 22.0 ],
-                                    "text": "videoSync.source source-help-2 @loop 1"
+                                    "patching_rect": [ 241.0, 657.0, 257.0, 22.0 ],
+                                    "text": "syncSuite.video.source source-help-2 @loop 1"
                                 }
                             },
                             {
@@ -2132,7 +2131,7 @@
                                     "filename": "helpdetails.js",
                                     "id": "obj-2",
                                     "ignoreclick": 1,
-                                    "jsarguments": [ "videoSync.source" ],
+                                    "jsarguments": [ "syncSuite.video.source" ],
                                     "maxclass": "jsui",
                                     "numinlets": 1,
                                     "numoutlets": 1,
@@ -2170,8 +2169,8 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 20.0, 657.0, 183.0, 22.0 ],
-                                    "text": "videoSync.context source-help-2"
+                                    "patching_rect": [ 20.0, 657.0, 211.0, 22.0 ],
+                                    "text": "syncSuite.video.context source-help-2"
                                 }
                             }
                         ],
@@ -2324,7 +2323,7 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 25.0, 151.0, 475.0, 20.0 ],
-                    "text": "For its most basic use, videoSync.source is a wrapper around jit.gl.movie and jit.gl.layer"
+                    "text": "For its most basic use, syncSuite.video.source is a wrapper around jit.gl.movie and jit.gl.layer"
                 }
             },
             {
@@ -2427,8 +2426,8 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 27.0, 292.0, 228.0, 22.0 ],
-                    "text": "videoSync.source source-help-1 @loop 1"
+                    "patching_rect": [ 27.0, 292.0, 257.0, 22.0 ],
+                    "text": "syncSuite.video.source source-help-1 @loop 1"
                 }
             },
             {
@@ -2489,8 +2488,8 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 366.0, 292.0, 382.0, 22.0 ],
-                    "text": "videoSync.source source-help-1 @autoRatio 1 @scale 0.6 @enable 0"
+                    "patching_rect": [ 366.0, 292.0, 411.0, 22.0 ],
+                    "text": "syncSuite.video.source source-help-1 @autoRatio 1 @scale 0.6 @enable 0"
                 }
             },
             {
@@ -2499,7 +2498,7 @@
                     "filename": "helpdetails.js",
                     "id": "obj-2",
                     "ignoreclick": 1,
-                    "jsarguments": [ "videoSync.source" ],
+                    "jsarguments": [ "syncSuite.video.source" ],
                     "maxclass": "jsui",
                     "numinlets": 1,
                     "numoutlets": 1,
@@ -2537,8 +2536,8 @@
                     "numinlets": 1,
                     "numoutlets": 3,
                     "outlettype": [ "jit_matrix", "bang", "" ],
-                    "patching_rect": [ 27.0, 510.0, 183.0, 22.0 ],
-                    "text": "videoSync.context source-help-1"
+                    "patching_rect": [ 27.0, 510.0, 211.0, 22.0 ],
+                    "text": "syncSuite.video.context source-help-1"
                 }
             }
         ],

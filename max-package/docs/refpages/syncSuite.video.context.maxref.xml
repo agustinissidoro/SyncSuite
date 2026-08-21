@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
 
-<c74object name="videoSync.source">
+<c74object name="syncSuite.video.context">
 
     <digest>
-        Utility for rendering textures, matrices, playing video files and compositing controls.
+        Video rendering context. Wrapper around jit.world for easier and extended functionalities.
     </digest>
 
     <description>
-        It allows intelligent loading and playback of video files, texture processing such as cropping, inserting fx, among others operations.
-        It is designed to work with the syncSuite Max4Live devices for video syncronization with Ableton Live. 
+        It allows out-of-the-box advanced video output, including compositing and exact-pixel mapping.
+        syncSuite.video.context works seemlessly with the SyncSuite package and Max4Live devices.
     </description>
 
     <!--METADATA-->
