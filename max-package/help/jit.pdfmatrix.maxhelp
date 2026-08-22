@@ -70,7 +70,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 578.0, 492.0, 159.0, 24.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "Store them in a matrixset"
                                 }
                             },
@@ -111,7 +110,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 582.0, 229.0, 109.0, 24.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "Dump all pages"
                                 }
                             },
@@ -302,8 +300,8 @@
                                                     "numinlets": 2,
                                                     "numoutlets": 2,
                                                     "outlettype": [ "", "" ],
-                                                    "patching_rect": [ 98.0357158780098, 277.19313138723373, 234.0, 22.0 ],
-                                                    "text": "combine folder media/beethoven_cello.pdf"
+                                                    "patching_rect": [ 98.0357158780098, 277.19313138723373, 239.0, 22.0 ],
+                                                    "text": "combine folder media/beethoven_piano.pdf"
                                                 }
                                             },
                                             {
