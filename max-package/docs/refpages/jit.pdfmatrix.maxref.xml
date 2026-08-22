@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
+
+<c74object name="jit.pdfmatrix">
+
+    <digest>
+        Renders a page of a PDF file into a Jitter matrix
+    </digest>
+
+    <description>
+        Loads a PDF file and outputs its pages as Jitter matrices. Part of the SyncSuite package.
+    </description>
+
+    <!--METADATA-->
+    <metadatalist>
+        <metadata name="author">Agustin Issidoro</metadata>
+        <metadata name="tag">SyncSuite</metadata>
+        <metadata name="tag">Jitter</metadata>
+        <metadata name="tag">Video processing</metadata>
+        <metadata name="tag">Score</metadata>
+    </metadatalist>
+
+    <!--INLETS-->
+    <inletlist>
+        <inlet id="0" type="anything">
+            <digest>Messages controlling the loaded PDF and current page</digest>
+            <description>
+                Accepts the "read", "load", "page" and "dump" messages described below, as well as
+                a bare int (treated the same as "page"). There is no matrix inlet — jit.pdfmatrix
+                does not accept or process incoming matrices.
+            </description>
+        </inlet>
+    </inletlist>
+
+    <!--OUTLETS-->
+    <outletlist>
+        <outlet id="0" type="jit_matrix">
+            <digest>The rasterized PDF page</digest>
+            <description>
+                Outputs a Jitter matrix each time "read"/"load", "page", a bare int, or "dump"
+                renders a page.
+            </description>
+        </outlet>
+        <outlet id="1" type="anything">
+            <digest>Page count, then page number and dimensions</digest>
+            <description>
+                Outputs "count &lt;numpages&gt;" once, right after a successful "read"/"load".
+                Then, right before each page's matrix goes out the left outlet, outputs a plain
+                3-int list "&lt;page&gt; &lt;width&gt; &lt;height&gt;" for that page.
+            </description>
+        </outlet>
+    </outletlist>
+
+    <!--ARGUMENTS-->
+    <objarglist>
+        <objarg name="filename" optional="1" type="symbol">
+            <digest>PDF file to load at creation time</digest>
+            <description>
+                If given, jit.pdfmatrix loads this file at creation, equivalent to sending it a
+                "read" message with the same argument. Optional; if omitted, no file is loaded
+                until a "read"/"load" message is sent.
+            </description>
+        </objarg>
+    </objarglist>
+
+    <!--MESSAGES-->
+    <methodlist>
+        <method name="read">
+            <arglist>
+                <arg name="filename" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Loads a PDF file
+            </digest>
+            <description>
+                Opens "filename" (a POSIX path; "~" is expanded) and loads it as the current
+                document, replacing any previously loaded PDF. On success, reports
+                "count &lt;numpages&gt;" out the right outlet, then renders page 1 out the left
+                outlet (preceded by its "1 &lt;width&gt; &lt;height&gt;" report out the right
+                outlet). If the file cannot be opened or is not a valid PDF, posts
+                "jit.pdfmatrix: could not read "&lt;filename&gt;" as a PDF" to the Max window and
+                leaves any previously loaded document untouched.
+            </description>
+        </method>
+
+        <method name="load">
+            <arglist>
+                <arg name="filename" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Alias for "read"
+            </digest>
+            <description>
+                Identical to "read": loads "filename" as the current document. See "read" above.
+            </description>
+        </method>
+
+        <method name="page">
+            <arglist>
+                <arg name="page-number" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Renders a page of the loaded PDF
+            </digest>
+            <description>
+                Rasterizes page "page-number" (1-based, clamped to the document's page range) of
+                the currently loaded PDF. Reports
+                "&lt;page-number&gt; &lt;width&gt; &lt;height&gt;" out the right outlet, then
+                outputs the matrix out the left outlet. A bare int sent to the inlet does the same
+                thing. If no PDF has been loaded yet, posts
+                "jit.pdfmatrix: no PDF loaded, use the "read" message first" to the Max window.
+            </description>
+        </method>
+
+        <method name="dump">
+            <digest>
+                Renders every page of the loaded PDF, in order
+            </digest>
+            <description>
+                Rasterizes and outputs every page of the currently loaded PDF, from page 1 to the
+                last page: for each page, its "&lt;page&gt; &lt;width&gt; &lt;height&gt;" report
+                goes out the right outlet immediately before that page's matrix goes out the left
+                outlet. Useful for filling a jit.matrixset — wire the right outlet into its control
+                message inlet and the left outlet into its matrix inlet. If no PDF has been loaded
+                yet, posts "jit.pdfmatrix: no PDF loaded, use the "read" message first" to the Max
+                window.
+            </description>
+        </method>
+    </methodlist>
+
+    <!--ATTRIBUTES-->
+    <attributelist>
+        <attribute name="file" get="1" set="1" type="symbol" size="1">
+            <digest>Currently loaded PDF file</digest>
+            <description>
+                Reports the path of the PDF file currently loaded via "read"/"load" or the
+                object's argument, or an empty symbol if none is loaded. Setting it (e.g. with
+                "@file &lt;path&gt;") loads that file, exactly like sending it a "read" message.
+            </description>
+        </attribute>
+    </attributelist>
+
+    <!--SEEALSO-->
+    <seealsolist>
+        <seealso name="jit.matrix"/>
+        <seealso name="jit.matrixset"/>
+        <seealso name="jit.pworld"/>
+        <seealso name="jit.gl.texture"/>
+        <seealso name="syncSuite.scoreplayer"/>
+        <seealso name="syncSuite.score.server"/>
+    </seealsolist>
+
+</c74object>
