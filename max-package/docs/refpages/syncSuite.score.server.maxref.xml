@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
+
+<c74object name="syncSuite.score.server">
+
+    <digest>
+        Node-for-Max server that streams a page-turning score to one or more remote devices.
+    </digest>
+
+    <description>
+        Use it to serve a page-turning PDF score to remote devices (phones, tablets, stand-mounted screens) over the network, one "score" per device.
+    </description>
+
+    <!--ARGUMENTS-->
+    <objarglist>
+        <objarg name="port" optional="1" type="int">
+            <digest>Port the server listens on</digest>
+            <description>
+                Sets the @port attribute at creation time, e.g. "syncSuite.score.server 8111". Optional;
+                defaults to 8111 if omitted.
+            </description>
+        </objarg>
+    </objarglist>
+
+    <!--METADATA-->
+    <metadatalist>
+        <metadata name="author">Agustin Issidoro</metadata>
+        <metadata name="tag">SyncSuite</metadata>
+        <metadata name="tag">Score</metadata>
+        <metadata name="tag">Node for Max</metadata>
+    </metadatalist>
+
+    <!--INLETS-->
+    <inletlist>
+        <inlet id="0" type="anything">
+            <digest>Commands controlling the server process and its registered scores</digest>
+            <description>
+                Accepts server-level commands ("start", "stop", "install", "addScore", "deleteScore", "get",
+                "restart", "refresh", "all") as well as messages addressed to a specific score, in the form
+                "&lt;scoreName&gt; &lt;command&gt; &lt;args...&gt;". See the Messages section for the full list.
+            </description>
+        </inlet>
+    </inletlist>
+
+    <!--OUTLETS-->
+    <outletlist>
+        <outlet id="0" type="anything">
+            <digest>Reports whether the HTTP/WebSocket server is running</digest>
+            <description>
+                Outputs "serverState 1" once the server is listening, and "serverState 0" if it stops or
+                fails to start.
+            </description>
+        </outlet>
+        <outlet id="1" type="anything">
+            <digest>Every other report from the server</digest>
+            <description>
+                Everything the server reports other than "serverState": "ip &lt;address&gt;:&lt;port&gt;" once
+                listening, "error"/"warning" messages, the current page ("&lt;scoreName&gt; currentPage
+                &lt;n&gt;", whenever it changes — from "addScore", "page", "load"/"read", "restart", or a
+                device turning its own page) and page count ("&lt;scoreName&gt; pages &lt;n&gt;" — reported
+                right after "addScore" as 0, and right after "load"/"read" from the PDF file itself, without
+                needing any device connected; 0 again after "restart"; and again whenever any connected
+                device separately reports its own rendered count back), device connect/disconnect and info
+                reports ("deviceEvent"/"deviceInfo"), the "&lt;scoreName&gt; connectedDevices"/"&lt;scoreName&gt;
+                state" health messages, the score's full URL after "addScore" or "load"/"read" (once the
+                server is running), "&lt;scoreName&gt; timerValue &lt;seconds&gt;" after "timer" and once per
+                second while it's running, and replies to "get". See the Messages section for the full list.
+            </description>
+        </outlet>
+    </outletlist>
+
+    <!--MESSAGES-->
+    <methodlist>
+        <method name="start">
+            <digest>
+                Starts the Node process
+            </digest>
+            <description>
+                Launches the underlying node.script, which starts the HTTP/WebSocket server on the configured
+                @port.
+            </description>
+        </method>
+
+        <method name="stop">
+            <digest>
+                Stops the Node process
+            </digest>
+            <description>
+                Shuts down the running server, disconnecting any connected devices.
+            </description>
+        </method>
+
+        <method name="install">
+            <digest>
+                Installs the server's Node dependencies (express, ws, pdf-lib)
+            </digest>
+            <description>
+                Runs "npm install express ws pdf-lib" for the node.script. Only needs to be sent once, the
+                first time the object is used, or after the node_modules folder has been removed.
+            </description>
+        </method>
+
+        <method name="addScore">
+            <arglist>
+                <arg name="name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Registers a new score/device stream
+            </digest>
+            <description>
+                Creates a new score identified by "name" (e.g. "violin"). Once added, the score can be reached
+                by remote devices at "/&lt;name&gt;" and can be addressed directly with
+                "&lt;name&gt; &lt;command&gt; &lt;args...&gt;" messages, see below. Replies with
+                "&lt;name&gt; currentPage 1" and "&lt;name&gt; pages 0" (nothing is loaded yet); if the server is
+                already running, also replies with
+                "&lt;name&gt; address &lt;address&gt;:&lt;port&gt;/&lt;name&gt;" — the full URL devices should
+                open to view this score.
+            </description>
+        </method>
+
+        <method name="deleteScore">
+            <arglist>
+                <arg name="name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Removes a previously registered score
+            </digest>
+            <description>
+                Deletes the score "name" and disconnects any devices currently viewing it.
+            </description>
+        </method>
+
+        <method name="get">
+            <arglist>
+                <arg name="name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Reports a score's address, loaded file, page and connected devices
+            </digest>
+            <description>
+                Requests information about the score "name". The server replies with, prefixed by that
+                score's name:
+                <br /><br />
+                - "&lt;name&gt; ip &lt;address&gt;:&lt;port&gt;/&lt;name&gt;": the full URL path devices
+                should open to view this score.
+                <br />
+                - "&lt;name&gt; file &lt;absolute-path&gt;": the currently loaded PDF's path, or an empty
+                string if none is loaded.
+                <br />
+                - "&lt;name&gt; currentPage &lt;n&gt;": the current page.
+                <br />
+                - "&lt;name&gt; pages &lt;n&gt;": the total page count of the loaded PDF (0 if none loaded).
+                <br />
+                - "&lt;name&gt; connectedDevices &lt;device-ip&gt; 1": one such message per device currently
+                connected to this score, giving that device's IP address.
+                <br /><br />
+                Fails if the server isn't running or "name" isn't a registered score.
+            </description>
+        </method>
+
+        <method name="restart">
+            <digest>
+                Resets every score to its default state
+            </digest>
+            <description>
+                Resets all registered scores' state and reloads every currently connected device. Sent as
+                "&lt;scoreName&gt; restart" instead, it resets only that one score, and replies with
+                "&lt;scoreName&gt; currentPage 1" and "&lt;scoreName&gt; pages 0".
+            </description>
+        </method>
+
+        <method name="refresh">
+            <digest>
+                Reloads every connected device
+            </digest>
+            <description>
+                Forces every connected device's viewer page to reload, without changing any state. Sent as
+                "&lt;scoreName&gt; refresh" instead, it reloads only that score's connected devices.
+            </description>
+        </method>
+
+        <method name="all">
+            <arglist>
+                <arg name="command" optional="0" type="symbol" />
+                <arg name="args" optional="1" type="list" />
+            </arglist>
+            <digest>
+                Sends a score command to every registered score
+            </digest>
+            <description>
+                Fans a per-score command (see below) out to every currently registered score, e.g. "all page 1"
+                turns every score to page 1.
+            </description>
+        </method>
+
+        <method name="load">
+            <arglist>
+                <arg name="path" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Loads a PDF file for a score
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; load &lt;absolute-path&gt;". Loads the PDF at "path" for that score,
+                resets it to page 1, and pushes it to every connected device. The path must be absolute; a
+                relative path is used as-is and a warning is posted, since it will typically fail to resolve
+                on the Node side. A leading boot-volume prefix from macOS "Copy as Pathname" (e.g.
+                "Macintosh HD:/Users/...") is stripped automatically. "read" is an alias for this message.
+                Replies immediately with "&lt;scoreName&gt; currentPage 1", followed a moment later by
+                "&lt;scoreName&gt; pages &lt;n&gt;" — the server reads the real page count directly from the
+                PDF file itself, no connected device required. If the server is already running, also
+                replies with "&lt;scoreName&gt; address &lt;address&gt;:&lt;port&gt;/&lt;scoreName&gt;" — the
+                full URL devices should open to view this score.
+            </description>
+        </method>
+
+        <method name="page">
+            <arglist>
+                <arg name="page-number" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Turns a score to the given page
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; page &lt;n&gt;". Turns to page "n" (1-based) on every connected
+                device, and replies with "&lt;scoreName&gt; currentPage &lt;n&gt;".
+            </description>
+        </method>
+
+        <method name="bar">
+            <arglist>
+                <arg name="bar-number" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets a score's current bar
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; bar &lt;n&gt;". Updates the bar shown by that score's bar/beat
+                indicator (see "displayBar").
+            </description>
+        </method>
+
+        <method name="beat">
+            <arglist>
+                <arg name="beat-number" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets a score's current beat
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; beat &lt;n&gt;". Updates the beat shown by that score's bar/beat
+                indicator (see "displayBeat") and the number shown inside the metronome circle (see
+                "displayMetronome").
+            </description>
+        </method>
+
+        <method name="position">
+            <arglist>
+                <arg name="bar-number" optional="0" type="int" />
+                <arg name="beat-number" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets a score's current bar and beat together
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; position &lt;bar&gt; &lt;beat&gt;". Equivalent to sending "bar" and
+                "beat" separately, but as a single message/broadcast — prefer this over two separate calls
+                when driving continuous playback position, to halve the network and redraw overhead.
+            </description>
+        </method>
+
+        <method name="displayBar">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Shows or hides a score's bar indicator
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; displayBar &lt;0/1&gt;". Shows (1) or hides (0) the current-bar
+                readout on that score's connected devices.
+            </description>
+        </method>
+
+        <method name="displayBeat">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Shows or hides a score's beat indicator
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; displayBeat &lt;0/1&gt;". Shows (1) or hides (0) the current-beat
+                readout on that score's connected devices.
+            </description>
+        </method>
+
+        <method name="barBeatPosition">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Positions a score's bar/beat readout
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; barBeatPosition &lt;x&gt; &lt;y&gt;". Places the bar/beat readout at
+                the normalized float (0.-1.) position x, y on the screen.
+            </description>
+        </method>
+
+        <method name="barColor">
+            <arglist>
+                <arg name="color" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the bar readout's text color
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; barColor &lt;packed-rgb-int&gt;". Sets the color of the "Bar &lt;n&gt;"
+                text in the bar/beat readout (see "displayBar"). Default green.
+            </description>
+        </method>
+
+        <method name="beatColor">
+            <arglist>
+                <arg name="color" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the beat readout's text color
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; beatColor &lt;packed-rgb-int&gt;". Sets the color of the "Beat &lt;n&gt;"
+                text in the bar/beat readout (see "displayBeat"). Default green.
+            </description>
+        </method>
+
+        <method name="text">
+            <arglist>
+                <arg name="text" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Sets a score's overlay text
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; text &lt;string&gt;". Displays "string" as an overlay message on
+                that score's connected devices.
+            </description>
+        </method>
+
+        <method name="textSize">
+            <arglist>
+                <arg name="size" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets a score's overlay text size
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; textSize &lt;n&gt;". Sets the font size, in points, of that score's
+                overlay text.
+            </description>
+        </method>
+
+        <method name="textPosition">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Positions a score's overlay text
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; textPosition &lt;x&gt; &lt;y&gt;". Places the overlay text at the
+                normalized float (0.-1.) position x, y on the screen.
+            </description>
+        </method>
+
+        <method name="textColor">
+            <arglist>
+                <arg name="color" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the overlay text's color
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; textColor &lt;packed-rgb-int&gt;". Sets the color of the overlay text
+                (see "text"). Default white.
+            </description>
+        </method>
+
+        <method name="black">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Blacks out a score's screen
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; black &lt;0/1&gt;". Blacks out (1) or restores (0) that score's
+                score display on every connected device. Any nonzero value counts as on, e.g. "black 2".
+            </description>
+        </method>
+
+        <method name="zoom">
+            <arglist>
+                <arg name="factor" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Sets a score's zoom level
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; zoom &lt;factor&gt;". Scales that score by "factor" (1.0 is
+                normal size).
+            </description>
+        </method>
+
+        <method name="flash">
+            <digest>
+                Briefly flashes a score's screen
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; flash". Flashes that score's screen in its current flashColor, for
+                its current flashDuration (default 50ms). One-shot, not persisted in the score's state.
+            </description>
+        </method>
+
+        <method name="flashColor">
+            <arglist>
+                <arg name="color" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the color used by "flash"
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; flashColor &lt;packed-rgb-int&gt;". Sets the color used the next
+                time "flash" is sent to that score; does not flash by itself.
+            </description>
+        </method>
+
+        <method name="flashDuration">
+            <arglist>
+                <arg name="milliseconds" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the duration used by "flash"
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; flashDuration &lt;ms&gt;". Sets how long, in milliseconds, the next
+                "flash" sent to that score stays visible; does not flash by itself. Default 50.
+            </description>
+        </method>
+
+        <method name="backgroundColor">
+            <arglist>
+                <arg name="color" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets a score's page background color
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; backgroundColor &lt;packed-rgb-int&gt;". Sets the background color
+                behind that score's page.
+            </description>
+        </method>
+
+        <method name="invertColor">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Inverts a score's page colors
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; invertColor &lt;0/1&gt;". Enables (1) or disables (0) color
+                inversion of that score's display.
+            </description>
+        </method>
+
+        <method name="displayMetronome">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Shows or hides a score's on-screen metronome
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; displayMetronome &lt;0/1&gt;". Shows (1) or hides (0) the on-screen
+                metronome on that score's connected devices. The metronome is a circle that briefly flashes
+                white on every "beat" (or "position") update, showing the current beat number inside it.
+            </description>
+        </method>
+
+        <method name="metronomeSize">
+            <arglist>
+                <arg name="size" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Sets the size of a score's on-screen metronome
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; metronomeSize &lt;n&gt;". Scales the on-screen metronome shown on
+                that score's connected devices.
+            </description>
+        </method>
+
+        <method name="metronomeColor">
+            <arglist>
+                <arg name="color" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the metronome's idle color
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; metronomeColor &lt;packed-rgb-int&gt;". Sets the metronome circle's
+                color between beats; it always flashes white on the beat itself. Default dark gray.
+            </description>
+        </method>
+
+        <method name="metronomePosition">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Positions a score's on-screen metronome
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; metronomePosition &lt;x&gt; &lt;y&gt;". Places the metronome circle
+                at the normalized float (0.-1.) position x, y on the screen. Default near the top-right corner.
+            </description>
+        </method>
+
+        <method name="timer">
+            <arglist>
+                <arg name="seconds-or-reset" optional="1" type="atom" />
+            </arglist>
+            <digest>
+                Starts, sets, or resets a score's on-screen timer
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; timer" (starts/restarts the timer running), "&lt;scoreName&gt; timer
+                &lt;n&gt;" (sets that score's timer target to "n" seconds, then starts running the same way),
+                or "&lt;scoreName&gt; timer reset" (stops the timer and resets it, without changing the target
+                set by the last "timer &lt;n&gt;"). If "timerDirection" is 1 (default), the timer counts up
+                from 00:00 and, once a target has been set, stops once it reaches it; if "timerDirection" is
+                -1, the timer counts down from the target to 00:00 and stops there. Replies with
+                "&lt;scoreName&gt; timerValue &lt;seconds&gt;". While running, the server ticks the timer once
+                per second and broadcasts the new value to every connected device, rendered there in mm:ss
+                format (see "timerDisplay").
+            </description>
+        </method>
+
+        <method name="timerDisplay">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Shows or hides a score's on-screen timer
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; timerDisplay &lt;0/1&gt;". Shows (1) or hides (0) the timer (see
+                "timer") on that score's connected devices.
+            </description>
+        </method>
+
+        <method name="timerSize">
+            <arglist>
+                <arg name="size" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets a score's timer text size
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; timerSize &lt;n&gt;". Sets the font size, in points, of that score's
+                timer readout. Default 48.
+            </description>
+        </method>
+
+        <method name="timerColor">
+            <arglist>
+                <arg name="color" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the timer's text color
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; timerColor &lt;packed-rgb-int&gt;". Sets the color of the timer
+                readout (see "timer"). Default white.
+            </description>
+        </method>
+
+        <method name="timerDirection">
+            <arglist>
+                <arg name="direction" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets whether a score's timer counts up or down
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; timerDirection 1|-1". 1 (default) counts up; -1 counts down to
+                00:00 from the target set by "timer &lt;n&gt;". Takes effect the next time "timer" is sent;
+                does not itself start or restart the timer.
+            </description>
+        </method>
+
+        <method name="timerPosition">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Positions a score's on-screen timer
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; timerPosition &lt;x&gt; &lt;y&gt;". Places the timer readout at the
+                normalized float (0.-1.) position x, y on the screen. Default near top-center.
+            </description>
+        </method>
+
+        <method name="allowPageChange">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Allows or blocks a device from turning its own pages
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; allowPageChange &lt;0/1&gt;". When enabled (1), a device may turn
+                that score's pages itself (e.g. by tapping/swiping); when disabled (0), page turns from the
+                device are ignored and pages can only be changed from Max with "page". A device's own page
+                turns are also always bounded by the score's page count — see "&lt;scoreName&gt; pages
+                &lt;n&gt;" on outlet 1, sent moments after "load"/"read" resolves it from the PDF file — so
+                they have no effect in the brief window before that arrives.
+            </description>
+        </method>
+
+        <method name="getDeviceInfo">
+            <digest>
+                Requests a score's device info
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; getDeviceInfo". Asks every device currently connected to that score
+                to report its screen size, pixel ratio and fullscreen state back to Max.
+            </description>
+        </method>
+    </methodlist>
+
+    <!--ATTRIBUTES-->
+    <attributelist>
+        <attribute name="port" get="1" set="1" type="int32" size="1">
+            <digest>Port the server listens on</digest>
+            <description>
+                HTTP/WebSocket port used when the server (re)starts. Default 8111. Takes effect only at
+                launch time — set it before sending "start", or set it as a creation argument; there is
+                currently no message to change the port of an already-running server.
+            </description>
+        </attribute>
+
+        <attribute name="watch" get="1" set="1" type="int32" size="1">
+            <digest>Auto-reloads the server when its script file changes</digest>
+            <description>
+                When enabled (1), the Node process is automatically restarted whenever
+                syncSuite.score.server.js is edited and saved on disk. The configured port and registered
+                scores are resent to it after each reload. Default 1.
+            </description>
+        </attribute>
+    </attributelist>
+
+    <!--SEEALSO-->
+    <seealsolist>
+        <seealso name="syncSuite.scoreplayer"/>
+    </seealsolist>
+
+</c74object>

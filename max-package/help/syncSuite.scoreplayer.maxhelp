@@ -73,7 +73,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 100.0, 121.0, 1047.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1047.0, 827.0 ],
                         "openinpresentation": 1,
                         "showontab": 2,
                         "boxes": [
@@ -158,10 +158,10 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 283.30096781253815, 241.5533955693245, 173.0, 51.0 ],
+                                    "patching_rect": [ 283.30096781253815, 241.5533955693245, 175.0, 51.0 ],
                                     "presentation": 1,
                                     "presentation_linecount": 3,
-                                    "presentation_rect": [ 174.0, 165.0, 173.0, 51.0 ],
+                                    "presentation_rect": [ 174.0, 165.0, 175.0, 51.0 ],
                                     "text": "Use \"space\" key to trigger events and \"r\" to rewind the score."
                                 }
                             },
@@ -970,7 +970,6 @@
                         ]
                     },
                     "patching_rect": [ 249.54854142665863, 1029.0, 188.0, 22.0 ],
-                    "presentation_linecount": 2,
                     "text": "p \"example in performance patch\""
                 }
             },
@@ -1035,7 +1034,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 672.0, 302.0, 150.0, 33.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "Lines commands are non-blocking."
                                 }
                             },
@@ -1058,8 +1056,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 745.0, 237.5, 138.0, 51.0 ],
-                                    "presentation_linecount": 5,
+                                    "patching_rect": [ 745.0, 237.5, 140.0, 51.0 ],
                                     "text": "Trigger simultaneous lines. Then trigger the second event."
                                 }
                             },
@@ -1131,8 +1128,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 268.0, 217.0, 108.0, 78.0 ],
-                                    "presentation_linecount": 5,
+                                    "patching_rect": [ 268.0, 217.0, 109.0, 78.0 ],
                                     "text": "Trigger the first event and then try to trigger the second... impossible!"
                                 }
                             },
@@ -1531,7 +1527,6 @@
                                         ]
                                     },
                                     "patching_rect": [ 92.0, 201.0, 135.0, 22.0 ],
-                                    "presentation_linecount": 3,
                                     "text": "p get_score_with_delay"
                                 }
                             },
@@ -1574,8 +1569,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 491.5, 717.0, 92.23300844430923, 22.0 ],
-                                    "text": "me neither!"
+                                    "patching_rect": [ 491.5, 717.0, 92.23300844430923, 22.0 ]
                                 }
                             },
                             {
@@ -1592,13 +1586,11 @@
                             {
                                 "box": {
                                     "id": "obj-10",
-                                    "linecount": 2,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 409.5, 671.0, 92.23300844430923, 35.0 ],
-                                    "text": "you were not expecting me!"
+                                    "patching_rect": [ 409.5, 671.0, 92.23300844430923, 22.0 ]
                                 }
                             },
                             {
@@ -1619,8 +1611,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 334.5, 625.0, 92.23300844430923, 22.0 ],
-                                    "text": "here i am!"
+                                    "patching_rect": [ 334.5, 625.0, 92.23300844430923, 22.0 ]
                                 }
                             },
                             {
@@ -1637,13 +1628,11 @@
                             {
                                 "box": {
                                     "id": "obj-5",
-                                    "linecount": 4,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 251.5, 554.0, 92.23300844430923, 62.0 ],
-                                    "text": "pipi will receive a message after 10 seconds"
+                                    "patching_rect": [ 251.5, 554.0, 93.0, 22.0 ]
                                 }
                             },
                             {
@@ -1799,7 +1788,6 @@
                         ]
                     },
                     "patching_rect": [ 124.54854142665863, 1029.0, 113.0, 22.0 ],
-                    "presentation_linecount": 4,
                     "text": "p \"delays and lines\""
                 }
             },
@@ -1822,7 +1810,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 514.7669860720634, 416.0, 75.0, 39.0 ],
+                    "patching_rect": [ 515.7669860720634, 420.0, 75.0, 39.0 ],
                     "text": "Check here!"
                 }
             },
@@ -1889,7 +1877,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 281.1546388864517, 645.0, 342.0, 60.0 ],
-                                    "presentation_linecount": 4,
                                     "text": "The DO-LINE command allows you to generate a linear ramp following line's format [starting-value target-value time-in-ms].\n\nUp to 20 simultaneous ramps can be used."
                                 }
                             },
@@ -1901,7 +1888,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 14.154638886451721, 645.0, 171.0, 20.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "DO-LINE receiver1 0. 1. 1000"
                                 }
                             },

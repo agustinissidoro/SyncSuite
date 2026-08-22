@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Score</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #111; overflow: hidden; }
+  #stage { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+  #page-wrap { transform-origin: center center; transition: transform 80ms linear; }
+  #pdf-canvas { display: block; background: #fff; opacity: 0; transition: opacity 120ms ease; }
+  #pdf-canvas.ready { opacity: 1; }
+
+  #overlay { position: absolute; inset: 0; pointer-events: none; font-family: -apple-system, Helvetica, Arial, sans-serif; }
+  #barbeat {
+    position: absolute;
+    font: 700 22px/1 monospace;
+    background: rgba(0,0,0,.55); padding: 6px 12px; border-radius: 6px;
+    display: none;
+  }
+  #bar-label, #beat-label { display: none; color: #0f0; }
+  #bb-sep { display: none; color: #888; padding: 0 6px; }
+  #metronome {
+    position: absolute;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #333; transition: background 40ms linear; display: none;
+    align-items: center; justify-content: center;
+    font: 700 12px sans-serif; color: #eee; user-select: none;
+  }
+  #text-overlay {
+    position: absolute;
+    color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.8);
+    font-weight: 700; white-space: nowrap; display: none;
+  }
+  #timer {
+    position: absolute;
+    font: 700 48px/1 monospace;
+    color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.8);
+    white-space: nowrap; display: none; user-select: none;
+  }
+  #black-screen {
+    position: absolute; inset: 0; background: #000; z-index: 20; display: none;
+  }
+  #flash-screen {
+    position: absolute; inset: 0; z-index: 30; display: none;
+  }
+  #gate {
+    position: absolute; inset: 0; z-index: 50;
+    background: #000; color: #eee;
+    display: flex; align-items: center; justify-content: center;
+    font: 600 22px sans-serif; text-align: center; cursor: pointer;
+  }
+  #connstate {
+    position: absolute; bottom: 8px; right: 12px;
+    width: 10px; height: 10px; border-radius: 50%; background: #555; z-index: 40;
+  }
+  #connstate.up { background: #2c2; }
+  #fullscreen-btn {
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 60; display: none;
+    color: #eee; background: rgba(0,0,0,.6); border: 1px solid #555; border-radius: 6px;
+    font: 600 15px sans-serif; padding: 8px 16px; cursor: pointer;
+  }
+  #load-error {
+    position: absolute; inset: 0; z-index: 70; display: none;
+    align-items: center; justify-content: center; text-align: center; padding: 24px;
+    color: #f66; background: #111; font: 600 16px/1.4 sans-serif; white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="page-wrap"><canvas id="pdf-canvas"></canvas></div>
+  <div id="overlay">
+    <div id="barbeat"><span id="bar-label"></span><span id="bb-sep"> / </span><span id="beat-label"></span></div>
+    <div id="metronome"><span id="metronome-num"></span></div>
+    <div id="text-overlay"></div>
+    <div id="timer">00:00</div>
+  </div>
+  <div id="black-screen"></div>
+  <div id="flash-screen"></div>
+  <div id="connstate"></div>
+  <div id="fullscreen-btn">Fullscreen</div>
+  <div id="load-error"></div>
+  <div id="gate">Tap to begin</div>
+</div>
+
+<script src="/vendor/pdfjs/pdf.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/vendor/pdfjs/pdf.worker.min.js';
+
+const scoreName = location.pathname.replace(/^\//, '');
+
+// =======================================================================
+// PDF rendering — prerender every page to an ImageBitmap on load, so any
+// page jump is an instant draw call, not a decode.
+// =======================================================================
+const canvas = document.getElementById('pdf-canvas');
+const ctx = canvas.getContext('2d', { alpha: false });
+const pageWrap = document.getElementById('page-wrap');
+
+let pdfDoc = null;
+let currentPage = 1;
+const pageCache = new Map(); // page number -> ImageBitmap
+const loadErrorEl = document.getElementById('load-error');
+
+function showLoadError(err) {
+  console.error('Failed to load score:', err);
+  loadErrorEl.textContent = 'Failed to load score:\n' + (err && err.message ? err.message : err);
+  loadErrorEl.style.display = 'flex';
+}
+
+// A previous load failing shouldn't leave a stale error message on screen
+// once a later load (or page render) actually succeeds.
+function clearLoadError() {
+  loadErrorEl.style.display = 'none';
+}
+
+async function loadScore(url) {
+  try {
+    pageCache.clear();
+    pdfDoc = await pdfjsLib.getDocument(url).promise;
+    clearLoadError();
+    sendWS({ type: 'pageCount', pageCount: pdfDoc.numPages });
+    await renderPage(currentPage || 1);
+    prerenderRemaining();
+  } catch (err) {
+    pdfDoc = null;
+    showLoadError(err);
+  }
+}
+
+async function renderToBitmap(num) {
+  const page = await pdfDoc.getPage(num);
+  const dpr = window.devicePixelRatio || 1;
+  const baseViewport = page.getViewport({ scale: 1 });
+  const scale = Math.min(
+    window.innerWidth / baseViewport.width,
+    window.innerHeight / baseViewport.height
+  ) * dpr;
+  const viewport = page.getViewport({ scale });
+
+  const off = document.createElement('canvas');
+  off.width = viewport.width;
+  off.height = viewport.height;
+  await page.render({ canvasContext: off.getContext('2d'), viewport }).promise;
+  return createImageBitmap(off);
+}
+
+function drawBitmap(bitmap) {
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.style.width = (bitmap.width / dpr) + 'px';
+  canvas.style.height = (bitmap.height / dpr) + 'px';
+  ctx.drawImage(bitmap, 0, 0);
+  canvas.classList.add('ready'); // hides the blank/black canvas until the first real frame is drawn
+}
+
+async function renderPage(num) {
+  if (!pdfDoc || num < 1 || num > pdfDoc.numPages) return;
+  currentPage = num;
+  if (pageCache.has(num)) {
+    drawBitmap(pageCache.get(num));
+    return;
+  }
+  try {
+    const bitmap = await renderToBitmap(num);
+    pageCache.set(num, bitmap);
+    if (currentPage === num) drawBitmap(bitmap); // still the wanted page after the await
+  } catch (err) {
+    showLoadError(err);
+  }
+}
+
+// Renders outward from currentPage (n, n+1, n-1, n+2, n-2, ...) instead of
+// strictly 1..numPages, so an immediate page turn right after loading is
+// far more likely to already be cached instead of stalling on a decode.
+function prerenderOrder(from, numPages) {
+  const order = [from];
+  for (let offset = 1; order.length < numPages; offset++) {
+    const fwd = from + offset;
+    const back = from - offset;
+    if (fwd <= numPages) order.push(fwd);
+    if (back >= 1) order.push(back);
+  }
+  return order;
+}
+
+async function prerenderRemaining() {
+  if (!pdfDoc) return;
+  for (const n of prerenderOrder(currentPage, pdfDoc.numPages)) {
+    if (pageCache.has(n)) continue;
+    try {
+      const bitmap = await renderToBitmap(n);
+      pageCache.set(n, bitmap);
+      if (currentPage === n) drawBitmap(bitmap);
+    } catch (e) { /* ignore, will fall back to on-demand render */ }
+  }
+}
+
+window.addEventListener('resize', () => {
+  pageCache.clear();
+  if (pdfDoc) { renderPage(currentPage); prerenderRemaining(); }
+});
+
+// =======================================================================
+// Overlay state application — one function handles both the initial
+// full 'sync' and reflects the same fields individual delta messages set.
+//
+// Perf: most messages during a live session only touch one or two fields
+// (a bar/beat tick, a text change...). Diffing against the previous state
+// and only touching the DOM properties that actually changed avoids
+// redundant style writes/reflows on every single message — the busiest
+// source of the lag reported during rapid updates. `force` (used for the
+// initial full 'sync') bypasses the diff so every field is painted at
+// least once, regardless of whether it happens to match this client's
+// hardcoded defaults below.
+// =======================================================================
+const barbeatEl = document.getElementById('barbeat');
+const barLabelEl = document.getElementById('bar-label');
+const beatLabelEl = document.getElementById('beat-label');
+const bbSepEl = document.getElementById('bb-sep');
+const metroEl = document.getElementById('metronome');
+const metroNumEl = document.getElementById('metronome-num');
+const textEl = document.getElementById('text-overlay');
+const blackEl = document.getElementById('black-screen');
+const flashEl = document.getElementById('flash-screen');
+const timerEl = document.getElementById('timer');
+
+let state = {
+  displayBar: false, displayBeat: false, bar: 0, beat: 0, barColor: '#00ff00', beatColor: '#00ff00',
+  textSize: 24, text: '', textColor: '#ffffff', black: false, zoom: 1,
+  displayMetronome: false, metronomeSize: 1, metronomeColor: '#333333',
+  allowPageChange: true, backgroundColor: '#111111', invertColor: false,
+  textX: 0.5, textY: 0.92, barBeatX: 0.1, barBeatY: 0.06, metronomeX: 0.92, metronomeY: 0.08,
+  displayTimer: false, timerValue: 0, timerSize: 48, timerColor: '#ffffff', timerX: 0.5, timerY: 0.08,
+};
+
+// Positions are normalized (0.-1.); convert to a CSS percentage.
+function pct(v) {
+  return (v * 100) + '%';
+}
+
+function applyState(s, force) {
+  const prev = state;
+  state = { ...state, ...s };
+  const changed = (k) => force || state[k] !== prev[k];
+
+  if (changed('bar') || changed('beat') || changed('displayBar') || changed('displayBeat') ||
+      changed('barColor') || changed('beatColor')) {
+    renderBarBeat();
+  }
+  if (changed('beat')) {
+    metroNumEl.textContent = state.beat;
+  }
+  if (changed('barBeatX') || changed('barBeatY')) {
+    barbeatEl.style.left = pct(state.barBeatX);
+    barbeatEl.style.top = pct(state.barBeatY);
+    barbeatEl.style.transform = 'translate(-50%, -50%)';
+  }
+  if (changed('text') || changed('textSize') || changed('textColor')) {
+    textEl.style.display = state.text ? 'block' : 'none';
+    textEl.style.fontSize = state.textSize + 'px';
+    textEl.style.color = state.textColor;
+    textEl.textContent = state.text;
+  }
+  if (changed('textX') || changed('textY')) {
+    textEl.style.left = pct(state.textX);
+    textEl.style.top = pct(state.textY);
+    textEl.style.transform = 'translate(-50%, -50%)';
+  }
+  if (changed('black')) {
+    blackEl.style.display = state.black ? 'block' : 'none';
+  }
+  if (changed('displayMetronome') || changed('metronomeSize') || changed('metronomeColor')) {
+    metroEl.style.display = state.displayMetronome ? 'flex' : 'none';
+    const baseSize = 26 * (state.metronomeSize || 1);
+    metroEl.style.width = baseSize + 'px';
+    metroEl.style.height = baseSize + 'px';
+    metroEl.style.fontSize = (baseSize * 0.42) + 'px';
+    metroEl.style.background = state.metronomeColor;
+  }
+  if (changed('metronomeX') || changed('metronomeY')) {
+    metroEl.style.left = pct(state.metronomeX);
+    metroEl.style.top = pct(state.metronomeY);
+    metroEl.style.transform = 'translate(-50%, -50%)';
+  }
+  if (changed('zoom')) {
+    pageWrap.style.transform = `scale(${state.zoom || 1})`;
+  }
+  if (changed('backgroundColor')) {
+    document.body.style.background = state.backgroundColor;
+  }
+  if (changed('invertColor')) {
+    pageWrap.style.filter = state.invertColor ? 'invert(1) hue-rotate(180deg)' : 'none';
+  }
+  if (changed('timerValue') || changed('displayTimer') || changed('timerColor')) {
+    renderTimer();
+  }
+  if (changed('timerSize')) {
+    timerEl.style.fontSize = state.timerSize + 'px';
+  }
+  if (changed('timerX') || changed('timerY')) {
+    timerEl.style.left = pct(state.timerX);
+    timerEl.style.top = pct(state.timerY);
+    timerEl.style.transform = 'translate(-50%, -50%)';
+  }
+  if (s.page !== undefined) renderPage(s.page);
+  if (s.pdfUrl) loadScore(s.pdfUrl);
+}
+
+function formatTimer(sec) {
+  sec = Math.max(0, Math.floor(sec));
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+function renderTimer() {
+  timerEl.style.display = state.displayTimer ? 'block' : 'none';
+  timerEl.style.color = state.timerColor;
+  timerEl.textContent = formatTimer(state.timerValue);
+}
+
+function renderBarBeat() {
+  if (!state.displayBar && !state.displayBeat) { barbeatEl.style.display = 'none'; return; }
+  barLabelEl.style.display = state.displayBar ? 'inline' : 'none';
+  barLabelEl.style.color = state.barColor;
+  barLabelEl.textContent = `Bar ${state.bar}`;
+  beatLabelEl.style.display = state.displayBeat ? 'inline' : 'none';
+  beatLabelEl.style.color = state.beatColor;
+  beatLabelEl.textContent = `Beat ${state.beat}`;
+  bbSepEl.style.display = (state.displayBar && state.displayBeat) ? 'inline' : 'none';
+  barbeatEl.style.display = 'block';
+}
+
+function pulseMetronome() {
+  if (!state.displayMetronome) return;
+  metroEl.style.background = '#fff';
+  metroNumEl.style.color = '#111';
+  setTimeout(() => {
+    metroEl.style.background = state.metronomeColor;
+    metroNumEl.style.color = '#eee';
+  }, 60);
+}
+
+function doFlash(ms, color) {
+  flashEl.style.background = color || '#ff0000';
+  flashEl.style.display = 'block';
+  setTimeout(() => { flashEl.style.display = 'none'; }, ms || 50);
+}
+
+// =======================================================================
+// WebSocket — connection is opened by the fullscreen gate tap (a real
+// user gesture is required for requestFullscreen anyway, so we piggyback
+// the socket open on the same tap rather than connecting on page load).
+// =======================================================================
+let ws = null;
+
+function sendWS(msg) {
+  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(msg));
+}
+
+function connect() {
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  ws = new WebSocket(`${proto}://${location.host}?score=${encodeURIComponent(scoreName)}`);
+  const connEl = document.getElementById('connstate');
+
+  ws.onopen = () => {
+    connEl.classList.add('up');
+    reportDeviceInfo(null); // push on connect
+  };
+  ws.onclose = () => { connEl.classList.remove('up'); setTimeout(connect, 1000); };
+  ws.onerror = () => ws.close();
+
+  ws.onmessage = (ev) => {
+    const msg = JSON.parse(ev.data);
+    switch (msg.type) {
+      case 'sync':
+        applyState(msg.state, true);
+        if (msg.reload) location.reload();
+        break;
+      case 'load':
+        applyState({ pdfUrl: msg.url });
+        break;
+      case 'page':
+        applyState({ page: msg.page });
+        break;
+      case 'position':
+        applyState({ bar: msg.bar, beat: msg.beat });
+        pulseMetronome();
+        break;
+      case 'displayBar':
+        applyState({ displayBar: msg.flag });
+        break;
+      case 'displayBeat':
+        applyState({ displayBeat: msg.flag });
+        break;
+      case 'textSize':
+        applyState({ textSize: msg.size });
+        break;
+      case 'text':
+        applyState({ text: msg.text });
+        break;
+      case 'textColor':
+        applyState({ textColor: msg.color });
+        break;
+      case 'black':
+        applyState({ black: msg.flag });
+        break;
+      case 'zoom':
+        applyState({ zoom: msg.zoom });
+        break;
+      case 'backgroundColor':
+        applyState({ backgroundColor: msg.color });
+        break;
+      case 'textPosition':
+        applyState({ textX: msg.x, textY: msg.y });
+        break;
+      case 'barBeatPosition':
+        applyState({ barBeatX: msg.x, barBeatY: msg.y });
+        break;
+      case 'invertColor':
+        applyState({ invertColor: msg.flag });
+        break;
+      case 'flash':
+        doFlash(msg.ms, msg.color);
+        break;
+      case 'displayMetronome':
+        applyState({ displayMetronome: msg.flag });
+        break;
+      case 'metronomeSize':
+        applyState({ metronomeSize: msg.size });
+        break;
+      case 'metronomeColor':
+        applyState({ metronomeColor: msg.color });
+        break;
+      case 'metronomePosition':
+        applyState({ metronomeX: msg.x, metronomeY: msg.y });
+        break;
+      case 'barColor':
+        applyState({ barColor: msg.color });
+        break;
+      case 'beatColor':
+        applyState({ beatColor: msg.color });
+        break;
+      case 'timer':
+        applyState({ timerValue: msg.value });
+        break;
+      case 'displayTimer':
+        applyState({ displayTimer: msg.flag });
+        break;
+      case 'timerSize':
+        applyState({ timerSize: msg.size });
+        break;
+      case 'timerColor':
+        applyState({ timerColor: msg.color });
+        break;
+      case 'timerPosition':
+        applyState({ timerX: msg.x, timerY: msg.y });
+        break;
+      case 'getDeviceInfo':
+        reportDeviceInfo(msg.requestId);
+        break;
+      case 'reload':
+        location.reload();
+        break;
+      case 'removed':
+        document.body.innerHTML = '';
+        document.body.style.background = '#000';
+        break;
+    }
+  };
+}
+
+function reportDeviceInfo(requestId) {
+  sendWS({
+    type: 'deviceInfo',
+    requestId: requestId || undefined,
+    screenWidth: window.screen.width,
+    screenHeight: window.screen.height,
+    devicePixelRatio: window.devicePixelRatio,
+    fullscreen: isFullscreen(),
+  });
+}
+
+// =======================================================================
+// Fullscreen compat — iPadOS/tablet Safari (and older WebKit) exposes this
+// only under webkit-prefixed names, and some tablet contexts (e.g. Safari
+// in an iframe, or Split View) throw synchronously instead of rejecting a
+// promise. Both cases used to silently abort the caller before it got to
+// `started = true` / `updateFullscreenButton()`, which is why the re-entry
+// button could fail to ever appear.
+// =======================================================================
+function isFullscreen() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement);
+}
+
+function requestFullscreenCompat(el) {
+  const fn = el.requestFullscreen || el.webkitRequestFullscreen;
+  if (!fn) return Promise.reject(new Error('Fullscreen API not available on this device'));
+  try {
+    const result = fn.call(el);
+    return (result && typeof result.catch === 'function') ? result : Promise.resolve();
+  } catch (err) {
+    return Promise.reject(err);
+  }
+}
+
+let started = false;
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+function updateFullscreenButton() {
+  fullscreenBtn.style.display = (started && !isFullscreen()) ? 'block' : 'none';
+}
+
+['fullscreenchange', 'webkitfullscreenchange'].forEach(evt => {
+  document.addEventListener(evt, () => {
+    sendWS({ type: 'fullscreenChange', fullscreen: isFullscreen() });
+    updateFullscreenButton();
+  });
+});
+
+fullscreenBtn.addEventListener('click', () => {
+  requestFullscreenCompat(document.documentElement).catch(() => {});
+});
+
+// =======================================================================
+// Fullscreen gate — requestFullscreen only works inside a user gesture,
+// so the server cannot trigger it remotely. One tap does both: enter
+// fullscreen and open the WebSocket. Everything after is server-driven.
+// A re-entry button (above) covers the case where fullscreen is later
+// exited, since that too can only be requested from a user gesture.
+//
+// The fullscreen request is fire-and-forget: on devices where it's
+// unsupported or throws, the rest of the gate (opening the WebSocket,
+// showing the re-entry button) must still run.
+// =======================================================================
+document.getElementById('gate').addEventListener('click', () => {
+  requestFullscreenCompat(document.documentElement).catch(() => {});
+  document.getElementById('gate').style.display = 'none';
+  started = true;
+  connect();
+  updateFullscreenButton();
+});
+
+// =======================================================================
+// Swipe to turn pages — a horizontal swipe sends a page-turn request to
+// the server (the authority on `page`), which validates against
+// allowPageChange/pageCount and broadcasts the result back to everyone.
+//
+// A double-tap (two quick, close-together taps that aren't a swipe)
+// re-enters fullscreen — a faster alternative to the re-entry button for
+// tablets, where the OS chrome (dock reveal, status bar, Split View) can
+// kick the page out of fullscreen without any in-page control involved.
+// =======================================================================
+let touchStartX = 0, touchStartY = 0;
+let lastTapTime = 0, lastTapX = 0, lastTapY = 0;
+
+document.addEventListener('touchstart', (e) => {
+  const t = e.changedTouches[0];
+  touchStartX = t.clientX;
+  touchStartY = t.clientY;
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+  const isSwipe = Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 2;
+
+  if (isSwipe) {
+    if (state.allowPageChange) sendWS({ type: 'turnPage', delta: dx < 0 ? 1 : -1 });
+    return;
+  }
+
+  if (!started) return; // nothing to re-enter before the gate's first tap
+  const now = Date.now();
+  const closeEnough = Math.abs(t.clientX - lastTapX) < 40 && Math.abs(t.clientY - lastTapY) < 40;
+  if (now - lastTapTime < 350 && closeEnough) {
+    requestFullscreenCompat(document.documentElement).catch(() => {});
+    lastTapTime = 0; // consume, so a third tap doesn't immediately re-trigger
+  } else {
+    lastTapTime = now;
+    lastTapX = t.clientX;
+    lastTapY = t.clientY;
+  }
+}, { passive: true });
+
+// Manual page turn for testing without Max, left/right arrows
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') renderPage(currentPage + 1);
+  if (e.key === 'ArrowLeft') renderPage(currentPage - 1);
+});
+</script>
+</body>
+</html>
