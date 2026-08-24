@@ -35,9 +35,16 @@ function toNormalized(v, fallback) {
   return Math.min(1, Math.max(0, toFloat(v, fallback)));
 }
 
-function rgbIntToHex(n) {
-  const num = toInt(n, 0xff0000);
-  return '#' + (num & 0xffffff).toString(16).padStart(6, '0');
+// Colors are sent as three separate ints, `<r> <g> <b>`, each 0-255 (e.g.
+// from a Max `swatch` unpacked into three number boxes), not a single
+// packed RGB int. Out-of-range values are clamped rather than rejected.
+// Falls back to the previous color if fewer than 3 numbers are sent.
+function rgbToHex(args, fallbackHex) {
+  if (args.length < 3) return fallbackHex;
+  const byte = (v) => Math.min(255, Math.max(0, toInt(v, 0)));
+  return '#' + [byte(args[0]), byte(args[1]), byte(args[2])]
+    .map(n => n.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 const path = require('path');
@@ -216,16 +223,33 @@ const SCORE_COMMANDS = {
   },
 
   barColor(score, registry, args) {
-    const hex = rgbIntToHex(args[0]);
+    const hex = rgbToHex(args, score.state.barColor);
     score.patch({ barColor: hex });
     registry.broadcast(score.name, { type: 'barColor', color: hex });
     return { ok: true };
   },
 
   beatColor(score, registry, args) {
-    const hex = rgbIntToHex(args[0]);
+    const hex = rgbToHex(args, score.state.beatColor);
     score.patch({ beatColor: hex });
     registry.broadcast(score.name, { type: 'beatColor', color: hex });
+    return { ok: true };
+  },
+
+  // Font size (px) of the "Bar <n>"/"Beat <n>" overlay text. The viewer
+  // auto-shrinks it to fit the screen if it would otherwise overflow, so an
+  // oversized value degrades gracefully instead of clipping off-screen.
+  barSize(score, registry, args) {
+    const n = toInt(args[0], score.state.barSize);
+    score.patch({ barSize: n });
+    registry.broadcast(score.name, { type: 'barSize', size: n });
+    return { ok: true };
+  },
+
+  beatSize(score, registry, args) {
+    const n = toInt(args[0], score.state.beatSize);
+    score.patch({ beatSize: n });
+    registry.broadcast(score.name, { type: 'beatSize', size: n });
     return { ok: true };
   },
 
@@ -258,7 +282,7 @@ const SCORE_COMMANDS = {
   },
 
   textColor(score, registry, args) {
-    const hex = rgbIntToHex(args[0]);
+    const hex = rgbToHex(args, score.state.textColor);
     score.patch({ textColor: hex });
     registry.broadcast(score.name, { type: 'textColor', color: hex });
     return { ok: true };
@@ -285,7 +309,7 @@ const SCORE_COMMANDS = {
   },
 
   flashColor(score, registry, args) {
-    const hex = rgbIntToHex(args[0]);
+    const hex = rgbToHex(args, score.state.flashColor);
     score.patch({ flashColor: hex });
     return { ok: true }; // takes effect on the next `flash`, no need to push now
   },
@@ -311,7 +335,7 @@ const SCORE_COMMANDS = {
   },
 
   metronomeColor(score, registry, args) {
-    const hex = rgbIntToHex(args[0]);
+    const hex = rgbToHex(args, score.state.metronomeColor);
     score.patch({ metronomeColor: hex });
     registry.broadcast(score.name, { type: 'metronomeColor', color: hex });
     return { ok: true };
@@ -342,7 +366,7 @@ const SCORE_COMMANDS = {
   },
 
   backgroundColor(score, registry, args) {
-    const hex = rgbIntToHex(args[0]);
+    const hex = rgbToHex(args, score.state.backgroundColor);
     score.patch({ backgroundColor: hex });
     registry.broadcast(score.name, { type: 'backgroundColor', color: hex });
     return { ok: true };
@@ -404,7 +428,7 @@ const SCORE_COMMANDS = {
   },
 
   timerColor(score, registry, args) {
-    const hex = rgbIntToHex(args[0]);
+    const hex = rgbToHex(args, score.state.timerColor);
     score.patch({ timerColor: hex });
     registry.broadcast(score.name, { type: 'timerColor', color: hex });
     return { ok: true };
@@ -433,6 +457,39 @@ const SCORE_COMMANDS = {
     return { ok: true };
   },
 
+  // Sent as `<scoreName> rename <newName>`. Renames the score in place —
+  // same state, same connected clients, same running timer — just under a
+  // new key/Max handler. server.js re-registers the Max handler for the new
+  // name after this returns (dispatchScoreCommand can't touch Max.addHandler
+  // itself). Connected browsers are told to follow via a `renamed` broadcast,
+  // since their URL/websocket are still pinned to the old name.
+  //
+  // Replies with the same init-style info an `addScore` would, under the new
+  // name, so downstream Max patching doesn't need a separate case for a
+  // renamed score vs. a freshly added one: `renamed`, `currentPage`, `pages`,
+  // and — once the server is running — `address`. server.js follows up with
+  // the usual `connectedDevices`/`state` health outlet too.
+  rename(score, registry, args) {
+    const newName = args[0];
+    if (!newName) return { ok: false, error: 'rename requires a new name' };
+    const oldName = score.name;
+    const result = registry.renameScore(oldName, newName);
+    if (!result.ok) return result;
+    // pdfUrl is keyed by score name (/scores/<name>/score.pdf) — without
+    // this it'd keep pointing at the old name's now-gone route and 404 the
+    // next time a client (re)loads it.
+    if (score.state.pdfUrl) score.patch({ pdfUrl: `/scores/${newName}/score.pdf` });
+    registry.broadcast(newName, { type: 'renamed', name: newName });
+    const info = [
+      ['renamed', newName],
+      ['currentPage', score.state.page],
+      ['pages', score.state.pageCount],
+    ];
+    const address = scoreAddress(registry, newName);
+    if (address) info.push(['address', address]);
+    return { ok: true, info };
+  },
+
   restart(score, registry) {
     score.reset();
     registry.broadcast(score.name, { type: 'sync', state: score.state, reload: true });
@@ -453,4 +510,4 @@ function dispatchScoreCommand(score, registry, command, args) {
   return handler(score, registry, args);
 }
 
-module.exports = { makeGlobalCommands, dispatchScoreCommand, toFlag, toInt, toFloat, rgbIntToHex };
+module.exports = { makeGlobalCommands, dispatchScoreCommand, toFlag, toInt, toFloat, rgbToHex };

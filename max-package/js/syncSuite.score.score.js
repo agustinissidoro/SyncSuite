@@ -21,6 +21,8 @@ function defaultState() {
     beat: 0,
     barColor: '#00ff00',
     beatColor: '#00ff00',
+    barSize: 22,
+    beatSize: 22,
     textSize: 24,
     text: '',
     textColor: '#ffffff',
@@ -110,6 +112,21 @@ class ScoreRegistry {
     this.broadcast(name, { type: 'removed' });
     score.clients.forEach(ws => ws.close());
     this.scores.delete(name);
+    return { ok: true };
+  }
+
+  // Renames a score in place: same Score object (state, connected clients,
+  // running timer all carry over), just re-keyed in the map under the new
+  // name. Callers (server.js) are responsible for re-pointing anything keyed
+  // by name outside the registry, e.g. the score's Max handler.
+  renameScore(oldName, newName) {
+    const score = this.scores.get(oldName);
+    if (!score) return { ok: false, error: `score '${oldName}' does not exist` };
+    if (oldName === newName) return { ok: true };
+    if (this.scores.has(newName)) return { ok: false, error: `score '${newName}' already exists` };
+    this.scores.delete(oldName);
+    score.name = newName;
+    this.scores.set(newName, score);
     return { ok: true };
   }
 

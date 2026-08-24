@@ -84,26 +84,29 @@ all invertColor 1
 | `position` | `<bar> <beat>` | Sets bar and beat together in one message — prefer this over separate `bar`/`beat` calls when driving continuous playback position, to halve the traffic/redraws. |
 | `displayBar` | `<flag>` | Shows/hides the bar number in the overlay. |
 | `displayBeat` | `<flag>` | Shows/hides the beat number in the overlay. |
-| `barColor` | `<rgb-int>` | Sets the "Bar `<n>`" text color. Default green. |
-| `beatColor` | `<rgb-int>` | Sets the "Beat `<n>`" text color. Default green. |
+| `barColor` | `<r> <g> <b>` | Sets the "Bar `<n>`" text color, each 0-255. Default green (`0 255 0`). |
+| `beatColor` | `<r> <g> <b>` | Sets the "Beat `<n>`" text color, each 0-255. Default green (`0 255 0`). |
+| `barSize` | `<n>` | Font size (px) of the "Bar `<n>`" text. Default 22. Shrinks together with `beatSize` if the readout would overflow the screen. |
+| `beatSize` | `<n>` | Font size (px) of the "Beat `<n>`" text. Default 22. Shrinks together with `barSize` if the readout would overflow the screen. |
 | `textSize` | `<n>` | Font size (px) of the text overlay. |
 | `text` | `<string...>` | Sets/shows the text overlay (empty string hides it). |
-| `textColor` | `<rgb-int>` | Sets the text overlay's color. Default white. |
+| `textColor` | `<r> <g> <b>` | Sets the text overlay's color, each 0-255. Default white (`255 255 255`). |
 | `textPosition` | `<x> <y>` | Position (normalized float, 0.–1.) of the text overlay's center. |
 | `barBeatPosition` | `<x> <y>` | Position (normalized float, 0.–1.) of the bar/beat overlay's center. |
 | `black` | `<flag>` | Shows/hides a full black screen over the score. Any nonzero value counts as on, e.g. `black 2`. |
 | `zoom` | `<factor>` | Scales the page (1.0 = 100%). |
-| `backgroundColor` | `<rgb-int>` | Sets the viewer's background color (Max color atom). |
+| `backgroundColor` | `<r> <g> <b>` | Sets the viewer's background color, each 0-255. |
 | `invertColor` | `<flag>` | Inverts the score's colors (white-paper scores → dark, low-luminosity). Overlays are unaffected. |
 | `flash` | — | One-shot full-screen color flash, using the current `flashColor` and `flashDuration`. |
-| `flashColor` | `<rgb-int>` | Sets the color used by the next `flash`. |
+| `flashColor` | `<r> <g> <b>` | Sets the color used by the next `flash`, each 0-255. Default red (`255 0 0`). |
 | `flashDuration` | `<ms>` | Sets how long, in milliseconds, the next `flash` stays visible. Default 50. |
 | `displayMetronome` | `<flag>` | Shows/hides the metronome circle. It flashes white on every beat, showing the current beat number inside it. |
 | `metronomeSize` | `<factor>` | Scales the metronome circle (1.0 = 26px). |
-| `metronomeColor` | `<rgb-int>` | Sets the metronome circle's idle (between-beats) color. Default dark gray; always flashes white on the beat. |
+| `metronomeColor` | `<r> <g> <b>` | Sets the metronome circle's idle (between-beats) color, each 0-255. Default dark gray (`51 51 51`); always flashes white on the beat. |
 | `metronomePosition` | `<x> <y>` | Position (normalized float, 0.–1.) of the metronome circle's center. Default near the top-right corner. |
 | `allowPageChange` | `<flag>` | Allows/blocks devices from turning their own pages via swipe. A device's own page turns are also always bounded by `<scoreName> pages <n>` (see below), sent moments after `load`/`read` resolves it from the PDF file, so they have no effect in the brief window before that arrives. |
 | `getDeviceInfo` | — | Asks connected viewers to report device info (see below). |
+| `rename` | `<newName>` | Renames this score to `newName` — state, connected devices, and any running timer all carry over. Connected viewers reconnect in place under the new name (no full page reload, no re-tapping the fullscreen gate). Every command after this must address the score by `newName`. Fails if `newName` is already registered. Replies the same way `addScore` would, under the new name: `<newName> renamed <newName>`, `<newName> currentPage <n>`, `<newName> pages <n>`, `<newName> connectedDevices <n>`, `<newName> state 1\|0`, and `<newName> address <fullAddress>` if the server is already running. |
 | `restart` | — | Resets this score to default state and reloads its viewers, outletting `<scoreName> currentPage 1` and `<scoreName> pages 0`. |
 | `refresh` | — | Reloads this score's viewers (no state reset). |
 

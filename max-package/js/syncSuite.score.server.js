@@ -219,12 +219,29 @@ if (typeof Max !== 'undefined') {
     });
   });
 
+  // A score's Max handler is keyed by name, so it has to be re-registered
+  // under the new name whenever a score is added or renamed (see below).
+  function registerScoreHandler(name) {
+    Max.addHandler(name, (...args) => {
+      const [command, ...rest] = args;
+      const score = registry.get(name);
+      if (!score) return;
+      runOnScore(score, command, rest);
+    });
+  }
+
   function runOnScore(score, command, rest) {
+    const oldName = score.name;
     const r = dispatchScoreCommand(score, registry, command, rest);
     if (!r.ok) { Max.outlet('error', `${score.name}: ${r.error}`); return; }
     if (r.warning) Max.outlet('warning', `${score.name}: ${r.warning}`);
     if (r.info) r.info.forEach(line => Max.outlet(score.name, ...line));
     if (command === 'load' || command === 'read') reportPageCount(score);
+    if (command === 'rename' && score.name !== oldName) {
+      Max.removeHandlers(oldName);
+      registerScoreHandler(score.name);
+      outletScoreHealth(score);
+    }
   }
 
   // addScore must also start listening for that score's own selector.
@@ -234,12 +251,7 @@ if (typeof Max !== 'undefined') {
     if (!result.ok) { Max.outlet('error', result.error); return; }
     outletScoreHealth(registry.get(name));
     if (result.info) result.info.forEach(line => Max.outlet(name, ...line));
-    Max.addHandler(name, (...args) => {
-      const [command, ...rest] = args;
-      const score = registry.get(name);
-      if (!score) return;
-      runOnScore(score, command, rest);
-    });
+    registerScoreHandler(name);
   });
 
   // `all <command> ...args` fans a score command out to every registered score.
@@ -257,6 +269,7 @@ if (typeof Max !== 'undefined') {
   console.log('  addScore violin');
   console.log('  violin load /absolute/path/to/score.pdf');
   console.log('  violin page 2');
+  console.log('  violin rename firstViolin');
   console.log('  get violin');
 
   process.stdin.setEncoding('utf8');

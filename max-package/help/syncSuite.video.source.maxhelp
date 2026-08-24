@@ -4,12 +4,12 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 5,
+            "revision": 4,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 100.0, 95.0, 914.0, 853.0 ],
+        "rect": [ 34.0, 95.0, 1140.0, 853.0 ],
         "description": "Wrapper around jit.world with extended mapping and compositing functionalities.",
         "digest": "Wrapper around jit.world",
         "showontab": 1,
@@ -36,14 +36,24 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 914.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 1140.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
+                            {
+                                "box": {
+                                    "id": "obj-10",
+                                    "maxclass": "newobj",
+                                    "numinlets": 1,
+                                    "numoutlets": 0,
+                                    "patching_rect": [ 182.0, 232.0, 32.0, 22.0 ],
+                                    "text": "print"
+                                }
+                            },
                             {
                                 "box": {
                                     "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
@@ -274,7 +284,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 5,
+                                            "revision": 4,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -541,7 +551,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 13.0, 11.0, 475.0, 52.0 ]
+                                    "patching_rect": [ 13.0, 11.0, 502.0, 52.0 ]
                                 }
                             },
                             {
@@ -649,6 +659,13 @@
                             },
                             {
                                 "patchline": {
+                                    "destination": [ "obj-10", 0 ],
+                                    "disabled": 1,
+                                    "source": [ "obj-8", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
                                     "destination": [ "obj-4", 0 ],
                                     "source": [ "obj-8", 0 ]
                                 }
@@ -676,12 +693,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 914.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1140.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -713,7 +730,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 85.0, 605.0, 655.0, 20.0 ],
+                                    "patching_rect": [ 85.0, 605.0, 673.0, 20.0 ],
                                     "text": "For a more complex implementation using simultaneously both projection modes, refer to the help of syncSuite.video.context."
                                 }
                             },
@@ -740,7 +757,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 5,
+                                            "revision": 4,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1099,7 +1116,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 13.0, 11.0, 475.0, 52.0 ]
+                                    "patching_rect": [ 13.0, 11.0, 498.0, 52.0 ]
                                 }
                             },
                             {
@@ -1226,12 +1243,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 914.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1140.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1576,7 +1593,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 13.0, 11.0, 475.0, 52.0 ]
+                                    "patching_rect": [ 13.0, 11.0, 501.0, 52.0 ]
                                 }
                             },
                             {
@@ -1751,12 +1768,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 914.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1140.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1862,7 +1879,7 @@
                                     "maxclass": "newobj",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 528.0, 280.0, 119.0, 22.0 ],
+                                    "patching_rect": [ 451.0, 280.0, 119.0, 22.0 ],
                                     "text": "s sync.source.help-2"
                                 }
                             },
@@ -1874,7 +1891,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 864.0, 189.0, 217.0, 51.0 ],
+                                    "patching_rect": [ 787.0, 189.0, 217.0, 51.0 ],
                                     "text": "Sending the time_ms message will start playing the current_video from that position in milliseconds."
                                 }
                             },
@@ -1910,7 +1927,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 627.0, 116.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 550.0, 116.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
                                     "text": "4",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1929,7 +1946,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 503.0, 154.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 426.0, 154.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
                                     "text": "3",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1944,7 +1961,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 648.0, 131.0, 119.0, 66.0 ],
+                                    "patching_rect": [ 571.0, 131.0, 119.0, 66.0 ],
                                     "text": "Set next video. This loads the video in memory.",
                                     "textjustification": 1
                                 }
@@ -1957,7 +1974,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 528.0, 151.0, 114.0, 39.0 ],
+                                    "patching_rect": [ 451.0, 151.0, 114.0, 39.0 ],
                                     "text": "Set current video.",
                                     "textjustification": 1
                                 }
@@ -1970,7 +1987,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 654.0, 204.0, 132.0, 35.0 ],
+                                    "patching_rect": [ 577.0, 204.0, 132.0, 35.0 ],
                                     "text": "next_video geom-demo-video.mp4"
                                 }
                             },
@@ -1981,7 +1998,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 793.0, 204.0, 64.0, 22.0 ],
+                                    "patching_rect": [ 716.0, 204.0, 64.0, 22.0 ],
                                     "text": "time_ms 0"
                                 }
                             },
@@ -1993,7 +2010,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 528.0, 204.0, 115.0, 35.0 ],
+                                    "patching_rect": [ 451.0, 204.0, 115.0, 35.0 ],
                                     "text": "current_video imovie_samp.mov"
                                 }
                             },
@@ -2022,7 +2039,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 859.0, 177.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 782.0, 177.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
                                     "text": "5",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -2137,7 +2154,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 13.0, 11.0, 475.0, 52.0 ]
+                                    "patching_rect": [ 13.0, 11.0, 503.0, 50.0 ]
                                 }
                             },
                             {
@@ -2178,7 +2195,7 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-31", 0 ],
-                                    "midpoints": [ 802.5, 264.5, 537.5, 264.5 ],
+                                    "midpoints": [ 725.5, 264.5, 460.5, 264.5 ],
                                     "source": [ "obj-12", 0 ]
                                 }
                             },
@@ -2191,7 +2208,7 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-31", 0 ],
-                                    "midpoints": [ 663.5, 264.5, 537.5, 264.5 ],
+                                    "midpoints": [ 586.5, 264.5, 460.5, 264.5 ],
                                     "source": [ "obj-23", 0 ]
                                 }
                             },
@@ -2322,7 +2339,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 25.0, 151.0, 475.0, 20.0 ],
+                    "patching_rect": [ 25.0, 151.0, 502.0, 20.0 ],
                     "text": "For its most basic use, syncSuite.video.source is a wrapper around jit.gl.movie and jit.gl.layer"
                 }
             },

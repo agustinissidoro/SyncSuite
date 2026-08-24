@@ -130,6 +130,27 @@
             </description>
         </method>
 
+        <method name="rename">
+            <arglist>
+                <arg name="new-name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Renames a registered score
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; rename &lt;new-name&gt;". Renames that score to "new-name" — its
+                loaded PDF, page, and all other state carry over unchanged, as do its currently connected
+                devices: each one is told in place to reconnect under the new name (no full page reload, no
+                re-tapping the fullscreen gate). Any future message must address the score by its new name,
+                e.g. "&lt;new-name&gt; page 2". Fails if "new-name" is already in
+                use by another score. Replies the same way "addScore" would, posted under the new name:
+                "&lt;new-name&gt; renamed &lt;new-name&gt;", "&lt;new-name&gt; currentPage &lt;n&gt;",
+                "&lt;new-name&gt; pages &lt;n&gt;", "&lt;new-name&gt; connectedDevices &lt;n&gt;" and
+                "&lt;new-name&gt; state 1|0", and — if the server is already running —
+                "&lt;new-name&gt; address &lt;address&gt;:&lt;port&gt;/&lt;new-name&gt;".
+            </description>
+        </method>
+
         <method name="get">
             <arglist>
                 <arg name="name" optional="0" type="symbol" />
@@ -311,27 +332,63 @@
 
         <method name="barColor">
             <arglist>
-                <arg name="color" optional="0" type="int" />
+                <arg name="r" optional="0" type="int" />
+                <arg name="g" optional="0" type="int" />
+                <arg name="b" optional="0" type="int" />
             </arglist>
             <digest>
                 Sets the bar readout's text color
             </digest>
             <description>
-                Sent as "&lt;scoreName&gt; barColor &lt;packed-rgb-int&gt;". Sets the color of the "Bar &lt;n&gt;"
-                text in the bar/beat readout (see "displayBar"). Default green.
+                Sent as "&lt;scoreName&gt; barColor &lt;r&gt; &lt;g&gt; &lt;b&gt;", each 0-255. Sets the color
+                of the "Bar &lt;n&gt;" text in the bar/beat readout (see "displayBar"). Default green
+                (0 255 0). Out-of-range values are clamped; fewer than 3 numbers leaves the color unchanged.
             </description>
         </method>
 
         <method name="beatColor">
             <arglist>
-                <arg name="color" optional="0" type="int" />
+                <arg name="r" optional="0" type="int" />
+                <arg name="g" optional="0" type="int" />
+                <arg name="b" optional="0" type="int" />
             </arglist>
             <digest>
                 Sets the beat readout's text color
             </digest>
             <description>
-                Sent as "&lt;scoreName&gt; beatColor &lt;packed-rgb-int&gt;". Sets the color of the "Beat &lt;n&gt;"
-                text in the bar/beat readout (see "displayBeat"). Default green.
+                Sent as "&lt;scoreName&gt; beatColor &lt;r&gt; &lt;g&gt; &lt;b&gt;", each 0-255. Sets the color
+                of the "Beat &lt;n&gt;" text in the bar/beat readout (see "displayBeat"). Default green
+                (0 255 0). Out-of-range values are clamped; fewer than 3 numbers leaves the color unchanged.
+            </description>
+        </method>
+
+        <method name="barSize">
+            <arglist>
+                <arg name="size" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the bar readout's text size
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; barSize &lt;n&gt;". Sets the font size, in pixels, of the
+                "Bar &lt;n&gt;" text in the bar/beat readout (see "displayBar"). Default 22. If the readout
+                would overflow the screen at that size, the viewer shrinks it (and "beatSize") together to
+                fit rather than clipping.
+            </description>
+        </method>
+
+        <method name="beatSize">
+            <arglist>
+                <arg name="size" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the beat readout's text size
+            </digest>
+            <description>
+                Sent as "&lt;scoreName&gt; beatSize &lt;n&gt;". Sets the font size, in pixels, of the
+                "Beat &lt;n&gt;" text in the bar/beat readout (see "displayBeat"). Default 22. If the readout
+                would overflow the screen at that size, the viewer shrinks it (and "barSize") together to
+                fit rather than clipping.
             </description>
         </method>
 
@@ -377,14 +434,17 @@
 
         <method name="textColor">
             <arglist>
-                <arg name="color" optional="0" type="int" />
+                <arg name="r" optional="0" type="int" />
+                <arg name="g" optional="0" type="int" />
+                <arg name="b" optional="0" type="int" />
             </arglist>
             <digest>
                 Sets the overlay text's color
             </digest>
             <description>
-                Sent as "&lt;scoreName&gt; textColor &lt;packed-rgb-int&gt;". Sets the color of the overlay text
-                (see "text"). Default white.
+                Sent as "&lt;scoreName&gt; textColor &lt;r&gt; &lt;g&gt; &lt;b&gt;", each 0-255. Sets the color
+                of the overlay text (see "text"). Default white (255 255 255). Out-of-range values are
+                clamped; fewer than 3 numbers leaves the color unchanged.
             </description>
         </method>
 
@@ -426,14 +486,17 @@
 
         <method name="flashColor">
             <arglist>
-                <arg name="color" optional="0" type="int" />
+                <arg name="r" optional="0" type="int" />
+                <arg name="g" optional="0" type="int" />
+                <arg name="b" optional="0" type="int" />
             </arglist>
             <digest>
                 Sets the color used by "flash"
             </digest>
             <description>
-                Sent as "&lt;scoreName&gt; flashColor &lt;packed-rgb-int&gt;". Sets the color used the next
-                time "flash" is sent to that score; does not flash by itself.
+                Sent as "&lt;scoreName&gt; flashColor &lt;r&gt; &lt;g&gt; &lt;b&gt;", each 0-255. Sets the color
+                used the next time "flash" is sent to that score; does not flash by itself. Default red
+                (255 0 0). Out-of-range values are clamped; fewer than 3 numbers leaves the color unchanged.
             </description>
         </method>
 
@@ -452,14 +515,17 @@
 
         <method name="backgroundColor">
             <arglist>
-                <arg name="color" optional="0" type="int" />
+                <arg name="r" optional="0" type="int" />
+                <arg name="g" optional="0" type="int" />
+                <arg name="b" optional="0" type="int" />
             </arglist>
             <digest>
                 Sets a score's page background color
             </digest>
             <description>
-                Sent as "&lt;scoreName&gt; backgroundColor &lt;packed-rgb-int&gt;". Sets the background color
-                behind that score's page.
+                Sent as "&lt;scoreName&gt; backgroundColor &lt;r&gt; &lt;g&gt; &lt;b&gt;", each 0-255. Sets the
+                background color behind that score's page. Out-of-range values are clamped; fewer than 3
+                numbers leaves the color unchanged.
             </description>
         </method>
 
@@ -505,14 +571,18 @@
 
         <method name="metronomeColor">
             <arglist>
-                <arg name="color" optional="0" type="int" />
+                <arg name="r" optional="0" type="int" />
+                <arg name="g" optional="0" type="int" />
+                <arg name="b" optional="0" type="int" />
             </arglist>
             <digest>
                 Sets the metronome's idle color
             </digest>
             <description>
-                Sent as "&lt;scoreName&gt; metronomeColor &lt;packed-rgb-int&gt;". Sets the metronome circle's
-                color between beats; it always flashes white on the beat itself. Default dark gray.
+                Sent as "&lt;scoreName&gt; metronomeColor &lt;r&gt; &lt;g&gt; &lt;b&gt;", each 0-255. Sets the
+                metronome circle's color between beats; it always flashes white on the beat itself. Default
+                dark gray (51 51 51). Out-of-range values are clamped; fewer than 3 numbers leaves the color
+                unchanged.
             </description>
         </method>
 
@@ -578,14 +648,17 @@
 
         <method name="timerColor">
             <arglist>
-                <arg name="color" optional="0" type="int" />
+                <arg name="r" optional="0" type="int" />
+                <arg name="g" optional="0" type="int" />
+                <arg name="b" optional="0" type="int" />
             </arglist>
             <digest>
                 Sets the timer's text color
             </digest>
             <description>
-                Sent as "&lt;scoreName&gt; timerColor &lt;packed-rgb-int&gt;". Sets the color of the timer
-                readout (see "timer"). Default white.
+                Sent as "&lt;scoreName&gt; timerColor &lt;r&gt; &lt;g&gt; &lt;b&gt;", each 0-255. Sets the color
+                of the timer readout (see "timer"). Default white (255 255 255). Out-of-range values are
+                clamped; fewer than 3 numbers leaves the color unchanged.
             </description>
         </method>
 

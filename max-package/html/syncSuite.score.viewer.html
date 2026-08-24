@@ -89,7 +89,7 @@
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/vendor/pdfjs/pdf.worker.min.js';
 
-const scoreName = location.pathname.replace(/^\//, '');
+let scoreName = location.pathname.replace(/^\//, '');
 
 // =======================================================================
 // PDF rendering — prerender every page to an ImageBitmap on load, so any
@@ -202,6 +202,7 @@ async function prerenderRemaining() {
 window.addEventListener('resize', () => {
   pageCache.clear();
   if (pdfDoc) { renderPage(currentPage); prerenderRemaining(); }
+  fitBarBeat();
 });
 
 // =======================================================================
@@ -230,6 +231,7 @@ const timerEl = document.getElementById('timer');
 
 let state = {
   displayBar: false, displayBeat: false, bar: 0, beat: 0, barColor: '#00ff00', beatColor: '#00ff00',
+  barSize: 22, beatSize: 22,
   textSize: 24, text: '', textColor: '#ffffff', black: false, zoom: 1,
   displayMetronome: false, metronomeSize: 1, metronomeColor: '#333333',
   allowPageChange: true, backgroundColor: '#111111', invertColor: false,
@@ -248,7 +250,7 @@ function applyState(s, force) {
   const changed = (k) => force || state[k] !== prev[k];
 
   if (changed('bar') || changed('beat') || changed('displayBar') || changed('displayBeat') ||
-      changed('barColor') || changed('beatColor')) {
+      changed('barColor') || changed('beatColor') || changed('barSize') || changed('beatSize')) {
     renderBarBeat();
   }
   if (changed('beat')) {
@@ -327,12 +329,29 @@ function renderBarBeat() {
   if (!state.displayBar && !state.displayBeat) { barbeatEl.style.display = 'none'; return; }
   barLabelEl.style.display = state.displayBar ? 'inline' : 'none';
   barLabelEl.style.color = state.barColor;
+  barLabelEl.style.fontSize = state.barSize + 'px';
   barLabelEl.textContent = `Bar ${state.bar}`;
   beatLabelEl.style.display = state.displayBeat ? 'inline' : 'none';
   beatLabelEl.style.color = state.beatColor;
+  beatLabelEl.style.fontSize = state.beatSize + 'px';
   beatLabelEl.textContent = `Beat ${state.beat}`;
   bbSepEl.style.display = (state.displayBar && state.displayBeat) ? 'inline' : 'none';
+  bbSepEl.style.fontSize = Math.max(state.barSize, state.beatSize) + 'px';
   barbeatEl.style.display = 'block';
+  fitBarBeat();
+}
+
+// If barSize/beatSize would overflow the screen (a stand-mounted device is
+// often much narrower than whatever size was dialed in from Max), shrink
+// both proportionally to fit instead of clipping or running off-screen.
+function fitBarBeat() {
+  if (barbeatEl.style.display === 'none') return;
+  const maxWidth = window.innerWidth * 0.92;
+  const natural = barbeatEl.scrollWidth;
+  const scale = natural > maxWidth ? maxWidth / natural : 1;
+  barLabelEl.style.fontSize = (state.barSize * scale) + 'px';
+  beatLabelEl.style.fontSize = (state.beatSize * scale) + 'px';
+  bbSepEl.style.fontSize = (Math.max(state.barSize, state.beatSize) * scale) + 'px';
 }
 
 function pulseMetronome() {
@@ -445,6 +464,12 @@ function connect() {
       case 'beatColor':
         applyState({ beatColor: msg.color });
         break;
+      case 'barSize':
+        applyState({ barSize: msg.size });
+        break;
+      case 'beatSize':
+        applyState({ beatSize: msg.size });
+        break;
       case 'timer':
         applyState({ timerValue: msg.value });
         break;
@@ -469,6 +494,16 @@ function connect() {
       case 'removed':
         document.body.innerHTML = '';
         document.body.style.background = '#000';
+        break;
+      case 'renamed':
+        // A full location.href navigation would land back on the "Tap to
+        // begin" gate (requestFullscreen needs a fresh user gesture), which
+        // is exactly the "device didn't come back" failure this avoids —
+        // swap the name in place instead and let the existing
+        // onclose->reconnect logic pick it up.
+        scoreName = msg.name;
+        history.replaceState(null, '', '/' + encodeURIComponent(msg.name));
+        ws.close();
         break;
     }
   };
