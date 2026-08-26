@@ -9,7 +9,7 @@
 
     <description>
         It allows intelligent loading and playback of video files, texture processing such as cropping, inserting fx, among others operations.
-        It is designed to work with the syncSuite Max4Live devices for video syncronization with Ableton Live. 
+        It is designed to work with the syncSuite Max4Live devices for video syncronization with Ableton Live.
     </description>
 
     <!--METADATA-->
@@ -22,64 +22,574 @@
 
     <!--INLETS-->
     <inletlist>
-        <inlet id="0" type="signal">
-            <digest>Short description of inlet 0</digest>
+        <inlet id="0" type="anything">
+            <digest>Messages, matrix and texture in</digest>
             <description>
-                Longer description of what inlet 0 accepts and does.
+                Accepts every message described below. Also accepts a jit_matrix or jit_gl_texture
+                directly, which is rendered instead of the internal movie player whenever the
+                "source" attribute is set to "external".
             </description>
         </inlet>
-        <inlet id="1" type="float">
-            <digest>Short description of inlet 1</digest>
+        <inlet id="1" type="jit_matrix">
+            <digest>FX-insert return (loop input)</digest>
+            <description>
+                Only relevant while "enableInsert" is on: feeds the matrix/texture returning from an
+                external FX chain back into the object for final display. See "enableInsert" below.
+            </description>
         </inlet>
     </inletlist>
 
     <!--OUTLETS-->
     <outletlist>
-        <outlet id="0" type="signal">
-            <digest>Short description of outlet 0</digest>
+        <outlet id="0" type="jit_matrix">
+            <digest>FX-insert output (loop output)</digest>
+            <description>
+                Only active while "enableInsert" is on: outputs the current texture/matrix so it can
+                be run through an external FX chain before being fed back into the second inlet.
+                Silent while "enableInsert" is off (default), since the object renders internally
+                instead.
+            </description>
         </outlet>
     </outletlist>
 
     <!--ARGUMENTS-->
     <objarglist>
-        <objarg name="argument-name" optional="1" type="float">
-            <digest>Short description of this argument</digest>
+        <objarg name="context" optional="0" type="symbol">
+            <digest>Name of the syncSuite.video.context to render into</digest>
             <description>
-                Longer description, including default value if optional.
+                Required. Names the rendering context this source draws into, same as the @drawto
+                attribute and the "drawto"/"context" messages. If omitted, the object has no render
+                context ("NONE") and posts a warning to the Max window until one is set.
             </description>
         </objarg>
     </objarglist>
 
     <!--MESSAGES-->
     <methodlist>
-        <method name="messagename">
+        <method name="read">
             <arglist>
-                <arg name="argname" optional="0" type="symbol" />
+                <arg name="filename" optional="1" type="symbol" />
             </arglist>
             <digest>
-                Short description of what this message does
+                Loads and plays a movie file directly
             </digest>
             <description>
-                Longer description of what this message does.
+                With a "filename" argument, loads and plays that movie immediately on the current
+                player. With no argument, opens a file-choose dialog.
+            </description>
+        </method>
+
+        <method name="addMovie">
+            <arglist>
+                <arg name="filename-or-mode" optional="1" type="symbol" />
+            </arglist>
+            <digest>
+                Adds a movie to the playlist
+            </digest>
+            <description>
+                Adds "filename" (a file in the search path, or a full path) to the object's internal
+                playlist, without loading it into memory yet - use "current_video" or "next_video" to
+                actually load a video that's been added. With no argument, opens a file-choose
+                dialog. "addMovie clear" empties the playlist. Movies belonging to the current
+                Ableton Live Project are added automatically this way by the companion Max4Live
+                device once connected.
+            </description>
+        </method>
+
+        <method name="current_video">
+            <arglist>
+                <arg name="filename" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Sets and plays the current video
+            </digest>
+            <description>
+                Switches playback to "filename" (previously added with "addMovie"). Internally the
+                object double-buffers two movie players and swaps between them, so if "filename" was
+                already preloaded via "next_video" the swap happens with zero delay. Often paired
+                with "time_ms" in the same message, e.g. "current_video &lt;file&gt;, time_ms 0".
+            </description>
+        </method>
+
+        <method name="next_video">
+            <arglist>
+                <arg name="filename" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Preloads a video into memory
+            </digest>
+            <description>
+                Loads "filename" into the currently inactive player, ready for an instantaneous swap
+                the next time "current_video" selects it.
+            </description>
+        </method>
+
+        <method name="time_ms">
+            <arglist>
+                <arg name="milliseconds" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Seeks and starts playback
+            </digest>
+            <description>
+                Moves the current video's playback position to "milliseconds" and starts playing
+                from there. See "goto" for seeking without starting.
+            </description>
+        </method>
+
+        <method name="goto">
+            <arglist>
+                <arg name="milliseconds" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Seeks without starting playback
+            </digest>
+            <description>
+                Moves the current video's playback position to "milliseconds" without changing its
+                running/stopped state. See "time_ms" to seek and start together.
+            </description>
+        </method>
+
+        <method name="start">
+            <digest>
+                Starts playback
+            </digest>
+            <description>
+                Starts (or resumes) playing the current video.
+            </description>
+        </method>
+
+        <method name="stop">
+            <digest>
+                Stops playback
+            </digest>
+            <description>
+                Stops the current video.
+            </description>
+        </method>
+
+        <method name="loop">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Enables or disables looping
+            </digest>
+            <description>
+                When enabled (1), the current video loops automatically at end-of-file instead of
+                stopping. Forwarded to the internal movie player's own "loop" attribute; also
+                settable as "@loop" at creation.
+            </description>
+        </method>
+
+        <method name="black">
+            <digest>
+                Blanks the display
+            </digest>
+            <description>
+                Stops playback and swaps in a solid black matrix, blanking the rendered output.
+            </description>
+        </method>
+
+        <method name="clear">
+            <digest>
+                Clears the current player
+            </digest>
+            <description>
+                Disposes of the current player's loaded movie and resets its state.
+            </description>
+        </method>
+
+        <method name="source">
+            <arglist>
+                <arg name="mode" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Chooses between the internal movie player and external input
+            </digest>
+            <description>
+                "internal" (default) renders the object's own movie playback chain. "external" stops
+                rendering the movie chain and instead renders whatever jit_matrix or jit_gl_texture is
+                fed into the first inlet, while still going through the same cropping, projection and
+                FX-insert pipeline the movie player uses.
+            </description>
+        </method>
+
+        <method name="autoRatio">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Automatically preserves the source's aspect ratio
+            </digest>
+            <description>
+                When enabled (1), scale is computed automatically from the source's native dimensions
+                against "dimComposite", preserving its aspect ratio. Only meaningful when
+                "projectionMode" is 0 (UV space); in pixel space (1) dimensions are already
+                pixel-exact and autoRatio has no effect. Default 0.
+            </description>
+        </method>
+
+        <method name="dimSource">
+            <arglist>
+                <arg name="width" optional="0" type="int" />
+                <arg name="height" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the source matrix/texture dimensions
+            </digest>
+            <description>
+                Tells the object the pixel dimensions of the incoming source, used together with
+                "dimComposite" for aspect-ratio math (see "autoRatio"). Normally read automatically
+                from a loaded movie file; set this explicitly when using "source external" with a
+                matrix/texture whose dimensions aren't otherwise known.
+            </description>
+        </method>
+
+        <method name="dimComposite">
+            <arglist>
+                <arg name="width" optional="0" type="int" />
+                <arg name="height" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the reference composite/output dimensions
+            </digest>
+            <description>
+                Reference width and height, in pixels, of the destination composite - used for
+                aspect-ratio calculations ("autoRatio") and pixel-space positioning. Default
+                1920 1080.
+            </description>
+        </method>
+
+        <method name="scale">
+            <arglist>
+                <arg name="factor" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Scales the video uniformly
+            </digest>
+            <description>
+                Sets the videoplane's scale on both axes at once. Default 1. See "scaleX"/"scaleY" to
+                scale each axis independently.
+            </description>
+        </method>
+
+        <method name="scaleX">
+            <arglist>
+                <arg name="factor" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Scales the video horizontally
+            </digest>
+            <description>
+                Sets only the x scale, leaving y unchanged.
+            </description>
+        </method>
+
+        <method name="scaleY">
+            <arglist>
+                <arg name="factor" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Scales the video vertically
+            </digest>
+            <description>
+                Sets only the y scale, leaving x unchanged.
+            </description>
+        </method>
+
+        <method name="position">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Positions the video in UV space
+            </digest>
+            <description>
+                Places the video at the normalized (-1. to 1.) position x, y. Used when
+                "projectionMode" is 0 (UV space); see "positionInPixels" for pixel space.
+            </description>
+        </method>
+
+        <method name="positionInPixels">
+            <arglist>
+                <arg name="x" optional="0" type="int" />
+                <arg name="y" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Positions the video in pixel space
+            </digest>
+            <description>
+                Places the video at pixel position x, y, with 0, 0 at the top-left pixel of the
+                texture. Used when "projectionMode" is 1 (pixel space).
+            </description>
+        </method>
+
+        <method name="rotatexyz">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+                <arg name="z" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Rotates the video around x, y and z
+            </digest>
+            <description>
+                Sets the videoplane's rotation, in degrees, around each axis.
+            </description>
+        </method>
+
+        <method name="layer">
+            <arglist>
+                <arg name="index" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets the compositing layer index
+            </digest>
+            <description>
+                Forwarded to the internal videoplane's "layer" attribute, controlling draw/compositing
+                order within the destination context.
+            </description>
+        </method>
+
+        <method name="cropTop">
+            <arglist>
+                <arg name="amount" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Crops the top edge
+            </digest>
+            <description>
+                Crops the texture from the top edge by "amount", via a custom cropping shader.
+            </description>
+        </method>
+
+        <method name="cropBottom">
+            <arglist>
+                <arg name="amount" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Crops the bottom edge
+            </digest>
+            <description>
+                Crops the texture from the bottom edge by "amount", via a custom cropping shader.
+            </description>
+        </method>
+
+        <method name="cropLeft">
+            <arglist>
+                <arg name="amount" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Crops the left edge
+            </digest>
+            <description>
+                Crops the texture from the left edge by "amount", via a custom cropping shader.
+            </description>
+        </method>
+
+        <method name="cropRight">
+            <arglist>
+                <arg name="amount" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Crops the right edge
+            </digest>
+            <description>
+                Crops the texture from the right edge by "amount", via a custom cropping shader.
+            </description>
+        </method>
+
+        <method name="enableInsert">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Routes the video through an external FX chain
+            </digest>
+            <description>
+                When disabled (0, default), the object renders and displays the video internally, and
+                the outlet stays silent. When enabled (1), the current texture/matrix is sent out the
+                outlet instead of being displayed, letting it be patched through external Jitter FX
+                objects; the result must be patched back into the second inlet, which feeds directly
+                into the internal display chain, closing the insert loop.
+            </description>
+        </method>
+
+        <method name="enable">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Enables or disables rendering
+            </digest>
+            <description>
+                Enables (1) or disables (0) the object's rendering.
+            </description>
+        </method>
+
+        <method name="projectionMode">
+            <arglist>
+                <arg name="mode" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Switches between UV space and pixel space
+            </digest>
+            <description>
+                0 (default) positions/scales the video in OpenGL's normalized UV space; 1 switches to
+                an absolute pixel space for exact-pixel compositing/video-mapping (see
+                "positionInPixels"). Must match the "projectionMode" set on the destination
+                syncSuite.video.context. See syncSuite.video.context for a full explanation of the two
+                projection modes.
+            </description>
+        </method>
+
+        <method name="windowSizeToDimComposite">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Ties dimComposite to the render window's size
+            </digest>
+            <description>
+                When enabled (1), "dimComposite" is kept automatically in sync with the destination
+                context's current window size, instead of being set manually.
+            </description>
+        </method>
+
+        <method name="drawto">
+            <arglist>
+                <arg name="context-name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Sets the destination rendering context
+            </digest>
+            <description>
+                Changes which syncSuite.video.context this source draws into. Same mechanism as the
+                creation argument.
+            </description>
+        </method>
+
+        <method name="context">
+            <arglist>
+                <arg name="context-name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Alias for "drawto"
+            </digest>
+            <description>
+                Identical to "drawto": sets the destination rendering context. See "drawto" above.
+            </description>
+        </method>
+
+        <method name="toVideoPlane">
+            <arglist>
+                <arg name="method" optional="0" type="symbol" />
+                <arg name="args" optional="1" type="list" />
+            </arglist>
+            <digest>
+                Sends a message straight to the internal videoplane/layer
+            </digest>
+            <description>
+                Forwards "method" and any following arguments directly to the internal
+                jit.gl.videoplane/jit.gl.layer object, e.g. "toVideoPlane blend_mode 1 1" or
+                "toVideoPlane scale 0.5 0.5 0.". Use this to reach jit.gl.layer attributes not
+                otherwise exposed as top-level messages on this object.
             </description>
         </method>
     </methodlist>
 
     <!--ATTRIBUTES-->
     <attributelist>
-        <attribute name="attributename" get="1" set="1" type="float64" size="1">
-            <digest>Short description of this attribute</digest>
+        <attribute name="drawto" get="1" set="1" type="symbol" size="1">
+            <digest>Destination rendering context</digest>
             <description>
-                Longer description of this attribute, including
-                acceptable range or values if relevant.
+                Same as the "drawto"/"context" messages and the creation argument. Default "NONE"
+                (no context set); a warning is posted to the Max window until a real context is
+                given.
+            </description>
+        </attribute>
+
+        <attribute name="dimComposite" get="1" set="1" type="int32" size="2">
+            <digest>Reference composite dimensions, in pixels</digest>
+            <description>
+                Same as the "dimComposite" message. Default 1920 1080.
+            </description>
+        </attribute>
+
+        <attribute name="scale" get="1" set="1" type="float32" size="1">
+            <digest>Uniform scale</digest>
+            <description>
+                Same as the "scale" message. Default 1.
+            </description>
+        </attribute>
+
+        <attribute name="autoRatio" get="1" set="1" type="int32" size="1">
+            <digest>Automatically preserves the source's aspect ratio</digest>
+            <description>
+                Same as the "autoRatio" message. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="enableInsert" get="1" set="1" type="int32" size="1">
+            <digest>Routes the video through an external FX chain</digest>
+            <description>
+                Same as the "enableInsert" message. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="projectionMode" get="1" set="1" type="int32" size="1">
+            <digest>UV space (0) or pixel space (1)</digest>
+            <description>
+                Same as the "projectionMode" message. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="windowSizeToDimComposite" get="1" set="1" type="int32" size="1">
+            <digest>Ties dimComposite to the render window's size</digest>
+            <description>
+                Same as the "windowSizeToDimComposite" message. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="source" get="1" set="1" type="symbol" size="1">
+            <digest>Internal player or external matrix/texture</digest>
+            <description>
+                Same as the "source" message. Default "internal".
+            </description>
+        </attribute>
+
+        <attribute name="loop" get="1" set="1" type="int32" size="1">
+            <digest>Loops the current video</digest>
+            <description>
+                Same as the "loop" message. Default 0.
             </description>
         </attribute>
     </attributelist>
 
+    <!--DISCUSSION-->
+    <discussion>
+        For its most basic use, syncSuite.video.source is a wrapper around jit.gl.movie and
+        jit.gl.layer (via an internal jit.gl.videoplane), and it inherits their compositing and
+        processing features on top of the custom ones documented above. Attributes and messages not
+        exposed directly on this object can still be reached with "toVideoPlane &lt;method&gt;
+        &lt;args...&gt;", forwarded straight to the internal videoplane/layer.
+        <br /><br />
+        Under the hood the object double-buffers two movie players so that "next_video" can preload
+        the next file while the current one keeps playing, making the swap on "current_video"
+        instantaneous. When paired with the companion Max4Live device, movies belonging to the
+        current Ableton Live Project are added automatically via "addMovie", and the device can drive
+        playback in sync with Live's transport.
+    </discussion>
+
     <!--SEEALSO-->
     <seealsolist>
-        <seealso name="relatedobject"/>
-        <seealso name="anotherobject"/>
+        <seealso name="jit.gl.movie"/>
+        <seealso name="jit.gl.layer"/>
+        <seealso name="jit.gl.videoplane"/>
+        <seealso name="syncSuite.video.context"/>
+        <seealso name="syncSuite.video.subs"/>
     </seealsolist>
 
 </c74object>

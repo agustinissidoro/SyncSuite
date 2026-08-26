@@ -889,7 +889,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 898.0, 557.0, 141.0, 47.0 ],
+                                    "patching_rect": [ 898.0, 557.0, 145.0, 47.0 ],
                                     "text": "syncSuite.video.source has dedicated messages for both spaces."
                                 }
                             },
@@ -1204,7 +1204,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 1051.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 1051.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {

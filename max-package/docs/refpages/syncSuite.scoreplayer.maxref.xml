@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
 
-<c74object name="syncSuite.video.subs">
+<c74object name="syncSuite.scoreplayer">
 
     <digest>
         Utility for designing, managing and triggering cues.
@@ -15,70 +15,232 @@
     <metadatalist>
         <metadata name="author">Agustin Issidoro</metadata>
         <metadata name="tag">SyncSuite</metadata>
-        <metadata name="tag">Video</metadata>
-        <metadata name="tag">Video processing</metadata>
+        <metadata name="tag">Score</metadata>
+        <metadata name="tag">qlist</metadata>
     </metadatalist>
 
     <!--INLETS-->
     <inletlist>
-        <inlet id="0" type="signal">
-            <digest>Short description of inlet 0</digest>
+        <inlet id="0" type="anything">
+            <digest>Messages controlling score loading and playback position</digest>
             <description>
-                Longer description of what inlet 0 accepts and does.
+                Accepts the "read", "open", "autowatch", "skip", "next", "rewind", "cue" and "event"
+                messages described below. There is no bare-number shorthand for "cue"/"event" - a
+                plain int sent to this inlet is not treated as a cue number.
             </description>
-        </inlet>
-        <inlet id="1" type="float">
-            <digest>Short description of inlet 1</digest>
         </inlet>
     </inletlist>
 
     <!--OUTLETS-->
     <outletlist>
-        <outlet id="0" type="signal">
-            <digest>Short description of outlet 0</digest>
+        <outlet id="0" type="int">
+            <digest>Index of the current cue/event</digest>
+            <description>
+                Outputs the numeric index of the cue or event currently positioned/playing.
+            </description>
+        </outlet>
+        <outlet id="1" type="symbol">
+            <digest>Name of the current cue/event</digest>
+            <description>
+                Outputs the name string of the cue or event currently positioned/playing.
+            </description>
+        </outlet>
+        <outlet id="2" type="int">
+            <digest>Delay monitor: 1 while a scheduled delay is pending</digest>
+            <description>
+                Outputs 1 while a message delay (see the score file format under "read") is pending
+                and "next" is therefore blocked, and 0 once the delay has resolved. During a delay,
+                no other event can be triggered.
+            </description>
+        </outlet>
+        <outlet id="3" type="list">
+            <digest>Cue/event names, for building a cue-selector menu</digest>
+            <description>
+                Outputs the full list of cue/event names each time a score is (re)loaded, intended
+                to fill a "umenu" elsewhere in the patch so the user can build a custom cue-selection
+                interface.
+            </description>
         </outlet>
     </outletlist>
 
     <!--ARGUMENTS-->
     <objarglist>
-        <objarg name="argument-name" optional="1" type="float">
-            <digest>Short description of this argument</digest>
+        <objarg name="read" optional="1" type="symbol">
+            <digest>Score file to load at creation time</digest>
             <description>
-                Longer description, including default value if optional.
+                Sets the @read attribute at creation time: the path of a score ".txt" file to load
+                immediately, equivalent to sending "read &lt;path&gt;" right after instantiation.
+                Optional; if omitted, no score is loaded until a "read"/"open" message is sent.
             </description>
         </objarg>
     </objarglist>
 
     <!--MESSAGES-->
     <methodlist>
-        <method name="messagename">
+        <method name="read">
             <arglist>
-                <arg name="argname" optional="0" type="symbol" />
+                <arg name="filename" optional="1" type="symbol" />
             </arglist>
             <digest>
-                Short description of what this message does
+                Loads a score file
             </digest>
             <description>
-                Longer description of what this message does.
+                With a "filename" argument (a score ".txt" file), loads that file directly, replacing
+                any previously loaded score. With no argument, opens a file-choose dialog to select
+                one. On success, a message confirming the score name and cue count is posted to the
+                Max window, and the cue/event names are output out the fourth outlet.
+            </description>
+        </method>
+
+        <method name="open">
+            <digest>
+                Opens the score's text editor
+            </digest>
+            <description>
+                Opens a text editor window on the currently loaded score file, letting it be edited
+                directly. Saving from this editor reloads the score automatically if "autowatch" is
+                enabled.
+            </description>
+        </method>
+
+        <method name="autowatch">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Enables or disables auto-reload on save
+            </digest>
+            <description>
+                Turns the @autowatch behavior on (1) or off (0): when on, the loaded score file is
+                automatically reloaded whenever it is saved, from the "open" editor or any other text
+                editor. Equivalent to setting the @autowatch attribute.
+            </description>
+        </method>
+
+        <method name="skip">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Sets whether jumping to a cue/event executes the messages in between
+            </digest>
+            <description>
+                Equivalent to setting the @skip attribute: when on (1, default), jumping to a cue or
+                event via "cue"/"event" does not execute the messages of the cues/events skipped
+                over. When off (0), jumping executes every message from the current position through
+                the target, including any delays. "next" always executes messages normally,
+                regardless of this setting.
+            </description>
+        </method>
+
+        <method name="next">
+            <digest>
+                Triggers the next cue/event
+            </digest>
+            <description>
+                Advances to and plays the next cue/event in sequence, sending all of its messages (in
+                order, honoring any delays - see "read"). Blocked while a delay from the current cue
+                is still pending; see the delay-monitor outlet.
+            </description>
+        </method>
+
+        <method name="rewind">
+            <digest>
+                Resets playback to the start of the score
+            </digest>
+            <description>
+                Resets the current position to the beginning of the score, equivalent to "cue 0" /
+                "event 0".
+            </description>
+        </method>
+
+        <method name="cue">
+            <arglist>
+                <arg name="index" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Selects a cue by index, without triggering it
+            </digest>
+            <description>
+                Positions the player one cue before "index" (1-based; 0 behaves like "rewind"),
+                waiting for a subsequent "next" message to actually trigger it. Whether the messages
+                of the cues skipped over on the way are executed depends on "skip" (see above).
+                "event" is an exact synonym for this message.
+            </description>
+        </method>
+
+        <method name="event">
+            <arglist>
+                <arg name="index" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Alias for "cue"
+            </digest>
+            <description>
+                Identical to "cue": positions the player one event before "index", waiting for "next"
+                to trigger it. Provided as a separate name for compatibility with the EVENT keyword
+                used in score files (originally for antescofo~-style score compatibility). See "cue"
+                above.
             </description>
         </method>
     </methodlist>
 
     <!--ATTRIBUTES-->
     <attributelist>
-        <attribute name="attributename" get="1" set="1" type="float64" size="1">
-            <digest>Short description of this attribute</digest>
+        <attribute name="read" get="1" set="1" type="symbol" size="1">
+            <digest>Score file loaded at creation time</digest>
             <description>
-                Longer description of this attribute, including
-                acceptable range or values if relevant.
+                Path of a score ".txt" file to load when the object is instantiated. See the "read"
+                message for the file format and behavior. Optional; no default.
+            </description>
+        </attribute>
+
+        <attribute name="autowatch" get="1" set="1" type="int32" size="1">
+            <digest>Auto-reloads the score file when it is saved</digest>
+            <description>
+                When enabled (1, default), the loaded score file is automatically reloaded whenever
+                it is saved to disk, from the "open" editor or any other text editor. Same as sending
+                the "autowatch" message.
+            </description>
+        </attribute>
+
+        <attribute name="skip" get="1" set="1" type="int32" size="1">
+            <digest>Whether jumping to a cue skips the messages in between</digest>
+            <description>
+                When enabled (1, default), jumping to a cue/event with "cue"/"event" does not execute
+                the messages of the cues/events in between. When disabled (0), all messages from the
+                current position through the target are executed, including delays. Does not affect
+                "next", which always executes messages normally. Same as sending the "skip" message.
             </description>
         </attribute>
     </attributelist>
 
+    <!--DISCUSSION-->
+    <discussion>
+        A score is a plain ".txt" file made of cue/event blocks. Each block starts with a declaration
+        line, "CUE &lt;n&gt; &lt;name&gt;" or "EVENT &lt;n&gt; &lt;name&gt;" (the two keywords are
+        exact synonyms), followed by zero or more message lines to send when that cue plays:
+        "&lt;receiver&gt; &lt;message...&gt;", where "&lt;receiver&gt;" is the name of a Max
+        "receive" object elsewhere in the patch. Prefixing a message line with an integer,
+        "&lt;delay-ms&gt; &lt;receiver&gt; &lt;message...&gt;", delays that message (and, once used,
+        every following message in the same cue) by that many milliseconds; no other event can be
+        triggered while a delay is pending. "DO-LINE &lt;receiver&gt; &lt;start&gt; &lt;target&gt;
+        &lt;time-ms&gt;" sends "&lt;receiver&gt;" a linear ramp from "start" to "target" over
+        "time-ms", exactly like the "line" object; up to 20 such ramps can run simultaneously, and
+        unlike delayed messages they do not block "next". Lines beginning with "//" are comments and
+        are not sent.
+        <br /><br />
+        The send/receive names CUE, EVENT and DO-LINE (case-sensitive) are reserved for this
+        object's internal use - do not reuse them elsewhere in the patch. Only one
+        syncSuite.scoreplayer should exist per patch, since these names are global.
+    </discussion>
+
     <!--SEEALSO-->
     <seealsolist>
-        <seealso name="relatedobject"/>
-        <seealso name="anotherobject"/>
+        <seealso name="qlist"/>
+        <seealso name="line"/>
+        <seealso name="syncSuite.score.server"/>
+        <seealso name="jit.pdfmatrix"/>
     </seealsolist>
 
 </c74object>

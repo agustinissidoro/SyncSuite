@@ -21,64 +21,349 @@
 
     <!--INLETS-->
     <inletlist>
-        <inlet id="0" type="signal">
-            <digest>Short description of inlet 0</digest>
+        <inlet id="0" type="anything">
+            <digest>Messages controlling the rendered text and its style</digest>
             <description>
-                Longer description of what inlet 0 accepts and does.
+                Accepts every message described below, as well as any attribute of the underlying
+                jit.gl.text object (e.g. "font", "align", "line_length", "tracking", "slant",
+                "weight"), since syncSuite.video.subs is a thin wrapper and forwards them straight
+                through. This is also the inlet the paired SubSync Max4Live device streams its live
+                text/style updates into, once connected (see "connect").
             </description>
-        </inlet>
-        <inlet id="1" type="float">
-            <digest>Short description of inlet 1</digest>
         </inlet>
     </inletlist>
 
     <!--OUTLETS-->
     <outletlist>
-        <outlet id="0" type="signal">
-            <digest>Short description of outlet 0</digest>
+        <outlet id="0" type="jit_gl_texture">
+            <digest>The rendered text, as a texture (if enabled)</digest>
+            <description>
+                Outputs the rendered text as a jit_gl_texture once "output_texture 1" has been sent.
+                Empty/unused while output_texture is off (the default).
+            </description>
         </outlet>
     </outletlist>
 
     <!--ARGUMENTS-->
     <objarglist>
-        <objarg name="argument-name" optional="1" type="float">
-            <digest>Short description of this argument</digest>
+        <objarg name="context" optional="0" type="symbol">
+            <digest>Name of the syncSuite.video.context to render into</digest>
             <description>
-                Longer description, including default value if optional.
+                Required. The name of the syncSuite.video.context this text layer draws to, same as
+                sending it a "drawto" message right after creation.
             </description>
         </objarg>
     </objarglist>
 
     <!--MESSAGES-->
     <methodlist>
-        <method name="messagename">
+        <method name="text">
             <arglist>
-                <arg name="argname" optional="0" type="symbol" />
+                <arg name="string" optional="0" type="symbol" />
             </arglist>
             <digest>
-                Short description of what this message does
+                Sets the displayed text
             </digest>
             <description>
-                Longer description of what this message does.
+                Renders "string" as the object's text content, replacing whatever was shown before.
+            </description>
+        </method>
+
+        <method name="font">
+            <arglist>
+                <arg name="name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Sets the font family
+            </digest>
+            <description>
+                Forwarded directly to the underlying jit.gl.text's "font" attribute.
+            </description>
+        </method>
+
+        <method name="fontsize">
+            <arglist>
+                <arg name="size" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Sets the font size
+            </digest>
+            <description>
+                Forwarded directly to the underlying jit.gl.text's "fontsize" attribute.
+            </description>
+        </method>
+
+        <method name="color">
+            <arglist>
+                <arg name="r" optional="0" type="float" />
+                <arg name="g" optional="0" type="float" />
+                <arg name="b" optional="0" type="float" />
+                <arg name="a" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Sets the text color
+            </digest>
+            <description>
+                Sets the text's RGBA color, each channel 0.-1. Forwarded directly to the underlying
+                jit.gl.text's "color" attribute.
+            </description>
+        </method>
+
+        <method name="align">
+            <arglist>
+                <arg name="mode" optional="0" type="atom" />
+            </arglist>
+            <digest>
+                Sets the text alignment
+            </digest>
+            <description>
+                Forwarded directly to the underlying jit.gl.text's "align" attribute.
+            </description>
+        </method>
+
+        <method name="line_length">
+            <arglist>
+                <arg name="length" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Sets the line-wrap length
+            </digest>
+            <description>
+                Forwarded directly to the underlying jit.gl.text's "line_length" attribute.
+            </description>
+        </method>
+
+        <method name="tracking">
+            <arglist>
+                <arg name="amount" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Sets the character tracking (letter-spacing)
+            </digest>
+            <description>
+                Forwarded directly to the underlying jit.gl.text's "tracking" attribute.
+            </description>
+        </method>
+
+        <method name="slant">
+            <arglist>
+                <arg name="mode" optional="0" type="atom" />
+            </arglist>
+            <digest>
+                Sets the font slant (italic)
+            </digest>
+            <description>
+                Forwarded directly to the underlying jit.gl.text's "slant" attribute.
+            </description>
+        </method>
+
+        <method name="weight">
+            <arglist>
+                <arg name="mode" optional="0" type="atom" />
+            </arglist>
+            <digest>
+                Sets the font weight (bold)
+            </digest>
+            <description>
+                Forwarded directly to the underlying jit.gl.text's "weight" attribute.
+            </description>
+        </method>
+
+        <method name="position">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Positions the text in normalized space
+            </digest>
+            <description>
+                Places the text at the normalized (-1. to 1.) position x, y in the rendering context.
+            </description>
+        </method>
+
+        <method name="positionInPixels">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Positions the text using pixel coordinates
+            </digest>
+            <description>
+                Places the text at pixel position x, y, with 0, 0 at the top-left corner. Internally
+                converted to a normalized "position" using the "dimComposite" reference dimensions,
+                so it depends on the paired syncSuite.video.context already running and reporting its
+                own size.
+            </description>
+        </method>
+
+        <method name="scale">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Scales the text on both axes
+            </digest>
+            <description>
+                Sets the text's x and y scale together.
+            </description>
+        </method>
+
+        <method name="scaleX">
+            <arglist>
+                <arg name="value" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Scales the text horizontally
+            </digest>
+            <description>
+                Sets only the x scale, leaving y unchanged.
+            </description>
+        </method>
+
+        <method name="scaleY">
+            <arglist>
+                <arg name="value" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Scales the text vertically
+            </digest>
+            <description>
+                Sets only the y scale, leaving x unchanged.
+            </description>
+        </method>
+
+        <method name="rotatexyz">
+            <arglist>
+                <arg name="x" optional="0" type="float" />
+                <arg name="y" optional="0" type="float" />
+                <arg name="z" optional="0" type="float" />
+            </arglist>
+            <digest>
+                Rotates the text around x, y and z
+            </digest>
+            <description>
+                Sets the text's rotation, in degrees, around each axis.
+            </description>
+        </method>
+
+        <method name="drawto">
+            <arglist>
+                <arg name="context-name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Sets the destination rendering context
+            </digest>
+            <description>
+                Changes which syncSuite.video.context this text layer draws into. Same mechanism used
+                by the object's creation argument.
+            </description>
+        </method>
+
+        <method name="clear">
+            <digest>
+                Clears the rendering context
+            </digest>
+            <description>
+                Clears the destination context's draw buffer.
+            </description>
+        </method>
+
+        <method name="enable">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Enables or disables rendering
+            </digest>
+            <description>
+                Enables (1) or disables (0) the underlying jit.gl.text object.
+            </description>
+        </method>
+
+        <method name="capture">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Captures a frame into the output texture
+            </digest>
+            <description>
+                Forwarded directly to the underlying jit.gl.text's "capture" attribute/message.
+            </description>
+        </method>
+
+        <method name="output_texture">
+            <arglist>
+                <arg name="flag" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Enables or disables texture output
+            </digest>
+            <description>
+                When enabled (1), the rendered text is captured to a texture and output out the
+                outlet on every frame. When disabled (0, default), the outlet stays unused. Same as
+                the @capture attribute.
+            </description>
+        </method>
+
+        <method name="connect">
+            <digest>
+                Confirms/re-establishes the SubSync connection
+            </digest>
+            <description>
+                Sent by, or in reply to, the paired SubSync Max4Live device to (re)establish the
+                UDP link the device uses to stream text/style updates into this object.
             </description>
         </method>
     </methodlist>
 
     <!--ATTRIBUTES-->
     <attributelist>
-        <attribute name="attributename" get="1" set="1" type="float64" size="1">
-            <digest>Short description of this attribute</digest>
+        <attribute name="dimComposite" get="1" set="1" type="int32" size="2">
+            <digest>Reference composite dimensions, in pixels</digest>
             <description>
-                Longer description of this attribute, including
-                acceptable range or values if relevant.
+                Width and height, in pixels, used as the reference size when converting
+                "positionInPixels" coordinates to the object's normalized position space. Default
+                1920 1080.
+            </description>
+        </attribute>
+
+        <attribute name="matrixoutput" get="1" set="1" type="int32" size="1">
+            <digest>Reserved for matrix output</digest>
+            <description>
+                Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="capture" get="1" set="1" type="int32" size="1">
+            <digest>Captures the rendered text</digest>
+            <description>
+                Same as the "capture" message.
             </description>
         </attribute>
     </attributelist>
 
+    <!--DISCUSSION-->
+    <discussion>
+        syncSuite.video.subs is a thin wrapper around jit.gl.text: besides the messages listed above,
+        it also accepts and forwards jit.gl.text's own attributes and messages directly (e.g. "font",
+        "align", "line_length", "tracking", "slant", "weight" and others not listed here), so consult
+        the jit.gl.text reference for the full underlying vocabulary.
+        <br /><br />
+        It is designed to be driven live by the companion SubSync Max4Live device: once "connect" has
+        completed the handshake, the device streams "text" and style messages straight into the
+        object's inlet, letting a performer change on-screen text/style from Ableton Live without
+        touching the Max patch.
+    </discussion>
+
     <!--SEEALSO-->
     <seealsolist>
-        <seealso name="relatedobject"/>
-        <seealso name="anotherobject"/>
+        <seealso name="jit.gl.text"/>
+        <seealso name="syncSuite.video.context"/>
+        <seealso name="syncSuite.video.source"/>
     </seealsolist>
 
 </c74object>

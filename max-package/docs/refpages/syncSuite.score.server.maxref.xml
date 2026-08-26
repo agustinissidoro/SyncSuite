@@ -742,6 +742,7 @@
     <!--SEEALSO-->
     <seealsolist>
         <seealso name="syncSuite.scoreplayer"/>
+        <seealso name="jit.pdfmatrix"/>
     </seealsolist>
 
 </c74object>

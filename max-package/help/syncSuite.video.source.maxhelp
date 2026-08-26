@@ -4,16 +4,381 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 4,
+            "revision": 5,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 34.0, 95.0, 1140.0, 853.0 ],
+        "rect": [ 34.0, 95.0, 930.0, 853.0 ],
         "description": "Wrapper around jit.world with extended mapping and compositing functionalities.",
         "digest": "Wrapper around jit.world",
         "showontab": 1,
         "boxes": [
+            {
+                "box": {
+                    "id": "obj-11",
+                    "maxclass": "newobj",
+                    "numinlets": 0,
+                    "numoutlets": 0,
+                    "patcher": {
+                        "fileversion": 1,
+                        "appversion": {
+                            "major": 9,
+                            "minor": 1,
+                            "revision": 5,
+                            "architecture": "x64",
+                            "modernui": 1
+                        },
+                        "classnamespace": "box",
+                        "rect": [ 0.0, 26.0, 930.0, 827.0 ],
+                        "showontab": 2,
+                        "boxes": [
+                            {
+                                "box": {
+                                    "filename": "jit.fx.bitcrush.jxs",
+                                    "id": "obj-27",
+                                    "maxclass": "newobj",
+                                    "numinlets": 1,
+                                    "numoutlets": 2,
+                                    "outlettype": [ "jit_gl_texture", "" ],
+                                    "patching_rect": [ 402.0, 293.0, 164.0, 22.0 ],
+                                    "text": "jit.fx.bitcrush @color_levels 2",
+                                    "textfile": {
+                                        "filename": "jit.fx.bitcrush.jxs",
+                                        "flags": 0,
+                                        "embed": 0,
+                                        "autowatch": 1
+                                    }
+                                }
+                            },
+                            {
+                                "box": {
+                                    "filename": "co.average.jxs",
+                                    "id": "obj-22",
+                                    "maxclass": "newobj",
+                                    "numinlets": 2,
+                                    "numoutlets": 2,
+                                    "outlettype": [ "jit_gl_texture", "" ],
+                                    "patching_rect": [ 37.0, 505.0, 93.0, 22.0 ],
+                                    "text": "jit.fx.co.average",
+                                    "textfile": {
+                                        "filename": "co.average.jxs",
+                                        "flags": 0,
+                                        "embed": 0,
+                                        "autowatch": 1
+                                    }
+                                }
+                            },
+                            {
+                                "box": {
+                                    "embedstate": [
+                                        [ "adapt", 1 ],
+                                        [ "bypass", 0 ],
+                                        [ "enable", 1 ],
+                                        [ "interp", 1 ]
+                                    ],
+                                    "filename": "jit.fx.tp.delay.js",
+                                    "id": "obj-23",
+                                    "maxclass": "newobj",
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "jit_gl_texture" ],
+                                    "patching_rect": [ 37.0, 454.0, 75.0, 22.0 ],
+                                    "saved_object_attributes": {
+                                        "parameter_enable": 0
+                                    },
+                                    "text": "jit.fx.tp.delay",
+                                    "textfile": {
+                                        "filename": "jit.fx.tp.delay.js",
+                                        "flags": 0,
+                                        "embed": 0,
+                                        "autowatch": 1
+                                    }
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-16",
+                                    "maxclass": "toggle",
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "int" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 621.0, 124.0, 24.0, 24.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-13",
+                                    "maxclass": "message",
+                                    "numinlets": 2,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "" ],
+                                    "patching_rect": [ 621.0, 165.0, 91.0, 22.0 ],
+                                    "text": "enableInsert $1"
+                                }
+                            },
+                            {
+                                "box": {
+                                    "data": {
+                                        "clips": [
+                                            {
+                                                "absolutepath": "geom-demo-video.mp4",
+                                                "filename": "geom-demo-video.mp4",
+                                                "filekind": "moviefile",
+                                                "id": "u654014134",
+                                                "loop": 1,
+                                                "content_state": {
+                                                    "loop": 1
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "drawto": "",
+                                    "id": "obj-9",
+                                    "loop": 1,
+                                    "maxclass": "jit.playlist",
+                                    "numinlets": 1,
+                                    "numoutlets": 3,
+                                    "outlettype": [ "jit_matrix", "", "dictionary" ],
+                                    "output_texture": 0,
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 402.0, 161.0, 150.0, 30.0 ],
+                                    "saved_attribute_attributes": {
+                                        "candicane2": {
+                                            "expression": ""
+                                        },
+                                        "candicane3": {
+                                            "expression": ""
+                                        },
+                                        "candicane4": {
+                                            "expression": ""
+                                        },
+                                        "candicane5": {
+                                            "expression": ""
+                                        },
+                                        "candicane6": {
+                                            "expression": ""
+                                        },
+                                        "candicane7": {
+                                            "expression": ""
+                                        },
+                                        "candicane8": {
+                                            "expression": ""
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "box": {
+                                    "auto_handle": 0,
+                                    "enable": 1,
+                                    "erase_color": [ 0.0, 0.0, 0.0, 1.0 ],
+                                    "fps": 30.0,
+                                    "gizmos": 0,
+                                    "id": "obj-3",
+                                    "maxclass": "jit.pworld",
+                                    "numinlets": 1,
+                                    "numoutlets": 2,
+                                    "outlettype": [ "jit_matrix", "" ],
+                                    "patching_rect": [ 34.0, 270.0, 314.0, 256.0 ],
+                                    "sync": 1
+                                }
+                            },
+                            {
+                                "box": {
+                                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
+                                    "fontname": "Arial Bold",
+                                    "hint": "",
+                                    "id": "obj-14",
+                                    "ignoreclick": 1,
+                                    "legacytextcolor": 1,
+                                    "maxclass": "textbutton",
+                                    "numinlets": 1,
+                                    "numoutlets": 3,
+                                    "outlettype": [ "", "", "int" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 650.0, 126.0, 20.0, 20.0 ],
+                                    "rounded": 60.0,
+                                    "text": "2",
+                                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "bubble": 1,
+                                    "id": "obj-12",
+                                    "maxclass": "comment",
+                                    "numinlets": 1,
+                                    "numoutlets": 0,
+                                    "patching_rect": [ 672.0, 124.0, 240.0, 24.0 ],
+                                    "text": "Play the video and switch back and forth"
+                                }
+                            },
+                            {
+                                "box": {
+                                    "bubble": 1,
+                                    "id": "obj-11",
+                                    "maxclass": "comment",
+                                    "numinlets": 1,
+                                    "numoutlets": 0,
+                                    "patching_rect": [ 84.0, 135.0, 125.0, 24.0 ],
+                                    "text": "Enable the context"
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-30",
+                                    "maxclass": "comment",
+                                    "numinlets": 1,
+                                    "numoutlets": 0,
+                                    "patching_rect": [ 13.0, 65.0, 668.0, 20.0 ],
+                                    "text": "The right inlet of the object is a fx insert."
+                                }
+                            },
+                            {
+                                "box": {
+                                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
+                                    "fontname": "Arial Bold",
+                                    "hint": "",
+                                    "id": "obj-38",
+                                    "ignoreclick": 1,
+                                    "legacytextcolor": 1,
+                                    "maxclass": "textbutton",
+                                    "numinlets": 1,
+                                    "numoutlets": 3,
+                                    "outlettype": [ "", "", "int" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 62.0, 137.0, 20.0, 20.0 ],
+                                    "rounded": 60.0,
+                                    "text": "1",
+                                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-19",
+                                    "linecount": 2,
+                                    "maxclass": "newobj",
+                                    "numinlets": 2,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "" ],
+                                    "patching_rect": [ 402.0, 223.0, 310.0, 35.0 ],
+                                    "text": "syncSuite.video.source source-help-6 @autoRatio 1 @scale 0.5 @source external"
+                                }
+                            },
+                            {
+                                "box": {
+                                    "border": 0,
+                                    "filename": "helpdetails.js",
+                                    "id": "obj-2",
+                                    "ignoreclick": 1,
+                                    "jsarguments": [ "syncSuite.video.source" ],
+                                    "maxclass": "jsui",
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 13.0, 11.0, 502.0, 52.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-7",
+                                    "maxclass": "toggle",
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "int" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 34.0, 135.0, 24.0, 24.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-5",
+                                    "maxclass": "message",
+                                    "numinlets": 2,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "" ],
+                                    "patching_rect": [ 34.0, 182.0, 61.0, 22.0 ],
+                                    "text": "enable $1"
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-1",
+                                    "maxclass": "newobj",
+                                    "numinlets": 1,
+                                    "numoutlets": 3,
+                                    "outlettype": [ "jit_gl_texture", "bang", "" ],
+                                    "patching_rect": [ 34.0, 223.0, 314.0, 22.0 ],
+                                    "text": "syncSuite.video.context source-help-6 @output_texture 1"
+                                }
+                            }
+                        ],
+                        "lines": [
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-3", 0 ],
+                                    "source": [ "obj-1", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-19", 0 ],
+                                    "midpoints": [ 630.5, 208.0, 411.5, 208.0 ],
+                                    "source": [ "obj-13", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-13", 0 ],
+                                    "source": [ "obj-16", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-27", 0 ],
+                                    "source": [ "obj-19", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-22", 0 ],
+                                    "source": [ "obj-23", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-19", 1 ],
+                                    "midpoints": [ 411.5, 334.96484375, 736.8125, 334.96484375, 736.8125, 204.50390625, 702.5, 204.50390625 ],
+                                    "source": [ "obj-27", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-1", 0 ],
+                                    "source": [ "obj-5", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-5", 0 ],
+                                    "source": [ "obj-7", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-19", 0 ],
+                                    "source": [ "obj-9", 0 ]
+                                }
+                            }
+                        ]
+                    },
+                    "patching_rect": [ 641.0, 771.0, 95.0, 22.0 ],
+                    "text": "p \"insert effects\""
+                }
+            },
             {
                 "box": {
                     "id": "obj-12",
@@ -36,12 +401,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 1140.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 930.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -50,7 +415,7 @@
                                     "maxclass": "newobj",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 256.0, 232.0, 32.0, 22.0 ],
+                                    "patching_rect": [ 287.0, 232.0, 32.0, 22.0 ],
                                     "text": "print"
                                 }
                             },
@@ -284,7 +649,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 4,
+                                            "revision": 5,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -491,11 +856,12 @@
                             {
                                 "box": {
                                     "id": "obj-30",
+                                    "linecount": 2,
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 13.0, 65.0, 668.0, 20.0 ],
-                                    "text": "A simple way of using the SyncSuite environment to synchronize video playback with Ableton Live's Transport."
+                                    "patching_rect": [ 13.0, 65.0, 668.0, 33.0 ],
+                                    "text": "The main purpose of syncSuite.video.source is its implementation with the Max4Live device to syncronize video playback with Ableton Live's transport."
                                 }
                             },
                             {
@@ -693,12 +1059,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 1140.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 930.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -757,7 +1123,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 4,
+                                            "revision": 5,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -978,7 +1344,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 701.0, 370.0, 190.0, 51.0 ],
-                                    "text": "This are the dimensions of the matrix. The video will be rendered with that exact size."
+                                    "text": "These are the dimensions of the matrix. The video will be rendered with that exact size."
                                 }
                             },
                             {
@@ -1243,12 +1609,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 1140.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 930.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1768,12 +2134,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 1140.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 930.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {

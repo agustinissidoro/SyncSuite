@@ -22,64 +22,219 @@
 
     <!--INLETS-->
     <inletlist>
-        <inlet id="0" type="signal">
-            <digest>Short description of inlet 0</digest>
+        <inlet id="0" type="anything">
+            <digest>Messages controlling the context, plus every jit.world message/attribute</digest>
             <description>
-                Longer description of what inlet 0 accepts and does.
+                Accepts the "projectionMode", "cameraContext" and "context" messages described below.
+                Anything else is passed straight through to the underlying jit.world, so all of
+                jit.world's own messages and attributes (e.g. "enable", "visible", "size", "fps",
+                "erase_color", "preserve_aspect", "floating", "displaylink", "fsaa", "fsmenubar",
+                "border", "dim", "transparency", "drawto") work exactly as they do on jit.world
+                itself, and can be set at creation as "@attr value" too.
             </description>
-        </inlet>
-        <inlet id="1" type="float">
-            <digest>Short description of inlet 1</digest>
         </inlet>
     </inletlist>
 
     <!--OUTLETS-->
     <outletlist>
-        <outlet id="0" type="signal">
-            <digest>Short description of outlet 0</digest>
+        <outlet id="0" type="jit_matrix">
+            <digest>jit.world's matrix output, when @outputmatrix is enabled</digest>
+            <description>
+                Outputs the rendered content as a jit_matrix, but only while jit.world's
+                @outputmatrix attribute is on (off by default).
+            </description>
+        </outlet>
+        <outlet id="1" type="bang">
+            <digest>Frame-rate clock</digest>
+            <description>
+                Outputs a bang once per rendered frame, at the context's configured @fps.
+            </description>
+        </outlet>
+        <outlet id="2" type="list">
+            <digest>Current window size, in pixels</digest>
+            <description>
+                Outputs "&lt;width&gt; &lt;height&gt;" whenever the window's pixel size changes.
+            </description>
         </outlet>
     </outletlist>
 
     <!--ARGUMENTS-->
     <objarglist>
-        <objarg name="argument-name" optional="1" type="float">
-            <digest>Short description of this argument</digest>
+        <objarg name="context" optional="0" type="symbol">
+            <digest>Name of the rendering context</digest>
             <description>
-                Longer description, including default value if optional.
+                Required. Names the shared Jitter OpenGL context created by this object; other
+                Jitter GL objects, and syncSuite.video.source's @context attribute, must reference
+                this same name to render into it. Can be changed later with the "context" message.
             </description>
         </objarg>
     </objarglist>
 
     <!--MESSAGES-->
     <methodlist>
-        <method name="messagename">
+        <method name="projectionMode">
             <arglist>
-                <arg name="argname" optional="0" type="symbol" />
+                <arg name="mode" optional="0" type="int" />
             </arglist>
             <digest>
-                Short description of what this message does
+                Switches between UV space and pixel space
             </digest>
             <description>
-                Longer description of what this message does.
+                0 (default) renders in OpenGL's normalized UV space: resolution-agnostic and
+                relative to the texture, with position 0. 0. always centered in the window - well
+                suited to video-mapping with a projector. 1 renders in pixel space: the texture
+                occupies its exact size in pixels on the canvas, with position 0 0 aligned to the
+                canvas's top-left pixel - well suited to mapping a single screen or multiple
+                screens/LED walls. Pixel space is rendered through a second, internal camera and a
+                custom shader kept in sync with the window's live pixel size; enabling
+                "projectionMode" is what turns that camera on. A paired syncSuite.video.source must
+                independently be set to the same projectionMode to actually draw in that space.
+            </description>
+        </method>
+
+        <method name="cameraContext">
+            <arglist>
+                <arg name="context-name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Redirects the pixel-space camera to another context
+            </digest>
+            <description>
+                By default the internal pixel-space camera draws into this object's own master
+                context. Sending "cameraContext" retargets it to draw into a different named
+                context (typically a jit.gl.node), decoupling pixel-space rendering from the master
+                context even while "projectionMode" is 1. This lets pixel-space and UV-space layers
+                be composited separately before being combined in the master context - point a
+                syncSuite.video.source at that node's name (via its @context attribute) to have it
+                render into that decoupled pixel-space layer.
+            </description>
+        </method>
+
+        <method name="context">
+            <arglist>
+                <arg name="name" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Renames the rendering context
+            </digest>
+            <description>
+                Changes this object's own master rendering context name at runtime, same role as the
+                creation argument.
             </description>
         </method>
     </methodlist>
 
     <!--ATTRIBUTES-->
     <attributelist>
-        <attribute name="attributename" get="1" set="1" type="float64" size="1">
-            <digest>Short description of this attribute</digest>
+        <attribute name="projectionMode" get="1" set="1" type="int32" size="1">
+            <digest>UV space (0) or pixel space (1)</digest>
             <description>
-                Longer description of this attribute, including
-                acceptable range or values if relevant.
+                Same as the "projectionMode" message. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="cameraContext" get="1" set="1" type="symbol" size="1">
+            <digest>Context the pixel-space camera draws into</digest>
+            <description>
+                Same as the "cameraContext" message.
+            </description>
+        </attribute>
+
+        <attribute name="enable" get="1" set="1" type="int32" size="1">
+            <digest>Enables the context (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="visible" get="1" set="1" type="int32" size="1">
+            <digest>Shows or hides the window (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="size" get="1" set="1" type="int32" size="2">
+            <digest>Window size, in pixels (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world. Default 640 480.
+            </description>
+        </attribute>
+
+        <attribute name="fps" get="1" set="1" type="float32" size="1">
+            <digest>Rendering frame rate (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world.
+            </description>
+        </attribute>
+
+        <attribute name="erase_color" get="1" set="1" type="float32" size="4">
+            <digest>Background clear color (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world, as RGBA floats 0.-1. Default 0. 0. 0. 1.
+            </description>
+        </attribute>
+
+        <attribute name="preserve_aspect" get="1" set="1" type="int32" size="1">
+            <digest>Preserves aspect ratio on resize (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="floating" get="1" set="1" type="int32" size="1">
+            <digest>Keeps the window floating (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="displaylink" get="1" set="1" type="int32" size="1">
+            <digest>Syncs rendering to the display refresh (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="fsaa" get="1" set="1" type="int32" size="1">
+            <digest>Full-scene anti-aliasing level (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world. Default 1.
+            </description>
+        </attribute>
+
+        <attribute name="fsmenubar" get="1" set="1" type="int32" size="1">
+            <digest>Shows the menu bar in fullscreen (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world. Default 0.
+            </description>
+        </attribute>
+
+        <attribute name="border" get="1" set="1" type="int32" size="1">
+            <digest>Shows the window's title bar/border (jit.world attribute)</digest>
+            <description>
+                Forwarded to jit.world. Default 1.
             </description>
         </attribute>
     </attributelist>
 
+    <!--DISCUSSION-->
+    <discussion>
+        syncSuite.video.context wraps jit.world: any attribute or message not listed above (e.g.
+        "dim", "transparency", "drawto", "title"...) is passed straight through to the underlying
+        jit.world unchanged, so the full jit.world reference applies here too. By itself, the object
+        renders nothing useful - it exists to be paired with one or more syncSuite.video.source (and
+        syncSuite.video.subs) instances that target its name via their own @context attribute. See
+        the syncSuite.video.source reference for how projection modes are set on the source side.
+    </discussion>
+
     <!--SEEALSO-->
     <seealsolist>
-        <seealso name="relatedobject"/>
-        <seealso name="anotherobject"/>
+        <seealso name="jit.world"/>
+        <seealso name="jit.gl.camera"/>
+        <seealso name="jit.gl.node"/>
+        <seealso name="syncSuite.video.source"/>
+        <seealso name="syncSuite.video.subs"/>
     </seealsolist>
 
 </c74object>
