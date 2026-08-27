@@ -1,4 +1,4 @@
-CUE 0 FIRST-CUE
+CUE 1 FIRST-CUE
 
 ///this message has no delay
 pepe pipi will receive a message after 10 seconds
@@ -10,7 +10,7 @@ popo you were not expecting me!
 pupu me neither!
 
 
-CUE 1 SECOND-CUE
+CUE 2 SECOND-CUE
 
 pipi will ever come out?
 

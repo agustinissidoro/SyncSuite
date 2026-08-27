@@ -53,7 +53,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 668.0, 694.0, 143.0, 51.0 ],
-                                    "presentation_linecount": 5,
                                     "text": "The \"all\" name allows to address to all available scores."
                                 }
                             },
@@ -458,7 +457,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 311.0, 243.0, 127.0, 24.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "Open the browsers"
                                 }
                             },
@@ -490,7 +488,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 71.0, 242.0, 108.0, 51.0 ],
-                                    "presentation_linecount": 3,
                                     "text": "Create two scores and load their parts"
                                 }
                             },
@@ -522,7 +519,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 95.0, 132.5, 108.0, 37.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "If off, start the server"
                                 }
                             },
@@ -619,7 +615,6 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "patching_rect": [ 701.0, 394.0, 50.0, 62.0 ],
-                                    "presentation_linecount": 4,
                                     "text": "192.168.0.18:8080/piano"
                                 }
                             },
@@ -720,7 +715,6 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "patching_rect": [ 140.0, 427.0, 81.0, 22.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "piano load $1"
                                 }
                             },
@@ -874,7 +868,6 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "patching_rect": [ 239.0, 381.0, 179.0, 22.0 ],
-                                    "presentation_linecount": 4,
                                     "text": "addScore cello, addScore piano"
                                 }
                             },
@@ -1357,7 +1350,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 955.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 955.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1368,7 +1361,7 @@
                                     "numoutlets": 2,
                                     "outlettype": [ "", "bang" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 28.0, 156.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 28.0, 251.0, 50.0, 22.0 ]
                                 }
                             },
                             {
@@ -1378,7 +1371,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 28.0, 200.0, 52.0, 22.0 ],
+                                    "patching_rect": [ 28.0, 295.0, 52.0, 22.0 ],
                                     "text": "page $1"
                                 }
                             },
@@ -1389,20 +1382,20 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 657.0, 295.0, 29.5, 22.0 ],
+                                    "patching_rect": [ 741.0, 295.0, 29.5, 22.0 ],
                                     "text": "text"
                                 }
                             },
                             {
                                 "box": {
                                     "id": "obj-33",
-                                    "linecount": 3,
+                                    "linecount": 4,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 501.0, 295.0, 145.0, 49.0 ],
-                                    "text": "text STOP PLAYING!, textSize 100, textColor 0 0 0, textPosition 0.5 0.5"
+                                    "patching_rect": [ 585.0, 295.0, 135.0, 62.0 ],
+                                    "text": "text STOP PLAYING!, textSize 100, textColor 255 0 0, textPosition 0.5 0.5"
                                 }
                             },
                             {
@@ -1412,8 +1405,8 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 367.0, 135.0, 264.0, 74.0 ],
-                                    "text": "Functions that depend on a very sharp and strict timing will not work as good as intended. It is meant for uses where this information works as a support rather than as a tempo-keeping tool."
+                                    "patching_rect": [ 451.0, 135.0, 269.0, 74.0 ],
+                                    "text": "Functions that depend on a very sharp and strict timing will not work as good as intended. It is meant for uses where this information works as a support rather than as a tempo-keeping tool. This is due to server and network latency."
                                 }
                             },
                             {
@@ -1424,7 +1417,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 5.0, 64.0, 803.0, 33.0 ],
-                                    "text": "The object allows you to render some graphical information on scores, such as a metronome, bar and beat information, as well as some other utilities.\nGo through the documentation to get a full grasp of its possibilities."
+                                    "text": "The object allows you to render graphical information on scores, such as a metronome, bar and beat information, as well as some other utilities.\nGo through the documentation to get a full grasp of its possibilities."
                                 }
                             },
                             {
@@ -1435,7 +1428,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 429.0, 243.0, 24.0, 24.0 ]
+                                    "patching_rect": [ 513.0, 243.0, 24.0, 24.0 ]
                                 }
                             },
                             {
@@ -1445,8 +1438,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 429.0, 295.0, 53.0, 22.0 ],
-                                    "presentation_linecount": 2,
+                                    "patching_rect": [ 513.0, 295.0, 53.0, 22.0 ],
                                     "text": "black $1"
                                 }
                             },
@@ -1458,7 +1450,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 336.0, 160.0, 24.0, 24.0 ]
+                                    "patching_rect": [ 420.0, 160.0, 24.0, 24.0 ]
                                 }
                             },
                             {
@@ -1468,7 +1460,7 @@
                                     "numinlets": 5,
                                     "numoutlets": 4,
                                     "outlettype": [ "int", "", "", "int" ],
-                                    "patching_rect": [ 336.0, 251.0, 69.0, 22.0 ],
+                                    "patching_rect": [ 420.0, 251.0, 69.0, 22.0 ],
                                     "text": "counter 1 4"
                                 }
                             },
@@ -1479,7 +1471,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "bang" ],
-                                    "patching_rect": [ 336.0, 219.0, 63.0, 22.0 ],
+                                    "patching_rect": [ 420.0, 219.0, 63.0, 22.0 ],
                                     "text": "metro 500"
                                 }
                             },
@@ -1490,7 +1482,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 336.0, 295.0, 49.0, 22.0 ],
+                                    "patching_rect": [ 420.0, 295.0, 49.0, 22.0 ],
                                     "text": "beat $1"
                                 }
                             },
@@ -1502,7 +1494,7 @@
                                     "numoutlets": 2,
                                     "outlettype": [ "", "bang" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 211.0, 251.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 295.0, 251.0, 50.0, 22.0 ]
                                 }
                             },
                             {
@@ -1512,7 +1504,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 211.0, 295.0, 109.0, 22.0 ],
+                                    "patching_rect": [ 295.0, 295.0, 109.0, 22.0 ],
                                     "text": "metronomeSize $1"
                                 }
                             },
@@ -1524,7 +1516,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 81.0, 249.0, 24.0, 24.0 ]
+                                    "patching_rect": [ 165.0, 249.0, 24.0, 24.0 ]
                                 }
                             },
                             {
@@ -1534,8 +1526,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 81.0, 295.0, 123.0, 22.0 ],
-                                    "presentation_linecount": 5,
+                                    "patching_rect": [ 165.0, 295.0, 123.0, 22.0 ],
                                     "text": "displayMetronome $1"
                                 }
                             },
@@ -1546,7 +1537,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 28.0, 295.0, 34.0, 22.0 ],
+                                    "patching_rect": [ 106.0, 295.0, 34.0, 22.0 ],
                                     "text": "flash"
                                 }
                             },
@@ -1597,7 +1588,7 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-6", 0 ],
-                                    "midpoints": [ 220.5, 383.0, 37.5, 383.0 ],
+                                    "midpoints": [ 304.5, 383.0, 37.5, 383.0 ],
                                     "source": [ "obj-12", 0 ]
                                 }
                             },
@@ -1610,7 +1601,7 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-6", 0 ],
-                                    "midpoints": [ 345.5, 383.0, 37.5, 383.0 ],
+                                    "midpoints": [ 429.5, 383.0, 37.5, 383.0 ],
                                     "source": [ "obj-15", 0 ]
                                 }
                             },
@@ -1635,7 +1626,7 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-6", 0 ],
-                                    "midpoints": [ 438.5, 383.0, 37.5, 383.0 ],
+                                    "midpoints": [ 522.5, 383.0, 37.5, 383.0 ],
                                     "source": [ "obj-24", 0 ]
                                 }
                             },
@@ -1648,14 +1639,14 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-6", 0 ],
-                                    "midpoints": [ 510.5, 383.0, 37.5, 383.0 ],
+                                    "midpoints": [ 594.5, 383.0, 37.5, 383.0 ],
                                     "source": [ "obj-33", 0 ]
                                 }
                             },
                             {
                                 "patchline": {
                                     "destination": [ "obj-6", 0 ],
-                                    "midpoints": [ 666.5, 383.0, 37.5, 383.0 ],
+                                    "midpoints": [ 750.5, 383.0, 37.5, 383.0 ],
                                     "source": [ "obj-41", 0 ]
                                 }
                             },
@@ -1680,13 +1671,14 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-6", 0 ],
+                                    "midpoints": [ 115.5, 381.0, 37.5, 381.0 ],
                                     "source": [ "obj-8", 0 ]
                                 }
                             },
                             {
                                 "patchline": {
                                     "destination": [ "obj-6", 0 ],
-                                    "midpoints": [ 90.5, 383.0, 37.5, 383.0 ],
+                                    "midpoints": [ 174.5, 383.0, 37.5, 383.0 ],
                                     "source": [ "obj-9", 0 ]
                                 }
                             }
@@ -1706,7 +1698,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 450.0, 701.0, 109.0, 64.0 ],
-                    "presentation_linecount": 4,
                     "text": "Click to open the address in a browser or copy it yourself."
                 }
             },
@@ -1855,7 +1846,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 464.0, 562.0, 126.0, 47.0 ],
-                    "presentation_linecount": 3,
                     "text": "The server will output information about the score"
                 }
             },
@@ -1898,8 +1888,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 361.5, 439.5, 123.0, 47.0 ],
-                    "presentation_linecount": 4,
+                    "patching_rect": [ 361.5, 439.5, 126.0, 47.0 ],
                     "text": "The name of the created score is used to set all its configs"
                 }
             },
@@ -1931,7 +1920,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 299.0, 346.0, 108.0, 51.0 ],
-                    "presentation_linecount": 3,
                     "text": "Load a pdf file to be rendered in the website"
                 }
             },
@@ -1956,7 +1944,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 28.0, 392.0, 108.0, 51.0 ],
-                    "presentation_linecount": 3,
                     "text": "Create a new score and name it"
                 }
             },
