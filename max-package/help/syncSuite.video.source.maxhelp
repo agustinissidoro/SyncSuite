@@ -4,7 +4,7 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 5,
+            "revision": 4,
             "architecture": "x64",
             "modernui": 1
         },
@@ -25,7 +25,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -401,21 +401,32 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 930.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 930.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
+                            {
+                                "box": {
+                                    "bgcolor": [ 1.0, 0.0, 0.0, 1.0 ],
+                                    "id": "obj-23",
+                                    "maxclass": "comment",
+                                    "numinlets": 1,
+                                    "numoutlets": 0,
+                                    "patching_rect": [ 45.0, 160.0, 381.0, 20.0 ],
+                                    "text": "Please, be sure that your session's sampling rate is set to 48.000 Hz!"
+                                }
+                            },
                             {
                                 "box": {
                                     "id": "obj-10",
                                     "maxclass": "newobj",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 287.0, 232.0, 32.0, 22.0 ],
+                                    "patching_rect": [ 284.0, 253.0, 32.0, 22.0 ],
                                     "text": "print"
                                 }
                             },
@@ -432,7 +443,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 31.5, 637.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 29.0, 646.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
                                     "text": "4",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -445,7 +456,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 58.5, 635.0, 200.0, 24.0 ],
+                                    "patching_rect": [ 56.0, 644.0, 200.0, 24.0 ],
                                     "text": "Play the Ableton Live's Transport"
                                 }
                             },
@@ -457,7 +468,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "bang" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 141.5, 341.0, 24.0, 24.0 ]
+                                    "patching_rect": [ 139.0, 362.0, 24.0, 24.0 ]
                                 }
                             },
                             {
@@ -467,7 +478,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 631.0, 190.0, 227.0, 24.0 ],
+                                    "patching_rect": [ 628.0, 211.0, 227.0, 24.0 ],
                                     "text": "You can also test connection this way."
                                 }
                             },
@@ -478,7 +489,7 @@
                                     "numinlets": 3,
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "" ],
-                                    "patching_rect": [ 61.5, 310.0, 179.0, 22.0 ],
+                                    "patching_rect": [ 59.0, 331.0, 179.0, 22.0 ],
                                     "text": "route connection_received bang"
                                 }
                             },
@@ -489,7 +500,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 574.0, 191.0, 51.0, 22.0 ],
+                                    "patching_rect": [ 571.0, 212.0, 51.0, 22.0 ],
                                     "text": "connect"
                                 }
                             },
@@ -499,7 +510,7 @@
                                     "maxclass": "newobj",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 574.0, 225.0, 135.0, 22.0 ],
+                                    "patching_rect": [ 571.0, 246.0, 135.0, 22.0 ],
                                     "text": "udpsend localhost 9992"
                                 }
                             },
@@ -516,7 +527,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 549.5, 191.5, 23.0, 21.0 ],
+                                    "patching_rect": [ 547.0, 213.0, 23.0, 21.0 ],
                                     "rounded": 60.0,
                                     "text": "2b",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -528,7 +539,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 624.5, 355.0, 177.0, 20.0 ],
+                                    "patching_rect": [ 622.0, 376.0, 177.0, 20.0 ],
                                     "text": "Playback control messages"
                                 }
                             },
@@ -539,7 +550,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 332.5, 403.0, 177.0, 60.0 ],
+                                    "patching_rect": [ 330.0, 424.0, 177.0, 60.0 ],
                                     "text": "Movies in the Live Project are automatically added to the source via the addMovie message."
                                 }
                             },
@@ -549,7 +560,7 @@
                                     "maxclass": "newobj",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 501.5, 354.0, 119.0, 22.0 ],
+                                    "patching_rect": [ 499.0, 375.0, 119.0, 22.0 ],
                                     "text": "s sync.source.help-5"
                                 }
                             },
@@ -566,7 +577,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 22.0, 192.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 19.0, 213.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
                                     "text": "2",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -579,7 +590,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 47.5, 190.0, 406.0, 24.0 ],
+                                    "patching_rect": [ 45.0, 211.0, 406.0, 24.0 ],
                                     "text": "Check that connection is established between the device and the patch."
                                 }
                             },
@@ -601,7 +612,7 @@
                                     "numinlets": 0,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 250.5, 536.0, 117.0, 22.0 ],
+                                    "patching_rect": [ 248.0, 557.0, 117.0, 22.0 ],
                                     "text": "r sync.source.help-5"
                                 }
                             },
@@ -611,7 +622,7 @@
                                     "maxclass": "newobj",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 208.5, 416.0, 119.0, 22.0 ],
+                                    "patching_rect": [ 206.0, 437.0, 119.0, 22.0 ],
                                     "text": "s sync.source.help-5"
                                 }
                             },
@@ -621,7 +632,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 87.5, 386.5, 64.0, 20.0 ],
+                                    "patching_rect": [ 85.0, 408.0, 64.0, 20.0 ],
                                     "text": "connected"
                                 }
                             },
@@ -634,7 +645,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 61.5, 384.5, 24.0, 24.0 ]
+                                    "patching_rect": [ 59.0, 406.0, 24.0, 24.0 ]
                                 }
                             },
                             {
@@ -649,7 +660,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 5,
+                                            "revision": 4,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -808,7 +819,7 @@
                                             }
                                         ]
                                     },
-                                    "patching_rect": [ 208.5, 359.0, 165.33333333333331, 22.0 ],
+                                    "patching_rect": [ 206.0, 380.0, 165.33333333333331, 22.0 ],
                                     "text": "p change_movies_folder"
                                 }
                             },
@@ -819,7 +830,7 @@
                                     "numinlets": 4,
                                     "numoutlets": 4,
                                     "outlettype": [ "", "", "", "" ],
-                                    "patching_rect": [ 61.5, 275.0, 459.0, 22.0 ],
+                                    "patching_rect": [ 59.0, 296.0, 459.0, 22.0 ],
                                     "text": "route connect live_project_path addMovie"
                                 }
                             },
@@ -830,7 +841,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 61.5, 232.0, 97.0, 22.0 ],
+                                    "patching_rect": [ 59.0, 253.0, 97.0, 22.0 ],
                                     "text": "udpreceive 9991"
                                 }
                             },
@@ -847,7 +858,7 @@
                                     "numoutlets": 3,
                                     "outlettype": [ "", "", "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 31.5, 464.0, 20.0, 20.0 ],
+                                    "patching_rect": [ 29.0, 485.0, 20.0, 20.0 ],
                                     "rounded": 60.0,
                                     "text": "3",
                                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -871,7 +882,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 58.5, 462.0, 125.0, 24.0 ],
+                                    "patching_rect": [ 56.0, 483.0, 125.0, 24.0 ],
                                     "text": "Enable the context"
                                 }
                             },
@@ -901,7 +912,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 250.5, 576.0, 349.0, 22.0 ],
+                                    "patching_rect": [ 248.0, 597.0, 349.0, 22.0 ],
                                     "text": "syncSuite.video.source source-help-5 @autoRatio 1 @scale 0.5"
                                 }
                             },
@@ -928,7 +939,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "int" ],
                                     "parameter_enable": 0,
-                                    "patching_rect": [ 29.5, 495.0, 24.0, 24.0 ]
+                                    "patching_rect": [ 27.0, 516.0, 24.0, 24.0 ]
                                 }
                             },
                             {
@@ -938,7 +949,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 29.5, 536.0, 118.0, 22.0 ],
+                                    "patching_rect": [ 27.0, 557.0, 118.0, 22.0 ],
                                     "text": "enable $1, visible $1"
                                 }
                             },
@@ -949,7 +960,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 3,
                                     "outlettype": [ "jit_matrix", "bang", "" ],
-                                    "patching_rect": [ 29.5, 576.0, 211.0, 22.0 ],
+                                    "patching_rect": [ 27.0, 597.0, 211.0, 22.0 ],
                                     "text": "syncSuite.video.context source-help-5"
                                 }
                             }
@@ -964,7 +975,7 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-3", 0 ],
-                                    "midpoints": [ 151.0, 377.9375, 71.0, 377.9375 ],
+                                    "midpoints": [ 148.5, 398.9375, 68.5, 398.9375 ],
                                     "source": [ "obj-22", 0 ]
                                 }
                             },
@@ -1013,7 +1024,7 @@
                             {
                                 "patchline": {
                                     "destination": [ "obj-1", 0 ],
-                                    "midpoints": [ 39.0, 563.5, 39.0, 563.5 ],
+                                    "midpoints": [ 36.5, 584.5, 36.5, 584.5 ],
                                     "source": [ "obj-5", 0 ]
                                 }
                             },
@@ -1059,12 +1070,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 930.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 930.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1123,7 +1134,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 5,
+                                            "revision": 4,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1609,7 +1620,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -2134,7 +2145,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
