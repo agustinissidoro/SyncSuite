@@ -29,7 +29,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 953.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 953.0, 827.0 ],
                         "showontab": 1,
                         "boxes": [
                             {
@@ -39,8 +39,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 537.0, 296.0, 298.0, 100.0 ],
-                                    "presentation_linecount": 12,
+                                    "patching_rect": [ 537.0, 296.0, 302.0, 100.0 ],
                                     "text": "TIP: In a setting where there's a router assigning IPs dynamically, you might not know yours in advance but you can usually know the router's. So you can initialise with the router's IP, then get yours and all connected devices.\n\nHow cool's that?"
                                 }
                             },
@@ -51,7 +50,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 253.0, 259.0, 230.0, 20.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "check your console for the netscan logs ;)"
                                 }
                             },
@@ -98,7 +96,6 @@
                         "lines": []
                     },
                     "patching_rect": [ 178.0, 245.0, 61.0, 22.0 ],
-                    "presentation_linecount": 3,
                     "text": "p initialise"
                 }
             },
@@ -129,7 +126,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 103.0, 402.5, 57.0, 33.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "pinged address"
                                 }
                             },
@@ -151,8 +147,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 162.0, 408.0, 112.0, 22.0 ],
-                                    "text": "192.168.0.1"
+                                    "patching_rect": [ 162.0, 408.0, 112.0, 22.0 ]
                                 }
                             },
                             {
@@ -314,7 +309,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 953.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 953.0, 827.0 ],
                         "showontab": 1,
                         "boxes": [
                             {
@@ -324,7 +319,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 583.5, 494.0, 83.0, 20.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "found devices"
                                 }
                             },
@@ -359,7 +353,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 456.0, 159.5, 174.0, 39.0 ],
-                                    "presentation_linecount": 4,
                                     "text": "Get all devices in your network"
                                 }
                             },
@@ -493,7 +486,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 126.0, 153.5, 122.0, 51.0 ],
-                                    "presentation_linecount": 4,
                                     "text": "Start the script (not now of course!)"
                                 }
                             },
@@ -505,8 +497,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 530.0, 493.0, 50.0, 22.0 ],
-                                    "text": "3"
+                                    "patching_rect": [ 530.0, 493.0, 50.0, 22.0 ]
                                 }
                             },
                             {
@@ -550,7 +541,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 700.0, 329.0, 77.0, 33.0 ],
-                                    "presentation_linecount": 2,
                                     "text": "processing bang"
                                 }
                             },
@@ -562,7 +552,6 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 165.0, 387.0, 57.0, 33.0 ],
-                                    "presentation_linecount": 11,
                                     "text": "netwrok interface"
                                 }
                             },
@@ -601,13 +590,11 @@
                                 "box": {
                                     "dontreplace": 1,
                                     "id": "obj-10",
-                                    "linecount": 2,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 275.0, 447.0, 50.0, 35.0 ],
-                                    "text": "192.168.0.18"
+                                    "patching_rect": [ 275.0, 447.0, 50.0, 22.0 ]
                                 }
                             },
                             {
@@ -651,8 +638,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 224.0, 393.0, 50.0, 22.0 ],
-                                    "text": "en0"
+                                    "patching_rect": [ 224.0, 393.0, 50.0, 22.0 ]
                                 }
                             },
                             {
@@ -674,13 +660,11 @@
                                 "box": {
                                     "dontreplace": 1,
                                     "id": "obj-11",
-                                    "linecount": 2,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 325.0, 509.0, 50.0, 35.0 ],
-                                    "text": "255.255.255.0"
+                                    "patching_rect": [ 325.0, 509.0, 50.0, 22.0 ]
                                 }
                             },
                             {

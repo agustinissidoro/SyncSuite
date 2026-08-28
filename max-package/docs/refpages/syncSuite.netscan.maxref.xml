@@ -45,12 +45,10 @@
             </description>
         </attribute>
         <attribute name="defer" get="1" set="1" type="int" size="1">
-            <digest>Wait for the Node process to finish loading before scanning on load</digest>
+            <digest>Runs the underlying node.script in the low- or high-priority queue</digest>
             <description>
-                Only relevant when "ip"/"mask" arguments are given. When set to 1 (the default), the
-                automatic startup scan waits until the underlying Node process reports it has finished
-                loading before it's sent, avoiding a race where the scan is dropped because the Node script
-                wasn't ready yet. Set to 0 to send the startup scan immediately instead.
+                Defers the processing of node.script. Default is 1: node.script's functions are deferred to
+                Max's low-priority queue. Set to 0 to have them execute in the high-priority queue instead.
             </description>
         </attribute>
     </attributelist>
@@ -69,7 +67,8 @@
             <digest>Commands controlling the underlying Node process and network requests</digest>
             <description>
                 Accepts "start", "stop", "myip", "myip all", "scan", "scan &lt;ip&gt; &lt;mask&gt;",
-                "ping &lt;ip&gt;", and "console &lt;0|1&gt;". See the Messages section for the full list.
+                "ping &lt;ip&gt;", "console &lt;0|1&gt;", and "defer &lt;0|1&gt;". See the Messages section for
+                the full list.
             </description>
         </inlet>
     </inletlist>
@@ -191,6 +190,20 @@
                 Sent as "console &lt;0|1&gt;". Same as the "console" attribute, settable at any time: 1 prints
                 every subsequent "myip"/"scan"/"ping"/"done" report to the Max Console instead of the
                 outlets; 0 restores normal outlet output.
+            </description>
+        </method>
+
+        <method name="defer">
+            <arglist>
+                <arg name="state" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Runs the underlying node.script in the low- or high-priority queue
+            </digest>
+            <description>
+                Sent as "defer &lt;0|1&gt;". Same as the "defer" attribute, settable at any time: 1 (default)
+                defers node.script's processing to Max's low-priority queue; 0 runs it in the high-priority
+                queue instead.
             </description>
         </method>
     </methodlist>

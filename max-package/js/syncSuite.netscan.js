@@ -74,13 +74,18 @@ function hostsInRange(ip, mask) {
 // -c 2: two attempts, so one dropped packet doesn't read as "dead" (ping's
 // exit code is 0 if AT LEAST one reply came back). -W is the per-reply wait:
 // milliseconds on macOS, whole seconds on Linux (note: macOS's -t sets IP
-// TTL, not a timeout — do not use it here for that purpose).
+// TTL, not a timeout — do not use it here for that purpose). -i 0.2: gap
+// between the 2 attempts, down from ping's 1s default — this is the lowest
+// interval macOS/Linux allow non-root users, so it's free speed: it doesn't
+// touch the attempt count or the per-reply wait, it just stops a dead host
+// from idling for a full second between its two (still full-length) chances
+// to answer.
 function pingHost(ip, waitMs = 800) {
   return new Promise((resolve) => {
     const isMac = os.platform() === 'darwin';
     const cmd = isMac
-      ? `ping -c 2 -W ${waitMs} ${ip}`
-      : `ping -c 2 -W ${Math.max(1, Math.ceil(waitMs / 1000))} ${ip}`;
+      ? `ping -c 2 -i 0.2 -W ${waitMs} ${ip}`
+      : `ping -c 2 -i 0.2 -W ${Math.max(1, Math.ceil(waitMs / 1000))} ${ip}`;
     exec(cmd, { timeout: waitMs * 3 }, (err) => resolve(!err));
   });
 }
@@ -88,7 +93,10 @@ function pingHost(ip, waitMs = 800) {
 async function scan(ip, mask, iface = ip) {
   const hosts = hostsInRange(ip, mask);
 
-  const CONCURRENCY = 24;
+  // Independent subprocesses pinging different hosts, so raising this just
+  // shortens wall-clock time — it doesn't change per-host accuracy the way
+  // cutting -c or waitMs would. 64 keeps a /24 (254 hosts) to ~4 batches.
+  const CONCURRENCY = 64;
   const alive = [];
   let idx = 0;
 
