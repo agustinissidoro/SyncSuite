@@ -4,17 +4,78 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 5,
+            "revision": 4,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 34.0, 95.0, 1139.0, 822.0 ],
+        "rect": [ 230.0, 117.0, 1139.0, 822.0 ],
         "openinpresentation": 1,
         "toolbarvisible": 0,
         "enablehscroll": 0,
         "title": "syncSuite",
         "boxes": [
+            {
+                "box": {
+                    "id": "obj-57",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 155.0, 581.0, 277.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 155.0, 581.0, 244.0, 20.0 ],
+                    "text": "Get IP, scan and ping devices in the network"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-55",
+                    "maxclass": "live.line",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 18.0, 564.0, 5.0, 100.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 18.0, 564.0, 474.0, 9.0 ]
+                }
+            },
+            {
+                "box": {
+                    "fontface": 1,
+                    "fontname": "Arial",
+                    "fontsize": 14.0,
+                    "id": "obj-56",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 19.0, 541.0, 124.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 19.0, 541.0, 115.0, 22.0 ],
+                    "text": "network utilities"
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgcolor2": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_angle": 270.0,
+                    "bgfillcolor_autogradient": 0.0,
+                    "bgfillcolor_color": [ 0.27450980392156865, 0.27450980392156865, 0.27450980392156865, 1.0 ],
+                    "bgfillcolor_color1": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_color2": [ 0.2, 0.2, 0.2, 1.0 ],
+                    "bgfillcolor_proportion": 0.5,
+                    "bgfillcolor_type": "color",
+                    "gradient": 1,
+                    "id": "obj-52",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 168.0, 503.0, 106.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 18.0, 580.0, 106.0, 22.0 ],
+                    "text": "syncSuite.netscan"
+                }
+            },
             {
                 "box": {
                     "id": "obj-54",
@@ -279,7 +340,7 @@
                     "numoutlets": 0,
                     "patching_rect": [ 38.0, 555.0, 5.0, 100.0 ],
                     "presentation": 1,
-                    "presentation_rect": [ 18.0, 545.0, 474.0, 9.0 ]
+                    "presentation_rect": [ 18.5, 612.0, 474.0, 9.0 ]
                 }
             },
             {
@@ -293,7 +354,7 @@
                     "numoutlets": 0,
                     "patching_rect": [ 38.0, 564.0, 172.0, 29.0 ],
                     "presentation": 1,
-                    "presentation_rect": [ 20.0, 551.0, 123.0, 29.0 ],
+                    "presentation_rect": [ 20.5, 618.0, 123.0, 29.0 ],
                     "text": "Tutorials"
                 }
             },
@@ -727,10 +788,10 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 33.0, 120.0, 1102.0, 33.0 ],
+                    "patching_rect": [ 33.0, 120.0, 1103.0, 33.0 ],
                     "presentation": 1,
                     "presentation_linecount": 2,
-                    "presentation_rect": [ 18.0, 120.0, 1102.0, 33.0 ],
+                    "presentation_rect": [ 18.0, 120.0, 1103.0, 33.0 ],
                     "text": "syncSuite is a cross-platform package (Max, Live, web-browsers) that offers solutions for sound, video and score syncronization and manipulation in the context of multimedia performance. The package has a focus on live performance so that it is simple to design reliable and performant technical solutions that support the whole process of production, including composition, rehearsals and performance. "
                 }
             },
@@ -815,6 +876,12 @@
                 "patchline": {
                     "destination": [ "obj-16", 0 ],
                     "source": [ "obj-22", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-16", 0 ],
+                    "source": [ "obj-52", 0 ]
                 }
             }
         ],

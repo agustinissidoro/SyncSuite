@@ -4,7 +4,7 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 5,
+            "revision": 4,
             "architecture": "x64",
             "modernui": 1
         },
@@ -24,12 +24,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 953.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 953.0, 827.0 ],
                         "showontab": 1,
                         "boxes": [
                             {
@@ -110,12 +110,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 953.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 953.0, 827.0 ],
                         "showontab": 1,
                         "boxes": [
                             {
@@ -147,7 +147,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 162.0, 408.0, 112.0, 22.0 ]
+                                    "patching_rect": [ 162.0, 408.0, 112.0, 22.0 ],
+                                    "text": "192.168.0.191"
                                 }
                             },
                             {
@@ -304,7 +305,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -440,11 +441,13 @@
                             {
                                 "box": {
                                     "id": "obj-37",
+                                    "linecount": 5,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 467.0, 441.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 417.0, 441.0, 100.0, 76.0 ],
+                                    "text": "192.168.0.1 192.168.0.12 192.168.0.13 192.168.0.15 192.168.0.18"
                                 }
                             },
                             {
@@ -454,7 +457,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 431.0, 378.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 431.0, 378.0, 50.0, 22.0 ],
+                                    "text": "en0"
                                 }
                             },
                             {
@@ -497,7 +501,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 530.0, 493.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 530.0, 493.0, 50.0, 22.0 ],
+                                    "text": "5"
                                 }
                             },
                             {
