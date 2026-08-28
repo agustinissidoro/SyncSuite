@@ -4,13 +4,26 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 4,
+            "revision": 5,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 789.0, 95.0, 689.0, 853.0 ],
+        "rect": [ 359.0, 95.0, 1009.0, 853.0 ],
         "boxes": [
+            {
+                "box": {
+                    "dontreplace": 1,
+                    "id": "obj-5",
+                    "linecount": 4,
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 359.0, 789.0, 50.0, 62.0 ],
+                    "text": "windowsize 1532 228"
+                }
+            },
             {
                 "box": {
                     "id": "obj-56",
@@ -67,7 +80,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -119,7 +132,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 4,
+                                            "revision": 5,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -580,6 +593,12 @@
             }
         ],
         "lines": [
+            {
+                "patchline": {
+                    "destination": [ "obj-5", 1 ],
+                    "source": [ "obj-1", 2 ]
+                }
+            },
             {
                 "patchline": {
                     "destination": [ "obj-4", 0 ],
