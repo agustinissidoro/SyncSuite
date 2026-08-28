@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
+
+<c74object name="syncSuite.netscan">
+
+    <digest>
+        Reports your machine's own IP/mask, and discovers live devices on a subnet via a ping sweep.
+    </digest>
+
+    <description>
+        Use it to find your own IPv4 address(es) and netmask(s), and to discover which devices answer on a
+        given subnet.
+    </description>
+
+    <!--ARGUMENTS-->
+    <objarglist>
+        <objarg name="ip" optional="1" type="symbol">
+            <digest>Subnet IP to scan on load</digest>
+            <description>
+                Together with "mask", runs a scan of this subnet as soon as the patcher containing this object
+                finishes loading, equivalent to sending "scan &lt;ip&gt; &lt;mask&gt;". Optional; omit both
+                arguments to scan nothing automatically.
+            </description>
+        </objarg>
+        <objarg name="mask" optional="1" type="symbol">
+            <digest>Subnet mask to scan on load</digest>
+            <description>
+                See "ip". Both arguments must be given together, e.g. "syncSuite.netscan 192.168.0.1
+                255.255.255.0".
+            </description>
+        </objarg>
+    </objarglist>
+
+    <!--METADATA-->
+    <metadatalist>
+        <metadata name="author">Agustin Issidoro</metadata>
+        <metadata name="tag">SyncSuite</metadata>
+        <metadata name="tag">Network</metadata>
+        <metadata name="tag">Node for Max</metadata>
+    </metadatalist>
+
+    <!--INLETS-->
+    <inletlist>
+        <inlet id="0" type="anything">
+            <digest>Commands controlling the underlying Node process and network requests</digest>
+            <description>
+                Accepts "start", "stop", "myip", "myip all", "scan", "scan &lt;ip&gt; &lt;mask&gt;", and
+                "ping &lt;ip&gt;". See the Messages section for the full list.
+            </description>
+        </inlet>
+    </inletlist>
+
+    <!--OUTLETS-->
+    <outletlist>
+        <outlet id="0" type="anything">
+            <digest>Results of "myip" / "myip all"</digest>
+            <description>
+                Outputs "&lt;iface&gt; &lt;ip&gt; &lt;mask&gt;" for each active non-internal IPv4 interface —
+                more than one message if you're connected to more than one network at once. After "myip all",
+                each message additionally ends with "internal" or "external", and internal/loopback
+                interfaces are included too.
+            </description>
+        </outlet>
+        <outlet id="1" type="anything">
+            <digest>Results of "scan" and "ping"</digest>
+            <description>
+                For "scan", outputs "&lt;iface&gt; &lt;host1&gt; &lt;host2&gt; ..." listing every device that
+                answered the ping sweep on that subnet (or "&lt;iface&gt; none" if nobody answered). Sending
+                "scan" with no arguments produces one such message per active interface, scanning each
+                interface's own subnet in turn. For "ping", outputs "&lt;ip&gt; &lt;0|1&gt;" — 1 if that host
+                answered, 0 if it didn't.
+            </description>
+        </outlet>
+        <outlet id="2" type="bang">
+            <digest>Bangs once a "myip"/"scan"/"ping" request finishes reporting</digest>
+            <description>
+                Fires right after outlet 0 (for "myip"/"myip all") or outlet 1 (for each "scan" or "ping"
+                report) finishes sending its results — useful as a "done" signal to sequence further
+                processing.
+            </description>
+        </outlet>
+    </outletlist>
+
+    <!--MESSAGES-->
+    <methodlist>
+        <method name="start">
+            <digest>
+                Starts the underlying Node process
+            </digest>
+            <description>
+                Launches the Node script backing this object. Not normally needed — the script starts
+                automatically the first time it's needed — but useful after "stop", or to force a restart.
+            </description>
+        </method>
+
+        <method name="stop">
+            <digest>
+                Stops the underlying Node process
+            </digest>
+            <description>
+                Shuts down the running Node script. Any scan in progress is abandoned without reporting.
+            </description>
+        </method>
+
+        <method name="myip">
+            <digest>
+                Reports this machine's own IPv4 address(es) and netmask(s)
+            </digest>
+            <description>
+                Reports every active non-internal IPv4 interface on outlet 0, one message per interface, then
+                bangs outlet 2. If you're on more than one network at once, you get more than one message —
+                nothing is dropped.
+            </description>
+        </method>
+
+        <method name="myip">
+            <arglist>
+                <arg name="all" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Reports every IPv4 interface, including internal/loopback
+            </digest>
+            <description>
+                Sent as "myip all". Same as plain "myip", but also includes internal/loopback interfaces, and
+                tags each reported message "internal" or "external" at the end.
+            </description>
+        </method>
+
+        <method name="scan">
+            <arglist>
+                <arg name="ip" optional="1" type="symbol" />
+                <arg name="mask" optional="1" type="symbol" />
+            </arglist>
+            <digest>
+                Discovers live devices on a subnet via a ping sweep
+            </digest>
+            <description>
+                Sent as "scan &lt;ip&gt; &lt;mask&gt;" (e.g. "scan 192.168.0.1 255.255.255.0"), pings every
+                host in that subnet and reports which ones answered on outlet 1, then bangs outlet 2. Sent as
+                bare "scan" with no arguments, scans every currently active interface's own subnet in turn,
+                one report + bang per interface. A device answering the ping means it exists on the network —
+                it does not by itself mean any particular UDP or TCP port on that device is reachable.
+            </description>
+        </method>
+
+        <method name="ping">
+            <arglist>
+                <arg name="ip" optional="0" type="symbol" />
+            </arglist>
+            <digest>
+                Pings a single host
+            </digest>
+            <description>
+                Sent as "ping &lt;ip&gt;" (e.g. "ping 192.168.0.12"). Pings just that one host and reports
+                "&lt;ip&gt; &lt;0|1&gt;" on outlet 1 — 1 if it answered, 0 if it didn't — then bangs outlet 2.
+            </description>
+        </method>
+    </methodlist>
+
+</c74object>

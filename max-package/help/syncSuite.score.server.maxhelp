@@ -41,7 +41,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 955.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 955.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -564,6 +564,7 @@
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-28",
                                     "maxclass": "message",
                                     "numinlets": 2,
@@ -575,6 +576,7 @@
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-30",
                                     "maxclass": "message",
                                     "numinlets": 2,
@@ -597,6 +599,7 @@
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-32",
                                     "maxclass": "message",
                                     "numinlets": 2,
@@ -608,6 +611,7 @@
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-35",
                                     "linecount": 4,
                                     "maxclass": "message",
@@ -620,6 +624,7 @@
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-21",
                                     "maxclass": "message",
                                     "numinlets": 2,
@@ -631,6 +636,7 @@
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-19",
                                     "maxclass": "message",
                                     "numinlets": 2,
@@ -653,6 +659,7 @@
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-13",
                                     "maxclass": "message",
                                     "numinlets": 2,
@@ -664,6 +671,7 @@
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-10",
                                     "linecount": 4,
                                     "maxclass": "message",
@@ -1350,7 +1358,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 955.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 955.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1405,7 +1413,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 451.0, 135.0, 269.0, 74.0 ],
+                                    "patching_rect": [ 451.0, 135.0, 273.0, 74.0 ],
                                     "text": "Functions that depend on a very sharp and strict timing will not work as good as intended. It is meant for uses where this information works as a support rather than as a tempo-keeping tool. This is due to server and network latency."
                                 }
                             },
@@ -1795,6 +1803,7 @@
             },
             {
                 "box": {
+                    "dontreplace": 1,
                     "id": "obj-43",
                     "linecount": 4,
                     "maxclass": "message",
@@ -1807,6 +1816,7 @@
             },
             {
                 "box": {
+                    "dontreplace": 1,
                     "id": "obj-41",
                     "maxclass": "message",
                     "numinlets": 2,
@@ -2227,6 +2237,7 @@
             },
             {
                 "box": {
+                    "dontreplace": 1,
                     "id": "obj-15",
                     "maxclass": "message",
                     "numinlets": 2,

@@ -30,7 +30,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 1051.0, 827.0 ],
+                        "rect": [ 34.0, 121.0, 1051.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1204,7 +1204,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 1051.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1051.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
                             {
@@ -1778,6 +1778,7 @@
             },
             {
                 "box": {
+                    "dontreplace": 1,
                     "id": "obj-24",
                     "linecount": 2,
                     "maxclass": "message",
