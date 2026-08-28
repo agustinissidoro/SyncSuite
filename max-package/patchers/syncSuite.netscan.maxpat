@@ -9,8 +9,52 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 34.0, 95.0, 1320.0, 853.0 ],
+        "rect": [ 34.0, 95.0, 832.0, 853.0 ],
         "boxes": [
+            {
+                "box": {
+                    "id": "obj-25",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 582.0, 716.0, 79.0, 22.0 ],
+                    "text": "prepend ping"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-19",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 865.5714285714286, 162.0, 48.0, 22.0 ],
+                    "text": "ping $1"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-21",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 1258.0, 309.0, 34.0, 22.0 ],
+                    "text": "myip"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-18",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 2,
+                    "outlettype": [ "", "bang" ],
+                    "patching_rect": [ 1137.0, 274.0, 140.0, 22.0 ],
+                    "text": "t l b"
+                }
+            },
             {
                 "box": {
                     "id": "obj-17",
@@ -117,7 +161,7 @@
                     "numinlets": 1,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 1137.0, 286.0, 81.0, 22.0 ],
+                    "patching_rect": [ 1137.0, 309.0, 81.0, 22.0 ],
                     "text": "prepend scan"
                 }
             },
@@ -280,11 +324,11 @@
                 "box": {
                     "id": "obj-43",
                     "maxclass": "newobj",
-                    "numinlets": 4,
-                    "numoutlets": 4,
-                    "outlettype": [ "", "", "", "" ],
-                    "patching_rect": [ 180.0, 661.0, 419.0, 22.0 ],
-                    "text": "route myip scan done"
+                    "numinlets": 5,
+                    "numoutlets": 5,
+                    "outlettype": [ "", "", "", "", "" ],
+                    "patching_rect": [ 180.0, 661.0, 555.0, 22.0 ],
+                    "text": "route myip scan done ping"
                 }
             },
             {
@@ -412,11 +456,11 @@
                 "box": {
                     "id": "obj-4",
                     "maxclass": "newobj",
-                    "numinlets": 7,
-                    "numoutlets": 7,
-                    "outlettype": [ "", "", "", "", "", "", "" ],
-                    "patching_rect": [ 203.0, 109.0, 682.0, 22.0 ],
-                    "text": "route start stop defer myip scan console"
+                    "numinlets": 8,
+                    "numoutlets": 8,
+                    "outlettype": [ "", "", "", "", "", "", "", "" ],
+                    "patching_rect": [ 203.0, 109.0, 792.0, 22.0 ],
+                    "text": "route start stop defer myip scan console ping"
                 }
             },
             {
@@ -430,6 +474,8 @@
                     "saved_object_attributes": {
                         "autostart": 0,
                         "defer": 1,
+                        "node_bin_path": "",
+                        "npm_bin_path": "",
                         "watch": 0
                     },
                     "text": "node.script syncSuite.netscan.js @watch 0",
@@ -506,6 +552,25 @@
             },
             {
                 "patchline": {
+                    "destination": [ "obj-21", 0 ],
+                    "source": [ "obj-18", 1 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-69", 0 ],
+                    "source": [ "obj-18", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-3", 0 ],
+                    "midpoints": [ 875.0714285714286, 192.0, 875.08203125, 192.0, 875.08203125, 402.0, 212.5, 402.0 ],
+                    "source": [ "obj-19", 0 ]
+                }
+            },
+            {
+                "patchline": {
                     "destination": [ "obj-28", 0 ],
                     "source": [ "obj-20", 0 ]
                 }
@@ -518,8 +583,22 @@
             },
             {
                 "patchline": {
+                    "destination": [ "obj-3", 0 ],
+                    "midpoints": [ 1267.5, 352.70703125, 212.5, 352.70703125 ],
+                    "source": [ "obj-21", 0 ]
+                }
+            },
+            {
+                "patchline": {
                     "destination": [ "obj-20", 0 ],
                     "source": [ "obj-22", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-5", 0 ],
+                    "midpoints": [ 591.5, 786.0, 189.5, 786.0 ],
+                    "source": [ "obj-25", 0 ]
                 }
             },
             {
@@ -578,6 +657,12 @@
             },
             {
                 "patchline": {
+                    "destination": [ "obj-19", 0 ],
+                    "source": [ "obj-4", 6 ]
+                }
+            },
+            {
+                "patchline": {
                     "destination": [ "obj-47", 0 ],
                     "source": [ "obj-4", 2 ]
                 }
@@ -604,6 +689,12 @@
                 "patchline": {
                     "destination": [ "obj-9", 0 ],
                     "source": [ "obj-4", 1 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-25", 0 ],
+                    "source": [ "obj-43", 3 ]
                 }
             },
             {
@@ -717,7 +808,7 @@
             },
             {
                 "patchline": {
-                    "destination": [ "obj-69", 0 ],
+                    "destination": [ "obj-18", 0 ],
                     "source": [ "obj-68", 0 ]
                 }
             },

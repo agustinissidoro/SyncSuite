@@ -26,10 +26,34 @@
             <digest>Subnet mask to scan on load</digest>
             <description>
                 See "ip". Both arguments must be given together, e.g. "syncSuite.netscan 192.168.0.1
-                255.255.255.0".
+                255.255.255.0". Any of the attributes below may follow the two arguments in the object box,
+                e.g. "syncSuite.netscan 192.168.0.1 255.255.255.0 @console 1".
             </description>
         </objarg>
     </objarglist>
+
+    <!--ATTRIBUTES-->
+    <attributelist>
+        <attribute name="console" get="1" set="1" type="int" size="1">
+            <digest>Send results to the Max Console instead of the outlets</digest>
+            <description>
+                When set to 1 (typed in the object box as "@console 1", or sent at any time as the message
+                "console 1"), every "myip"/"scan"/"ping"/"done" report is printed to the Max Console instead
+                of being sent out the object's outlets — handy for quick testing without wiring up
+                print/route yourself. Default is 0 (reports go to the outlets as usual). Send "console 0" to
+                switch back.
+            </description>
+        </attribute>
+        <attribute name="defer" get="1" set="1" type="int" size="1">
+            <digest>Wait for the Node process to finish loading before scanning on load</digest>
+            <description>
+                Only relevant when "ip"/"mask" arguments are given. When set to 1 (the default), the
+                automatic startup scan waits until the underlying Node process reports it has finished
+                loading before it's sent, avoiding a race where the scan is dropped because the Node script
+                wasn't ready yet. Set to 0 to send the startup scan immediately instead.
+            </description>
+        </attribute>
+    </attributelist>
 
     <!--METADATA-->
     <metadatalist>
@@ -44,8 +68,8 @@
         <inlet id="0" type="anything">
             <digest>Commands controlling the underlying Node process and network requests</digest>
             <description>
-                Accepts "start", "stop", "myip", "myip all", "scan", "scan &lt;ip&gt; &lt;mask&gt;", and
-                "ping &lt;ip&gt;". See the Messages section for the full list.
+                Accepts "start", "stop", "myip", "myip all", "scan", "scan &lt;ip&gt; &lt;mask&gt;",
+                "ping &lt;ip&gt;", and "console &lt;0|1&gt;". See the Messages section for the full list.
             </description>
         </inlet>
     </inletlist>
@@ -153,6 +177,20 @@
             <description>
                 Sent as "ping &lt;ip&gt;" (e.g. "ping 192.168.0.12"). Pings just that one host and reports
                 "&lt;ip&gt; &lt;0|1&gt;" on outlet 1 — 1 if it answered, 0 if it didn't — then bangs outlet 2.
+            </description>
+        </method>
+
+        <method name="console">
+            <arglist>
+                <arg name="state" optional="0" type="int" />
+            </arglist>
+            <digest>
+                Toggles sending results to the Max Console instead of the outlets
+            </digest>
+            <description>
+                Sent as "console &lt;0|1&gt;". Same as the "console" attribute, settable at any time: 1 prints
+                every subsequent "myip"/"scan"/"ping"/"done" report to the Max Console instead of the
+                outlets; 0 restores normal outlet output.
             </description>
         </method>
     </methodlist>
