@@ -13,115 +13,133 @@
         "boxes": [
             {
                 "box": {
-                    "id": "obj-63",
-                    "maxclass": "newobj",
-                    "numinlets": 0,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 872.0, 529.0, 59.0, 22.0 ],
-                    "text": "r source4"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-61",
-                    "maxclass": "newobj",
-                    "numinlets": 0,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 623.0, 529.0, 59.0, 22.0 ],
-                    "text": "r source3"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-58",
-                    "maxclass": "newobj",
-                    "numinlets": 0,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 384.0, 529.0, 59.0, 22.0 ],
-                    "text": "r source2"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-57",
-                    "linecount": 3,
-                    "maxclass": "newobj",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 872.0, 571.0, 222.0, 49.0 ],
-                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 239 134"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-55",
-                    "linecount": 3,
-                    "maxclass": "newobj",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 623.0, 571.0, 214.0, 49.0 ],
-                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 0 134"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-46",
-                    "linecount": 3,
-                    "maxclass": "newobj",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 384.0, 571.0, 221.0, 49.0 ],
-                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 239 0"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-45",
-                    "maxclass": "number",
+                    "id": "obj-40",
+                    "linecount": 4,
+                    "maxclass": "comment",
                     "numinlets": 1,
-                    "numoutlets": 2,
-                    "outlettype": [ "", "bang" ],
-                    "parameter_enable": 0,
-                    "patching_rect": [ 1280.0, 436.0, 50.0, 22.0 ]
+                    "numoutlets": 0,
+                    "patching_rect": [ 149.0, 1293.0, 462.0, 60.0 ],
+                    "text": "Of course, the composite with exact pixel dimensions can be achieved entirely in Max with the syncSuite.video.context and syncSuite.video.souce objects, with out the m4l devices. If you don't need/want syncrionisation with a timeline, then things are even easier :D"
                 }
             },
             {
                 "box": {
-                    "id": "obj-42",
-                    "maxclass": "number",
-                    "numinlets": 1,
-                    "numoutlets": 2,
-                    "outlettype": [ "", "bang" ],
-                    "parameter_enable": 0,
-                    "patching_rect": [ 1133.0, 436.0, 50.0, 22.0 ]
-                }
-            },
-            {
-                "box": {
+                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
+                    "fontname": "Arial Bold",
+                    "hint": "",
                     "id": "obj-38",
-                    "maxclass": "newobj",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 1133.0, 487.0, 166.0, 22.0 ],
-                    "text": "pak i i"
+                    "ignoreclick": 1,
+                    "legacytextcolor": 1,
+                    "maxclass": "textbutton",
+                    "numinlets": 1,
+                    "numoutlets": 3,
+                    "outlettype": [ "", "", "int" ],
+                    "parameter_enable": 0,
+                    "patching_rect": [ 120.0, 1293.0, 23.0, 21.0 ],
+                    "rounded": 60.0,
+                    "text": "6",
+                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
                 }
             },
             {
                 "box": {
                     "id": "obj-17",
-                    "maxclass": "newobj",
+                    "maxclass": "live.line",
                     "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 72.0, 1266.0, 914.0, 12.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-11",
+                    "linecount": 6,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 1075.0, 1001.0, 248.0, 87.0 ],
+                    "presentation_linecount": 6,
+                    "text": "However, also have in mind that the initialisation of the m4l devices already dumps all the information. Meaning that opening the session with the patch open should already have things correctly set :). Give it a try."
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-16",
+                    "linecount": 6,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 846.0, 222.0, 199.0, 87.0 ],
+                    "text": "To be sure about the size, you can do fullscreen on any output and check the windowsize output information from syncSuite.video.context. This is the true size of your screen. "
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-10",
+                    "maxclass": "newobj",
+                    "numinlets": 0,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 1133.0, 529.0, 139.0, 22.0 ],
-                    "text": "prepend positionInPixels"
+                    "patching_rect": [ 871.0, 529.0, 59.0, 22.0 ],
+                    "text": "r source4"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-14",
+                    "linecount": 3,
+                    "maxclass": "newobj",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 871.0, 571.0, 215.0, 49.0 ],
+                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 960 540"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-8",
+                    "maxclass": "newobj",
+                    "numinlets": 0,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 624.0, 529.0, 59.0, 22.0 ],
+                    "text": "r source3"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-9",
+                    "linecount": 3,
+                    "maxclass": "newobj",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 624.0, 571.0, 225.0, 49.0 ],
+                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 0 540"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-3",
+                    "maxclass": "newobj",
+                    "numinlets": 0,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 371.0, 529.0, 59.0, 22.0 ],
+                    "text": "r source2"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-6",
+                    "linecount": 3,
+                    "maxclass": "newobj",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 371.0, 571.0, 215.0, 49.0 ],
+                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 960 0"
                 }
             },
             {
@@ -132,7 +150,7 @@
                     "numoutlets": 1,
                     "outlettype": [ "int" ],
                     "parameter_enable": 0,
-                    "patching_rect": [ 349.0, 193.0, 24.0, 24.0 ]
+                    "patching_rect": [ 224.5, 179.0, 24.0, 24.0 ]
                 }
             },
             {
@@ -142,7 +160,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 246.0, 227.0, 64.0, 22.0 ],
+                    "patching_rect": [ 224.5, 222.0, 64.0, 22.0 ],
                     "text": "floating $1"
                 }
             },
@@ -152,7 +170,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 65.0, 1363.0, 150.0, 20.0 ]
+                    "patching_rect": [ 76.0, 1559.0, 150.0, 20.0 ]
                 }
             },
             {
@@ -243,7 +261,7 @@
                     "numoutlets": 3,
                     "outlettype": [ "", "", "int" ],
                     "parameter_enable": 0,
-                    "patching_rect": [ 1119.0, 884.0, 23.0, 21.0 ],
+                    "patching_rect": [ 1039.0, 895.0, 23.0, 21.0 ],
                     "rounded": 60.0,
                     "text": "4b",
                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1493,7 +1511,7 @@
                     "numoutlets": 3,
                     "outlettype": [ "", "", "int" ],
                     "parameter_enable": 0,
-                    "patching_rect": [ 100.0, 178.0, 22.0, 21.5 ],
+                    "patching_rect": [ 73.0, 150.25, 22.0, 21.5 ],
                     "rounded": 60.0,
                     "text": "1a",
                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1506,8 +1524,8 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 453.0, 298.0, 243.0, 74.0 ],
-                    "text": "Have this at hand. This is the ultimate information you need to know whether the mapping is working correctly or not.\n(Which it will. This time is just for testing purposes.)"
+                    "patching_rect": [ 511.0, 274.0, 245.0, 74.0 ],
+                    "text": "If your display is not at least 1920x1080 you will see a window that doesn't fit in your display or you will see cropped videos. This is ok, it means that videos keep their exact size no matter their output target."
                 }
             },
             {
@@ -1517,31 +1535,20 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 1003.0, 217.0, 194.0, 87.0 ],
+                    "patching_rect": [ 1052.0, 222.0, 194.0, 87.0 ],
                     "text": "For performances or installations, it is highly recommended to save the position of the render window in the second output or just hardcode it if you're completely sure about it."
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-39",
-                    "linecount": 4,
-                    "maxclass": "comment",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 847.0, 217.0, 150.0, 60.0 ],
-                    "text": "For testing purposes, you can use a second montior or -if you're on a small laptop- just skip this. "
                 }
             },
             {
                 "box": {
                     "bubble": 1,
                     "id": "obj-37",
-                    "linecount": 3,
+                    "linecount": 4,
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 830.0, 163.0, 515.0, 51.0 ],
-                    "text": "An important step would be moving the render window to the target output and then do fullscreen. After doing that, check the windowsize output of syncSuite.video.context. It should match exactly to your target resolution. "
+                    "patching_rect": [ 818.0, 156.5, 548.0, 64.0 ],
+                    "text": "In performance and installations, it is standard practice to use a second display as your final output target and set the render window to fullscreen there. The only thing to be double-check is that the true size of the output display is exactly your target size. If your output display is larger, you will see black spaces. If it is smaller, you will see cropped videos."
                 }
             },
             {
@@ -1581,7 +1588,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 764.0, 217.0, 77.0, 22.0 ],
+                    "patching_rect": [ 764.0, 222.0, 77.0, 22.0 ],
                     "text": "fullscreen $1"
                 }
             },
@@ -1592,7 +1599,7 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 72.0, 98.0, 941.0, 20.0 ],
-                    "text": "For practical reasons, we will say that each is screen is 240x134 in resolution (a very tiny little brother of a FHD video). So 4 screens would exactly amount to a 480x268."
+                    "text": "For practical reasons, we will say that each is screen is 960x540 in resolution. So 4 screens would exactly amount to a 1920x1080 (FHD)."
                 }
             },
             {
@@ -1618,12 +1625,11 @@
                 "box": {
                     "bubble": 1,
                     "id": "obj-28",
-                    "linecount": 3,
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 129.0, 156.75, 504.0, 51.0 ],
-                    "text": "Set up the rendering context with projectionMode 1. The size of the rendering window is super important here because it dicates the size of the output. You can hardcode this as @size or -if you're sure about the resolution of the second output - also do fullscreen."
+                    "patching_rect": [ 105.0, 149.0, 303.0, 24.0 ],
+                    "text": "Set up the rendering context with projectionMode 1. "
                 }
             },
             {
@@ -1641,12 +1647,13 @@
                 "box": {
                     "dontreplace": 1,
                     "id": "obj-5",
+                    "linecount": 2,
                     "maxclass": "message",
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 322.0, 318.0, 122.0, 22.0 ],
-                    "text": "windowsize 480 268"
+                    "patching_rect": [ 383.0, 319.0, 122.0, 35.0 ],
+                    "text": "windowsize 1512 921"
                 }
             },
             {
@@ -1756,24 +1763,14 @@
             },
             {
                 "box": {
-                    "id": "obj-11",
-                    "maxclass": "newobj",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 433.0, 1001.0, 32.0, 22.0 ],
-                    "text": "print"
-                }
-            },
-            {
-                "box": {
                     "bubble": 1,
                     "id": "obj-29",
-                    "linecount": 3,
+                    "linecount": 5,
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 1213.0, 864.0, 196.0, 51.0 ],
-                    "text": "Be sure that out patch and our Live session are connected to each other."
+                    "patching_rect": [ 1132.0, 866.0, 196.0, 78.0 ],
+                    "text": "Be sure that out patch and our Live session are connected to each other. This also dumps all video information from the m4l devices to the patch."
                 }
             },
             {
@@ -1794,7 +1791,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 1155.0, 883.0, 51.0, 22.0 ],
+                    "patching_rect": [ 1075.0, 894.0, 51.0, 22.0 ],
                     "text": "connect"
                 }
             },
@@ -1804,7 +1801,7 @@
                     "maxclass": "newobj",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 1155.0, 927.0, 135.0, 22.0 ],
+                    "patching_rect": [ 1075.0, 965.0, 135.0, 22.0 ],
                     "text": "udpsend localhost 9992"
                 }
             },
@@ -1881,7 +1878,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 140.0, 571.0, 225.0, 49.0 ],
+                    "patching_rect": [ 140.0, 571.0, 210.0, 49.0 ],
                     "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 0 0"
                 }
             },
@@ -1892,8 +1889,8 @@
                     "numinlets": 1,
                     "numoutlets": 3,
                     "outlettype": [ "jit_matrix", "bang", "" ],
-                    "patching_rect": [ 72.0, 274.0, 372.0, 22.0 ],
-                    "text": "syncSuite.video.context tutorial1 @projectionMode 1 @size 480 268"
+                    "patching_rect": [ 72.0, 274.0, 433.0, 22.0 ],
+                    "text": "syncSuite.video.context tutorial1 @projectionMode 1 @size 1920 1080 @fsaa 0"
                 }
             }
         ],
@@ -1906,14 +1903,14 @@
             },
             {
                 "patchline": {
-                    "destination": [ "obj-7", 0 ],
-                    "source": [ "obj-13", 0 ]
+                    "destination": [ "obj-14", 0 ],
+                    "source": [ "obj-10", 0 ]
                 }
             },
             {
                 "patchline": {
-                    "destination": [ "obj-2", 0 ],
-                    "source": [ "obj-17", 0 ]
+                    "destination": [ "obj-7", 0 ],
+                    "source": [ "obj-13", 0 ]
                 }
             },
             {
@@ -1924,15 +1921,7 @@
             },
             {
                 "patchline": {
-                    "destination": [ "obj-11", 0 ],
-                    "order": 1,
-                    "source": [ "obj-19", 0 ]
-                }
-            },
-            {
-                "patchline": {
                     "destination": [ "obj-47", 0 ],
-                    "order": 0,
                     "source": [ "obj-19", 0 ]
                 }
             },
@@ -1968,6 +1957,12 @@
             },
             {
                 "patchline": {
+                    "destination": [ "obj-6", 0 ],
+                    "source": [ "obj-3", 0 ]
+                }
+            },
+            {
+                "patchline": {
                     "destination": [ "obj-1", 0 ],
                     "midpoints": [ 773.5, 259.0625, 81.12890625, 259.0625, 81.12890625, 267.0, 81.5, 267.0 ],
                     "source": [ "obj-31", 0 ]
@@ -1977,12 +1972,6 @@
                 "patchline": {
                     "destination": [ "obj-31", 0 ],
                     "source": [ "obj-35", 0 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-17", 0 ],
-                    "source": [ "obj-38", 0 ]
                 }
             },
             {
@@ -2001,18 +1990,6 @@
                 "patchline": {
                     "destination": [ "obj-27", 0 ],
                     "source": [ "obj-4", 0 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-38", 0 ],
-                    "source": [ "obj-42", 0 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-38", 1 ],
-                    "source": [ "obj-45", 0 ]
                 }
             },
             {
@@ -2065,27 +2042,15 @@
             },
             {
                 "patchline": {
-                    "destination": [ "obj-46", 0 ],
-                    "source": [ "obj-58", 0 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-55", 0 ],
-                    "source": [ "obj-61", 0 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-57", 0 ],
-                    "source": [ "obj-63", 0 ]
-                }
-            },
-            {
-                "patchline": {
                     "destination": [ "obj-1", 0 ],
-                    "midpoints": [ 255.5, 261.0, 81.5, 261.0 ],
+                    "midpoints": [ 234.0, 258.5390625, 81.5, 258.5390625 ],
                     "source": [ "obj-7", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-9", 0 ],
+                    "source": [ "obj-8", 0 ]
                 }
             }
         ],
