@@ -4,16 +4,194 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 5,
+            "revision": 4,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 209.0, 95.0, 1069.0, 853.0 ],
+        "rect": [ 100.0, 95.0, 1069.0, 853.0 ],
         "description": "Wrapper around jit.world with extended mapping and compositing functionalities.",
         "digest": "Wrapper around jit.world",
-        "showontab": 1,
+        "showrootpatcherontab": 0,
+        "showontab": 0,
         "boxes": [
+            {
+                "box": {
+                    "id": "obj-5",
+                    "maxclass": "newobj",
+                    "numinlets": 0,
+                    "numoutlets": 0,
+                    "patcher": {
+                        "fileversion": 1,
+                        "appversion": {
+                            "major": 9,
+                            "minor": 1,
+                            "revision": 4,
+                            "architecture": "x64",
+                            "modernui": 1
+                        },
+                        "classnamespace": "box",
+                        "rect": [ 0.0, 26.0, 1069.0, 827.0 ],
+                        "showontab": 1,
+                        "visible": 1,
+                        "boxes": [
+                            {
+                                "box": {
+                                    "border": 0,
+                                    "filename": "helpdetails.js",
+                                    "id": "obj-13",
+                                    "ignoreclick": 1,
+                                    "jsarguments": [ "syncSuite.video.subs" ],
+                                    "maxclass": "jsui",
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 16.0, 10.0, 605.1546052694321, 97.9381388425827 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "bubble": 1,
+                                    "id": "obj-27",
+                                    "maxclass": "comment",
+                                    "numinlets": 1,
+                                    "numoutlets": 0,
+                                    "patching_rect": [ 346.0, 175.0, 108.0, 24.0 ],
+                                    "text": "Render the text"
+                                }
+                            },
+                            {
+                                "box": {
+                                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
+                                    "fontname": "Arial Bold",
+                                    "hint": "",
+                                    "id": "obj-28",
+                                    "ignoreclick": 1,
+                                    "legacytextcolor": 1,
+                                    "maxclass": "textbutton",
+                                    "numinlets": 1,
+                                    "numoutlets": 3,
+                                    "outlettype": [ "", "", "int" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 324.0, 177.0, 20.0, 20.0 ],
+                                    "rounded": 60.0,
+                                    "text": "2",
+                                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "bubble": 1,
+                                    "id": "obj-6",
+                                    "maxclass": "comment",
+                                    "numinlets": 1,
+                                    "numoutlets": 0,
+                                    "patching_rect": [ 75.0, 136.0, 125.0, 24.0 ],
+                                    "text": "Enable the context"
+                                }
+                            },
+                            {
+                                "box": {
+                                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
+                                    "fontname": "Arial Bold",
+                                    "hint": "",
+                                    "id": "obj-38",
+                                    "ignoreclick": 1,
+                                    "legacytextcolor": 1,
+                                    "maxclass": "textbutton",
+                                    "numinlets": 1,
+                                    "numoutlets": 3,
+                                    "outlettype": [ "", "", "int" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 53.0, 138.0, 20.0, 20.0 ],
+                                    "rounded": 60.0,
+                                    "text": "1",
+                                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-21",
+                                    "maxclass": "message",
+                                    "numinlets": 2,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "" ],
+                                    "patching_rect": [ 241.0, 176.0, 77.0, 22.0 ],
+                                    "text": "text pepecito"
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-19",
+                                    "maxclass": "newobj",
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "jit_gl_texture" ],
+                                    "patching_rect": [ 241.0, 217.0, 366.0, 22.0 ],
+                                    "text": "syncSuite.video.subs subs-help-1 @fontsize 80 @color 0.5 0.5 0 1."
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-7",
+                                    "maxclass": "toggle",
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "int" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 20.0, 136.0, 24.0, 24.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-5",
+                                    "maxclass": "message",
+                                    "numinlets": 2,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "" ],
+                                    "patching_rect": [ 20.0, 176.0, 180.0, 22.0 ],
+                                    "text": "enable $1, visible $1, floating $1"
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-1",
+                                    "maxclass": "newobj",
+                                    "numinlets": 1,
+                                    "numoutlets": 3,
+                                    "outlettype": [ "jit_matrix", "bang", "" ],
+                                    "patching_rect": [ 20.0, 217.0, 201.0, 22.0 ],
+                                    "text": "syncSuite.video.context subs-help-1"
+                                }
+                            }
+                        ],
+                        "lines": [
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-19", 0 ],
+                                    "source": [ "obj-21", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-1", 0 ],
+                                    "midpoints": [ 29.5, 204.74838083982468, 29.5, 204.74838083982468 ],
+                                    "source": [ "obj-5", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-5", 0 ],
+                                    "source": [ "obj-7", 0 ]
+                                }
+                            }
+                        ]
+                    },
+                    "patching_rect": [ 30.0, 105.0, 47.0, 22.0 ],
+                    "text": "p basic"
+                }
+            },
             {
                 "box": {
                     "id": "obj-2",
@@ -25,12 +203,12 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 209.0, 121.0, 1069.0, 827.0 ],
+                        "rect": [ 100.0, 121.0, 1069.0, 827.0 ],
                         "showontab": 1,
                         "boxes": [
                             {
@@ -412,162 +590,12 @@
                             }
                         ]
                     },
-                    "patching_rect": [ 16.82242977619171, 465.0, 70.0, 22.0 ],
+                    "patching_rect": [ 98.0, 105.0, 70.0, 22.0 ],
                     "text": "p Max4Live"
                 }
-            },
-            {
-                "box": {
-                    "border": 0,
-                    "filename": "helpdetails.js",
-                    "id": "obj-13",
-                    "ignoreclick": 1,
-                    "jsarguments": [ "syncSuite.video.subs" ],
-                    "maxclass": "jsui",
-                    "numinlets": 1,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "parameter_enable": 0,
-                    "patching_rect": [ 13.402061104774475, 11.340205550193787, 605.1546052694321, 97.9381388425827 ]
-                }
-            },
-            {
-                "box": {
-                    "bubble": 1,
-                    "id": "obj-27",
-                    "maxclass": "comment",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 343.0, 176.0, 108.0, 24.0 ],
-                    "text": "Render the text"
-                }
-            },
-            {
-                "box": {
-                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
-                    "fontname": "Arial Bold",
-                    "hint": "",
-                    "id": "obj-28",
-                    "ignoreclick": 1,
-                    "legacytextcolor": 1,
-                    "maxclass": "textbutton",
-                    "numinlets": 1,
-                    "numoutlets": 3,
-                    "outlettype": [ "", "", "int" ],
-                    "parameter_enable": 0,
-                    "patching_rect": [ 321.0, 178.0, 20.0, 20.0 ],
-                    "rounded": 60.0,
-                    "text": "2",
-                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
-                }
-            },
-            {
-                "box": {
-                    "bubble": 1,
-                    "id": "obj-6",
-                    "maxclass": "comment",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 71.82242977619171, 137.0, 125.0, 24.0 ],
-                    "text": "Enable the context"
-                }
-            },
-            {
-                "box": {
-                    "bgcolor": [ 1.0, 0.788235, 0.470588, 1.0 ],
-                    "fontname": "Arial Bold",
-                    "hint": "",
-                    "id": "obj-38",
-                    "ignoreclick": 1,
-                    "legacytextcolor": 1,
-                    "maxclass": "textbutton",
-                    "numinlets": 1,
-                    "numoutlets": 3,
-                    "outlettype": [ "", "", "int" ],
-                    "parameter_enable": 0,
-                    "patching_rect": [ 49.82242977619171, 139.0, 20.0, 20.0 ],
-                    "rounded": 60.0,
-                    "text": "1",
-                    "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-21",
-                    "maxclass": "message",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 238.0, 177.0, 77.0, 22.0 ],
-                    "text": "text pepecito"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-19",
-                    "maxclass": "newobj",
-                    "numinlets": 1,
-                    "numoutlets": 1,
-                    "outlettype": [ "jit_gl_texture" ],
-                    "patching_rect": [ 238.0, 218.0, 366.0, 22.0 ],
-                    "text": "syncSuite.video.subs subs-help-1 @fontsize 80 @color 0.5 0.5 0 1."
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-7",
-                    "maxclass": "toggle",
-                    "numinlets": 1,
-                    "numoutlets": 1,
-                    "outlettype": [ "int" ],
-                    "parameter_enable": 0,
-                    "patching_rect": [ 16.82242977619171, 137.0, 24.0, 24.0 ]
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-5",
-                    "maxclass": "message",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 16.82242977619171, 177.0, 180.0, 22.0 ],
-                    "text": "enable $1, visible $1, floating $1"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-1",
-                    "maxclass": "newobj",
-                    "numinlets": 1,
-                    "numoutlets": 3,
-                    "outlettype": [ "jit_matrix", "bang", "" ],
-                    "patching_rect": [ 16.82242977619171, 217.7570076584816, 201.0, 22.0 ],
-                    "text": "syncSuite.video.context subs-help-1"
-                }
             }
         ],
-        "lines": [
-            {
-                "patchline": {
-                    "destination": [ "obj-19", 0 ],
-                    "source": [ "obj-21", 0 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-1", 0 ],
-                    "midpoints": [ 26.32242977619171, 205.74838083982468, 26.32242977619171, 205.74838083982468 ],
-                    "source": [ "obj-5", 0 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-5", 0 ],
-                    "source": [ "obj-7", 0 ]
-                }
-            }
-        ],
+        "lines": [],
         "autosave": 0
     }
 }
