@@ -13,6 +13,141 @@
         "boxes": [
             {
                 "box": {
+                    "id": "obj-63",
+                    "maxclass": "newobj",
+                    "numinlets": 0,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 872.0, 529.0, 59.0, 22.0 ],
+                    "text": "r source4"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-61",
+                    "maxclass": "newobj",
+                    "numinlets": 0,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 623.0, 529.0, 59.0, 22.0 ],
+                    "text": "r source3"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-58",
+                    "maxclass": "newobj",
+                    "numinlets": 0,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 384.0, 529.0, 59.0, 22.0 ],
+                    "text": "r source2"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-57",
+                    "linecount": 3,
+                    "maxclass": "newobj",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 872.0, 571.0, 222.0, 49.0 ],
+                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 239 134"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-55",
+                    "linecount": 3,
+                    "maxclass": "newobj",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 623.0, 571.0, 214.0, 49.0 ],
+                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 0 134"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-46",
+                    "linecount": 3,
+                    "maxclass": "newobj",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 384.0, 571.0, 221.0, 49.0 ],
+                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 239 0"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-45",
+                    "maxclass": "number",
+                    "numinlets": 1,
+                    "numoutlets": 2,
+                    "outlettype": [ "", "bang" ],
+                    "parameter_enable": 0,
+                    "patching_rect": [ 1280.0, 436.0, 50.0, 22.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-42",
+                    "maxclass": "number",
+                    "numinlets": 1,
+                    "numoutlets": 2,
+                    "outlettype": [ "", "bang" ],
+                    "parameter_enable": 0,
+                    "patching_rect": [ 1133.0, 436.0, 50.0, 22.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-38",
+                    "maxclass": "newobj",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 1133.0, 487.0, 166.0, 22.0 ],
+                    "text": "pak i i"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-17",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 1133.0, 529.0, 139.0, 22.0 ],
+                    "text": "prepend positionInPixels"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-13",
+                    "maxclass": "toggle",
+                    "numinlets": 1,
+                    "numoutlets": 1,
+                    "outlettype": [ "int" ],
+                    "parameter_enable": 0,
+                    "patching_rect": [ 349.0, 193.0, 24.0, 24.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-7",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 246.0, 227.0, 64.0, 22.0 ],
+                    "text": "floating $1"
+                }
+            },
+            {
+                "box": {
                     "id": "obj-78",
                     "maxclass": "comment",
                     "numinlets": 1,
@@ -92,7 +227,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 145.0, 1207.0, 375.0, 24.0 ],
-                    "presentation_linecount": 3,
                     "text": "In the Live session, go to Arrangement View (press Tab) and Play."
                 }
             },
@@ -122,7 +256,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 1064.0, 766.0, 247.0, 87.0 ],
+                    "patching_rect": [ 1064.0, 766.0, 248.0, 87.0 ],
                     "text": "Note that there are 4 videoSync devices already set. Each device has it's \"prepend message\" option on, which we use to prepend a name to all outcoming messages. Like this we can keep all devices properly separated without cross-talking/triggering."
                 }
             },
@@ -135,7 +269,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 1064.0, 718.0, 247.0, 37.0 ],
-                    "presentation_linecount": 2,
                     "text": "Open the syncSuite-tutorial1.als session in the /ableton-project folder."
                 }
             },
@@ -148,7 +281,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 698.0, 875.0, 247.0, 104.0 ],
-                    "presentation_linecount": 7,
                     "text": "What is happening inside here is just an extra step to get the correct video paths from the Live project folder. This is not necessary when working with your own computer and paths. But it's good to know in case of needing to export the project elsewhere/remap the video paths."
                 }
             },
@@ -202,41 +334,7 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 133.0, 713.0, 247.0, 37.0 ],
-                    "presentation_linecount": 2,
                     "text": "Set up the communication with Live and the videoSync devices."
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-58",
-                    "maxclass": "newobj",
-                    "numinlets": 0,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 901.0, 529.0, 59.0, 22.0 ],
-                    "text": "r source4"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-57",
-                    "maxclass": "newobj",
-                    "numinlets": 0,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 652.0, 529.0, 59.0, 22.0 ],
-                    "text": "r source3"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-55",
-                    "maxclass": "newobj",
-                    "numinlets": 0,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 393.0, 529.0, 59.0, 22.0 ],
-                    "text": "r source2"
                 }
             },
             {
@@ -1408,8 +1506,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 366.0, 299.5, 243.0, 74.0 ],
-                    "presentation_linecount": 3,
+                    "patching_rect": [ 453.0, 298.0, 243.0, 74.0 ],
                     "text": "Have this at hand. This is the ultimate information you need to know whether the mapping is working correctly or not.\n(Which it will. This time is just for testing purposes.)"
                 }
             },
@@ -1444,7 +1541,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 830.0, 163.0, 515.0, 51.0 ],
-                    "presentation_linecount": 3,
                     "text": "An important step would be moving the render window to the target output and then do fullscreen. After doing that, check the windowsize output of syncSuite.video.context. It should match exactly to your target resolution. "
                 }
             },
@@ -1496,7 +1592,7 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 72.0, 98.0, 941.0, 20.0 ],
-                    "text": "For practical reasons, we will say that each is screen is 960x540 in resolution. So 4 screens would exactly amount to a 1920x1080 (FHD) signal."
+                    "text": "For practical reasons, we will say that each is screen is 240x134 in resolution (a very tiny little brother of a FHD video). So 4 screens would exactly amount to a 480x268."
                 }
             },
             {
@@ -1522,13 +1618,12 @@
                 "box": {
                     "bubble": 1,
                     "id": "obj-28",
-                    "linecount": 4,
+                    "linecount": 3,
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 129.0, 156.75, 504.0, 64.0 ],
-                    "presentation_linecount": 4,
-                    "text": "Set up the rendering context with projectionMode 1. The size of the rendering window is super important here because it dicates the size of the output. You can hardcode this as @size 1920 1080 or -if you're sure about the resolution of the second output - also do fullscreen."
+                    "patching_rect": [ 129.0, 156.75, 504.0, 51.0 ],
+                    "text": "Set up the rendering context with projectionMode 1. The size of the rendering window is super important here because it dicates the size of the output. You can hardcode this as @size or -if you're sure about the resolution of the second output - also do fullscreen."
                 }
             },
             {
@@ -1539,43 +1634,7 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 72.0, 46.0, 964.0, 47.0 ],
-                    "text": "Though Situation: you're doing a multimedia piece for sound a 4 channel video with 4 LED screens and you also need syncronization with Live. You go through a video-wall controller that splits an incoming video signal into 4 smaller signals to feed each of the screens. So you need a way to composite all 4 videos in a single output from your computer (which is more elegant, efficient and practic than using 4 physical outputs). "
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-10",
-                    "linecount": 3,
-                    "maxclass": "newobj",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 901.0, 571.0, 227.16666666666663, 49.0 ],
-                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 540 960"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-8",
-                    "linecount": 3,
-                    "maxclass": "newobj",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 652.0, 571.0, 227.0, 49.0 ],
-                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 540 0"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-6",
-                    "linecount": 3,
-                    "maxclass": "newobj",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 393.0, 571.0, 227.0, 49.0 ],
-                    "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 0 960"
+                    "text": "Thought Situation: you're doing a multimedia piece for sound and 4-channel video with 4 LED screens and you also need syncronization with Live. You go through a video-wall controller that splits an incoming video signal into 4 smaller signals to feed each of the screens. So you need a way to composite all 4 videos in a single output from your computer (which is more elegant, efficient and practic than using 4 physical outputs). "
                 }
             },
             {
@@ -1586,8 +1645,8 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 238.0, 314.0, 122.0, 22.0 ],
-                    "text": "windowsize 961 540"
+                    "patching_rect": [ 322.0, 318.0, 122.0, 22.0 ],
+                    "text": "windowsize 480 268"
                 }
             },
             {
@@ -1776,7 +1835,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 133.0, 443.0, 261.0, 64.0 ],
+                    "patching_rect": [ 133.0, 443.0, 262.0, 64.0 ],
                     "text": "Now set the sources. 4 sources, one for each video/channel and with different position offsets. Turn projectionMode 1 here as well."
                 }
             },
@@ -1822,7 +1881,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 140.0, 571.0, 222.0, 49.0 ],
+                    "patching_rect": [ 140.0, 571.0, 225.0, 49.0 ],
                     "text": "syncSuite.video.source tutorial1 @projectionMode 1 @positionInPixels 0 0"
                 }
             },
@@ -1833,8 +1892,8 @@
                     "numinlets": 1,
                     "numoutlets": 3,
                     "outlettype": [ "jit_matrix", "bang", "" ],
-                    "patching_rect": [ 72.0, 274.0, 288.0, 22.0 ],
-                    "text": "syncSuite.video.context tutorial1 @projectionMode 1"
+                    "patching_rect": [ 72.0, 274.0, 372.0, 22.0 ],
+                    "text": "syncSuite.video.context tutorial1 @projectionMode 1 @size 480 268"
                 }
             }
         ],
@@ -1843,6 +1902,18 @@
                 "patchline": {
                     "destination": [ "obj-5", 1 ],
                     "source": [ "obj-1", 2 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-7", 0 ],
+                    "source": [ "obj-13", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-2", 0 ],
+                    "source": [ "obj-17", 0 ]
                 }
             },
             {
@@ -1910,6 +1981,12 @@
             },
             {
                 "patchline": {
+                    "destination": [ "obj-17", 0 ],
+                    "source": [ "obj-38", 0 ]
+                }
+            },
+            {
+                "patchline": {
                     "destination": [ "obj-19", 0 ],
                     "source": [ "obj-4", 2 ]
                 }
@@ -1924,6 +2001,18 @@
                 "patchline": {
                     "destination": [ "obj-27", 0 ],
                     "source": [ "obj-4", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-38", 0 ],
+                    "source": [ "obj-42", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-38", 1 ],
+                    "source": [ "obj-45", 0 ]
                 }
             },
             {
@@ -1970,26 +2059,33 @@
             },
             {
                 "patchline": {
-                    "destination": [ "obj-6", 0 ],
-                    "source": [ "obj-55", 0 ]
-                }
-            },
-            {
-                "patchline": {
                     "destination": [ "obj-54", 0 ],
                     "source": [ "obj-56", 0 ]
                 }
             },
             {
                 "patchline": {
-                    "destination": [ "obj-8", 0 ],
-                    "source": [ "obj-57", 0 ]
+                    "destination": [ "obj-46", 0 ],
+                    "source": [ "obj-58", 0 ]
                 }
             },
             {
                 "patchline": {
-                    "destination": [ "obj-10", 0 ],
-                    "source": [ "obj-58", 0 ]
+                    "destination": [ "obj-55", 0 ],
+                    "source": [ "obj-61", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-57", 0 ],
+                    "source": [ "obj-63", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-1", 0 ],
+                    "midpoints": [ 255.5, 261.0, 81.5, 261.0 ],
+                    "source": [ "obj-7", 0 ]
                 }
             }
         ],
