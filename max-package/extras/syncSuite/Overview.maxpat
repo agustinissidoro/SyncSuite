@@ -9,7 +9,7 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 230.0, 117.0, 1139.0, 822.0 ],
+        "rect": [ 81.0, 81.0, 1139.0, 822.0 ],
         "openinpresentation": 1,
         "toolbarvisible": 0,
         "enablehscroll": 0,
@@ -792,7 +792,7 @@
                     "presentation": 1,
                     "presentation_linecount": 2,
                     "presentation_rect": [ 18.0, 120.0, 1103.0, 33.0 ],
-                    "text": "syncSuite is a cross-platform package (Max, Live, web-browsers) that offers solutions for sound, video and score syncronization and manipulation in the context of multimedia performance. The package has a focus on live performance so that it is simple to design reliable and performant technical solutions that support the whole process of production, including composition, rehearsals and performance. "
+                    "text": "syncSuite is a cross-platform package (Max, Live, web-browsers) that offers solutions for sound, video and score syncronization and control in the context of multimedia performance. The package has a focus on live performance so that it is simple to design reliable and performant technical solutions that support the whole process of production, including composition, rehearsals and performance. "
                 }
             },
             {

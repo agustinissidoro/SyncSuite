@@ -13,13 +13,25 @@
         "boxes": [
             {
                 "box": {
+                    "id": "obj-39",
+                    "linecount": 5,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 149.0, 1368.0, 465.0, 74.0 ],
+                    "presentation_linecount": 5,
+                    "text": "In this tutorial we've made a very simple composite, where all channels are of the same size. This could be achieved by other means due to this uniformity. However, syncSuite allows for more complex compositing, where not all sources have the same size. Think, for example, in a situation where different LED screens resolutions are used."
+                }
+            },
+            {
+                "box": {
                     "id": "obj-40",
                     "linecount": 4,
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 149.0, 1293.0, 462.0, 60.0 ],
-                    "text": "Of course, the composite with exact pixel dimensions can be achieved entirely in Max with the syncSuite.video.context and syncSuite.video.souce objects, with out the m4l devices. If you don't need/want syncrionisation with a timeline, then things are even easier :D"
+                    "patching_rect": [ 149.0, 1293.0, 465.0, 60.0 ],
+                    "text": "Of course, the composite with exact pixel dimensions can be achieved entirely in Max with the syncSuite.video.context and syncSuite.video.souce objects and without the m4l devices. If you don't need/want syncrionisation with a timeline, then things are even easier :D"
                 }
             },
             {
@@ -58,7 +70,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 1075.0, 1001.0, 248.0, 87.0 ],
-                    "presentation_linecount": 6,
                     "text": "However, also have in mind that the initialisation of the m4l devices already dumps all the information. Meaning that opening the session with the patch open should already have things correctly set :). Give it a try."
                 }
             },
@@ -1647,13 +1658,12 @@
                 "box": {
                     "dontreplace": 1,
                     "id": "obj-5",
-                    "linecount": 2,
                     "maxclass": "message",
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 383.0, 319.0, 122.0, 35.0 ],
-                    "text": "windowsize 1512 921"
+                    "patching_rect": [ 383.0, 319.0, 122.0, 22.0 ],
+                    "text": "windowsize 640 477"
                 }
             },
             {
