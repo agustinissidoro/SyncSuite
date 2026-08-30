@@ -9,19 +9,121 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 81.0, 81.0, 1139.0, 822.0 ],
+        "rect": [ 208.0, 106.0, 1139.0, 822.0 ],
         "openinpresentation": 1,
         "toolbarvisible": 0,
         "enablehscroll": 0,
-        "title": "syncSuite",
+        "title": "syncSuite Overview",
         "boxes": [
+            {
+                "box": {
+                    "bgcolor": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgcolor2": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_angle": 270.0,
+                    "bgfillcolor_autogradient": 0.0,
+                    "bgfillcolor_color": [ 0.27450980392156865, 0.27450980392156865, 0.27450980392156865, 1.0 ],
+                    "bgfillcolor_color1": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_color2": [ 0.2, 0.2, 0.2, 1.0 ],
+                    "bgfillcolor_proportion": 0.5,
+                    "bgfillcolor_type": "color",
+                    "gradient": 1,
+                    "id": "obj-66",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 385.0, 634.0, 214.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 20.5, 715.0, 214.0, 22.0 ],
+                    "text": "Synced Multichannel Video Composite"
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgcolor2": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_angle": 270.0,
+                    "bgfillcolor_autogradient": 0.0,
+                    "bgfillcolor_color": [ 0.27450980392156865, 0.27450980392156865, 0.27450980392156865, 1.0 ],
+                    "bgfillcolor_color1": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_color2": [ 0.2, 0.2, 0.2, 1.0 ],
+                    "bgfillcolor_proportion": 0.5,
+                    "bgfillcolor_type": "color",
+                    "gradient": 1,
+                    "id": "obj-65",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 231.0, 634.0, 145.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 20.5, 686.0, 145.0, 22.0 ],
+                    "text": "Controlling Live with UDP"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-64",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 42.0, 672.0, 57.0, 22.0 ],
+                    "text": "tosymbol"
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgcolor2": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_angle": 270.0,
+                    "bgfillcolor_autogradient": 0.0,
+                    "bgfillcolor_color": [ 0.27450980392156865, 0.27450980392156865, 0.27450980392156865, 1.0 ],
+                    "bgfillcolor_color1": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_color2": [ 0.2, 0.2, 0.2, 1.0 ],
+                    "bgfillcolor_proportion": 0.5,
+                    "bgfillcolor_type": "color",
+                    "gradient": 1,
+                    "id": "obj-61",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 42.0, 634.0, 175.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 20.5, 657.0, 175.0, 22.0 ],
+                    "text": "Centralizing Multimedia Control"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-60",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 42.0, 705.0, 79.0, 22.0 ],
+                    "text": "prepend load"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-31",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 42.0, 736.0, 51.0, 22.0 ],
+                    "text": "pcontrol"
+                }
+            },
             {
                 "box": {
                     "id": "obj-57",
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 155.0, 581.0, 277.0, 20.0 ],
+                    "patching_rect": [ 142.0, 542.0, 277.0, 20.0 ],
                     "presentation": 1,
                     "presentation_rect": [ 155.0, 581.0, 244.0, 20.0 ],
                     "text": "Get IP, scan and ping devices in the network"
@@ -33,7 +135,7 @@
                     "maxclass": "live.line",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 18.0, 564.0, 5.0, 100.0 ],
+                    "patching_rect": [ 684.0, 595.0, 5.0, 100.0 ],
                     "presentation": 1,
                     "presentation_rect": [ 18.0, 564.0, 474.0, 9.0 ]
                 }
@@ -47,7 +149,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 19.0, 541.0, 124.0, 22.0 ],
+                    "patching_rect": [ 159.0, 477.0, 124.0, 22.0 ],
                     "presentation": 1,
                     "presentation_rect": [ 19.0, 541.0, 115.0, 22.0 ],
                     "text": "network utilities"
@@ -70,7 +172,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 168.0, 503.0, 106.0, 22.0 ],
+                    "patching_rect": [ 154.5, 503.0, 106.0, 22.0 ],
                     "presentation": 1,
                     "presentation_rect": [ 18.0, 580.0, 106.0, 22.0 ],
                     "text": "syncSuite.netscan"
@@ -338,7 +440,7 @@
                     "maxclass": "live.line",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 38.0, 555.0, 5.0, 100.0 ],
+                    "patching_rect": [ 677.0, 591.0, 5.0, 100.0 ],
                     "presentation": 1,
                     "presentation_rect": [ 18.5, 612.0, 474.0, 9.0 ]
                 }
@@ -352,7 +454,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 38.0, 564.0, 172.0, 29.0 ],
+                    "patching_rect": [ 42.0, 591.0, 172.0, 29.0 ],
                     "presentation": 1,
                     "presentation_rect": [ 20.5, 618.0, 123.0, 29.0 ],
                     "text": "Tutorials"
@@ -366,7 +468,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 594.0, 541.0, 129.0, 35.0 ],
+                    "patching_rect": [ 859.0, 65.0, 129.0, 35.0 ],
                     "text": ";\rmax launchbrowser $1"
                 }
             },
@@ -387,7 +489,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 594.0, 503.0, 260.0, 22.0 ],
+                    "patching_rect": [ 859.0, 27.0, 260.0, 22.0 ],
                     "presentation": 1,
                     "presentation_rect": [ 860.0, 17.0, 260.0, 22.0 ],
                     "text": "https://github.com/agustinissidoro/SyncSuite.git",
@@ -412,7 +514,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 28.86597776412964, 720.6185163259506, 1102.0, 20.0 ],
+                    "patching_rect": [ 28.0, 765.0, 1102.0, 20.0 ],
                     "presentation": 1,
                     "presentation_rect": [ 10.0, 770.0, 934.0, 20.0 ],
                     "text": "The syncSuite project was possible thanks to the support of Hamburg Online Open University (HOOU) and the Hochschule für Musik und Theater Hamburg (HfMT - Hamburg)"
@@ -576,7 +678,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 32.0, 485.56698310375214, 48.0, 22.0 ],
+                    "patching_rect": [ 32.0, 503.0, 48.0, 22.0 ],
                     "text": "help $1"
                 }
             },
@@ -587,7 +689,7 @@
                     "numinlets": 1,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 32.0, 523.7113108634949, 51.0, 22.0 ],
+                    "patching_rect": [ 32.0, 541.0, 51.0, 22.0 ],
                     "text": "pcontrol"
                 }
             },
@@ -882,6 +984,36 @@
                 "patchline": {
                     "destination": [ "obj-16", 0 ],
                     "source": [ "obj-52", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-31", 0 ],
+                    "source": [ "obj-60", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-64", 0 ],
+                    "source": [ "obj-61", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-60", 0 ],
+                    "source": [ "obj-64", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-64", 0 ],
+                    "source": [ "obj-65", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-64", 0 ],
+                    "source": [ "obj-66", 0 ]
                 }
             }
         ],

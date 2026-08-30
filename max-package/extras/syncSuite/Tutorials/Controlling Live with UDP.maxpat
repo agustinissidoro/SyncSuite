@@ -4,13 +4,24 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 5,
+            "revision": 4,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
         "rect": [ 34.0, 95.0, 1079.0, 853.0 ],
         "boxes": [
+            {
+                "box": {
+                    "id": "obj-4",
+                    "linecount": 4,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 27.0, 342.0, 157.0, 60.0 ],
+                    "text": "TIP: tempo, bar, beat and timesignature information are very useful for feeding into syncSuite.score.server!"
+                }
+            },
             {
                 "box": {
                     "id": "obj-48",
@@ -27,9 +38,8 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 89.0, 715.0, 677.0, 60.0 ],
-                    "presentation_linecount": 5,
-                    "text": "In this tutorial, for simplicity purposes, the network communication happens in the loopback address (127.0.0.1 or localhost). However, this same architecture could be implemented with two or more devices if needed. This means it is easy to control Live from any other device in the same local network capable of sending and receiving UDP messages (a smartphone, another computer, a micro-controller, some advanced MIDI controllers). How cool's that?"
+                    "patching_rect": [ 89.0, 715.0, 901.0, 60.0 ],
+                    "text": "In this tutorial, for simplicity purposes, the network communication happens through the loopback address (127.0.0.1 or localhost). Everything is sent and received in the same computer. However, this architecture could be implemented with two or more devices if needed. This means it is easy to control Live from any other device in the same local network capable of sending and receiving UDP messages (a smartphone, another computer, a micro-controller, some advanced MIDI controllers). How cool's that?"
                 }
             },
             {
@@ -69,8 +79,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 90.0, 612.0, 598.0, 74.0 ],
-                    "presentation_linecount": 6,
+                    "patching_rect": [ 90.0, 612.0, 600.0, 74.0 ],
                     "text": "You will notice that the transport will stop at bar 21. Why? Because there's a C-2 note in the MIDI track and this note has been set as the \"stop note\", meaning that the transport will stop as soon as it plays it.\n\nThis is a handy feature in performances where you need to combine precise transport playback with more open/flexible moments."
                 }
             },
@@ -101,8 +110,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 192.0, 391.0, 50.0, 22.0 ],
-                    "text": "21"
+                    "patching_rect": [ 192.0, 391.0, 50.0, 22.0 ]
                 }
             },
             {
@@ -215,8 +223,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 244.0, 123.0, 222.0, 51.0 ],
-                    "presentation_linecount": 3,
+                    "patching_rect": [ 244.0, 123.0, 225.0, 51.0 ],
                     "text": "Check that communication is established and that addresses/ports match"
                 }
             },
@@ -345,8 +352,8 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 33.0, 25.0, 609.0, 20.0 ],
-                    "text": "This tutorial demonstrates how to control basic function of Live via UDP messaging via the liveSync.amxd device."
+                    "patching_rect": [ 33.0, 25.0, 615.0, 20.0 ],
+                    "text": "This tutorial demonstrates how to control basic functions of Live via UDP messaging via the liveSync.amxd device."
                 }
             },
             {
