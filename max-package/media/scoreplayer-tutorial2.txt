@@ -1,0 +1,53 @@
+CUE 1 INIT
+
+///INITIALISE ALL MEDIA
+
+video context enable 1
+video context visible 1
+video context floating 1
+video source stop
+video source black
+///video fullscreen 1
+
+audio dsp start
+audio player 0
+audio player gain 1.
+
+score start
+
+lights init
+
+
+CUE 2 START-PIECE
+
+video source start
+audio player 1
+score page 1
+lights cue 1
+
+CUE 3 END-PIECE
+
+///do a fade-out of 3secs
+DO-LINE audio player gain 1. 0. 3000
+
+///after fade out, all black
+3500 video source black
+video source stop
+score black
+lights black
+
+CUE 4 SHUTDOWN
+
+video context visible 0
+video context enable 0
+audio dsp stop
+score stop
+
+
+
+
+
+
+
+
+
