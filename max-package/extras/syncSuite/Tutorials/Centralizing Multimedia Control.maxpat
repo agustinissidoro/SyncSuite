@@ -4,7 +4,7 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 4,
+            "revision": 5,
             "architecture": "x64",
             "modernui": 1
         },
@@ -144,8 +144,8 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 76.0, 830.0, 278.0, 194.0 ],
-                    "text": "A score allows to design an organized set of messages grouped as cues that can be triggered manually or automatically to control software and hardware.\n\nIt is easy and flexible to send several messages at once to many different receivers and supporting many different formats, thus enabling very complex and refined control at the expense of just a couple of text lines.\n\nBecause of this features, the score is a very powerful tool from which to conceive the general control of different media simultaneously."
+                    "patching_rect": [ 76.0, 830.0, 279.0, 194.0 ],
+                    "text": "A score allows to design an organized set of messages grouped as cues that can be triggered manually or automatically to control software and hardware.\n\nIt is easy and flexible to send several messages at once to many different receivers and supports many different formats, thus enabling very complex and refined control at the expense of just a couple of text lines.\n\nBecause of this features, the score is a very powerful tool from which to conceive the general control of different media simultaneously."
                 }
             },
             {
@@ -249,7 +249,8 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 676.0, 734.0, 50.0, 22.0 ]
+                    "patching_rect": [ 676.0, 734.0, 50.0, 22.0 ],
+                    "text": "255 0 0"
                 }
             },
             {
@@ -473,7 +474,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -813,7 +814,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -910,7 +911,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 4,
+                                            "revision": 5,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1211,7 +1212,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -1241,7 +1242,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 4,
+                                            "revision": 5,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1559,7 +1560,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -1738,7 +1739,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 4,
+                            "revision": 5,
                             "architecture": "x64",
                             "modernui": 1
                         },
