@@ -148,7 +148,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "patching_rect": [ 162.0, 408.0, 112.0, 22.0 ],
-                                    "text": "192.168.0.191"
+                                    "text": "192.168.0.1"
                                 }
                             },
                             {
@@ -440,6 +440,7 @@
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-37",
                                     "linecount": 5,
                                     "maxclass": "message",
@@ -447,11 +448,12 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "patching_rect": [ 417.0, 441.0, 100.0, 76.0 ],
-                                    "text": "192.168.0.1 192.168.0.12 192.168.0.13 192.168.0.15 192.168.0.18"
+                                    "text": "192.168.0.1 192.168.0.13 192.168.0.14 192.168.0.16 192.168.0.18"
                                 }
                             },
                             {
                                 "box": {
+                                    "dontreplace": 1,
                                     "id": "obj-36",
                                     "maxclass": "message",
                                     "numinlets": 2,
@@ -595,11 +597,13 @@
                                 "box": {
                                     "dontreplace": 1,
                                     "id": "obj-10",
+                                    "linecount": 2,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 275.0, 447.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 275.0, 447.0, 50.0, 35.0 ],
+                                    "text": "192.168.0.16"
                                 }
                             },
                             {
@@ -643,7 +647,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 224.0, 393.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 224.0, 393.0, 50.0, 22.0 ],
+                                    "text": "en0"
                                 }
                             },
                             {
@@ -665,11 +670,13 @@
                                 "box": {
                                     "dontreplace": 1,
                                     "id": "obj-11",
+                                    "linecount": 2,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 325.0, 509.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 325.0, 509.0, 50.0, 35.0 ],
+                                    "text": "255.255.255.0"
                                 }
                             },
                             {

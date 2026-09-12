@@ -4,7 +4,7 @@
         "appversion": {
             "major": 9,
             "minor": 1,
-            "revision": 5,
+            "revision": 4,
             "architecture": "x64",
             "modernui": 1
         },
@@ -249,8 +249,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 676.0, 734.0, 50.0, 22.0 ],
-                    "text": "255 0 0"
+                    "patching_rect": [ 676.0, 734.0, 50.0, 22.0 ]
                 }
             },
             {
@@ -474,7 +473,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -814,7 +813,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -911,7 +910,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 5,
+                                            "revision": 4,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1212,12 +1211,13 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
                         "rect": [ 414.0, 125.0, 1000.0, 759.0 ],
+                        "visible": 1,
                         "boxes": [
                             {
                                 "box": {
@@ -1242,7 +1242,7 @@
                                         "appversion": {
                                             "major": 9,
                                             "minor": 1,
-                                            "revision": 5,
+                                            "revision": 4,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1385,8 +1385,8 @@
                                             }
                                         ]
                                     },
-                                    "patching_rect": [ 305.0, 338.0, 71.0, 22.0 ],
-                                    "text": "p get_score"
+                                    "patching_rect": [ 305.0, 338.0, 74.0, 22.0 ],
+                                    "text": "p get_movie"
                                 }
                             },
                             {
@@ -1560,7 +1560,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -1739,7 +1739,7 @@
                         "appversion": {
                             "major": 9,
                             "minor": 1,
-                            "revision": 5,
+                            "revision": 4,
                             "architecture": "x64",
                             "modernui": 1
                         },

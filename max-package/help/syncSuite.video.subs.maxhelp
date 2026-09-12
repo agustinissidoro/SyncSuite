@@ -332,7 +332,7 @@
                                     "numinlets": 1,
                                     "numoutlets": 0,
                                     "patching_rect": [ 59.0, 110.0, 628.0, 24.0 ],
-                                    "text": "Open the \"syncSuite-help1.als\" Live Project contained in the ableton-project folder of the SyncSuite master folder "
+                                    "text": "Open the \"syncSuite-help2.als\" Live Project contained in the ableton-project folder of the SyncSuite master folder "
                                 }
                             },
                             {
