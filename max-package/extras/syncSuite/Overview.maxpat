@@ -9,12 +9,58 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 158.0, 94.0, 1139.0, 822.0 ],
+        "rect": [ 398.0, 184.0, 1139.0, 822.0 ],
         "openinpresentation": 1,
         "toolbarvisible": 0,
         "enablehscroll": 0,
         "title": "syncSuite Overview",
         "boxes": [
+            {
+                "box": {
+                    "bgcolor": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgcolor2": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_angle": 270.0,
+                    "bgfillcolor_autogradient": 0.0,
+                    "bgfillcolor_color": [ 0.27450980392156865, 0.27450980392156865, 0.27450980392156865, 1.0 ],
+                    "bgfillcolor_color1": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_color2": [ 0.2, 0.2, 0.2, 1.0 ],
+                    "bgfillcolor_proportion": 0.5,
+                    "bgfillcolor_type": "color",
+                    "gradient": 1,
+                    "id": "obj-58",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 385.0, 723.0, 183.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 447.0, 686.0, 183.0, 22.0 ],
+                    "text": "Offloading Video Render In Sync"
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgcolor2": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_angle": 270.0,
+                    "bgfillcolor_autogradient": 0.0,
+                    "bgfillcolor_color": [ 0.27450980392156865, 0.27450980392156865, 0.27450980392156865, 1.0 ],
+                    "bgfillcolor_color1": [ 0.301961, 0.301961, 0.301961, 1.0 ],
+                    "bgfillcolor_color2": [ 0.2, 0.2, 0.2, 1.0 ],
+                    "bgfillcolor_proportion": 0.5,
+                    "bgfillcolor_type": "color",
+                    "gradient": 1,
+                    "id": "obj-7",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 385.0, 677.0, 116.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 447.0, 657.0, 116.0, 22.0 ],
+                    "text": "Are We Connected?"
+                }
+            },
             {
                 "box": {
                     "bgcolor": [ 0.301961, 0.301961, 0.301961, 1.0 ],
@@ -442,7 +488,7 @@
                     "numoutlets": 0,
                     "patching_rect": [ 677.0, 591.0, 5.0, 100.0 ],
                     "presentation": 1,
-                    "presentation_rect": [ 18.5, 612.0, 474.0, 9.0 ]
+                    "presentation_rect": [ 19.0, 612.0, 642.0, 5.0 ]
                 }
             },
             {
@@ -988,6 +1034,12 @@
             },
             {
                 "patchline": {
+                    "destination": [ "obj-64", 0 ],
+                    "source": [ "obj-58", 0 ]
+                }
+            },
+            {
+                "patchline": {
                     "destination": [ "obj-31", 0 ],
                     "source": [ "obj-60", 0 ]
                 }
@@ -1014,6 +1066,12 @@
                 "patchline": {
                     "destination": [ "obj-64", 0 ],
                     "source": [ "obj-66", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-64", 0 ],
+                    "source": [ "obj-7", 0 ]
                 }
             }
         ],

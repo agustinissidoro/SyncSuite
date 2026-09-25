@@ -9,7 +9,7 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 34.0, 95.0, 1079.0, 853.0 ],
+        "rect": [ 345.0, 108.0, 1079.0, 853.0 ],
         "boxes": [
             {
                 "box": {
@@ -19,7 +19,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 68.0, 1315.0, 196.0, 24.0 ],
-                    "presentation_linecount": 2,
                     "text": "Play the Ableton Live Session."
                 }
             },
@@ -88,7 +87,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 464.0, 976.0, 176.0, 24.0 ],
+                    "patching_rect": [ 465.0, 976.0, 176.0, 24.0 ],
                     "text": "Check what happened here."
                 }
             },
@@ -105,7 +104,7 @@
                     "numoutlets": 3,
                     "outlettype": [ "", "", "int" ],
                     "parameter_enable": 0,
-                    "patching_rect": [ 436.0, 977.0, 22.0, 21.5 ],
+                    "patching_rect": [ 437.0, 977.0, 22.0, 21.5 ],
                     "rounded": 60.0,
                     "text": "2e",
                     "textcolor": [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -140,8 +139,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 505.5, 280.0, 294.0, 51.0 ],
-                    "presentation_linecount": 11,
+                    "patching_rect": [ 505.5, 280.0, 297.0, 51.0 ],
                     "text": "Open the movies folder in this computer (the video computer!). For this tutorial, you can load the /ableton-project/movies folder"
                 }
             },
@@ -193,7 +191,7 @@
                     "numinlets": 0,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 407.0, 938.0, 88.0, 22.0 ],
+                    "patching_rect": [ 407.3333333333333, 938.0, 88.0, 22.0 ],
                     "text": "r moviesFolder"
                 }
             },
@@ -213,7 +211,7 @@
                     "maxclass": "newobj",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 260.0, 1026.0, 101.0, 22.0 ],
+                    "patching_rect": [ 261.0, 1026.0, 101.0, 22.0 ],
                     "text": "s syncSuite-tuto4"
                 }
             },
@@ -225,7 +223,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 394.5, 644.0, 266.0, 24.0 ],
-                    "presentation_linecount": 4,
                     "text": "Confirm communication between computers"
                 }
             },
@@ -310,7 +307,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 33.5, 539.0, 106.0, 51.0 ],
-                    "presentation_linecount": 3,
                     "text": "Get and set the video computer's IP"
                 }
             },
@@ -396,7 +392,7 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 59.0, 114.0, 1000.0, 759.0 ],
+                        "rect": [ 515.0, 172.0, 1000.0, 759.0 ],
                         "boxes": [
                             {
                                 "box": {
@@ -405,7 +401,7 @@
                                     "maxclass": "comment",
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 18.0, 27.0, 150.0, 127.0 ],
+                                    "patching_rect": [ 18.0, 27.0, 153.0, 127.0 ],
                                     "text": "Actually, there's no magic at all - and it's rather boring:\n\nWe're just taking the name of the video file and conforming it to find the same file in THIS computer. Volià."
                                 }
                             },
@@ -558,7 +554,7 @@
                             }
                         ]
                     },
-                    "patching_rect": [ 260.0, 977.0, 165.33333333333331, 22.0 ],
+                    "patching_rect": [ 261.0, 977.0, 165.33333333333331, 22.0 ],
                     "text": "p DO-THE-MAGIC-HERE!"
                 }
             },
@@ -877,9 +873,8 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 59.0, 132.25, 532.0, 47.0 ],
-                    "presentation_linecount": 4,
-                    "text": "To be able to fully follow this tutorial you will need 2 different computers on the same local network! Additionally, video files should be in both computers. In the video computer, all videos should be located in the same folder."
+                    "patching_rect": [ 59.0, 132.25, 535.0, 47.0 ],
+                    "text": "To be able to fully follow this tutorial you will need 2 different computers on the same local network! Additionally, video files should be in both computers. In the video computer, all videos should be located in the same folder. File names should match EXACTLY in both computers."
                 }
             },
             {
@@ -909,7 +904,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 39.0, 56.0, 943.0, 47.0 ],
-                    "presentation_linecount": 4,
                     "text": "In multimedia productions, it is a common practice to separate the rendering and playback of different medias in different computers. In this way, you avoid overloading a single computer with too many heavy processes (imagine, for example, processing live audio and processing live video). Additionally, in case of failure or crash, you can keep the rest of the media running. "
                 }
             },

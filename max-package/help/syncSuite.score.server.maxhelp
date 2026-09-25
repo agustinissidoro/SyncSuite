@@ -9,7 +9,7 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 34.0, 95.0, 955.0, 853.0 ],
+        "rect": [ 506.0, 234.0, 955.0, 853.0 ],
         "description": "Node-for-Max server that streams a page-turning score to remote devices.",
         "digest": "Score server for remote page-turning devices",
         "showrootpatcherontab": 0,
@@ -31,9 +31,8 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 955.0, 827.0 ],
+                        "rect": [ 506.0, 260.0, 955.0, 827.0 ],
                         "showontab": 1,
-                        "visible": 1,
                         "boxes": [
                             {
                                 "box": {

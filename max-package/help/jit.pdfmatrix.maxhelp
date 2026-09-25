@@ -9,7 +9,7 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 34.0, 95.0, 1073.0, 853.0 ],
+        "rect": [ 499.0, 309.0, 1073.0, 853.0 ],
         "showrootpatcherontab": 0,
         "showontab": 0,
         "boxes": [
@@ -29,9 +29,8 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 1073.0, 827.0 ],
+                        "rect": [ 499.0, 335.0, 1073.0, 827.0 ],
                         "showontab": 1,
-                        "visible": 1,
                         "boxes": [
                             {
                                 "box": {
@@ -323,8 +322,7 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 504.0, 386.0, 50.0, 22.0 ],
-                                    "text": "4"
+                                    "patching_rect": [ 504.0, 386.0, 50.0, 22.0 ]
                                 }
                             },
                             {
@@ -335,21 +333,18 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 608.0, 422.0, 50.0, 22.0 ],
-                                    "text": "1"
+                                    "patching_rect": [ 608.0, 422.0, 50.0, 22.0 ]
                                 }
                             },
                             {
                                 "box": {
                                     "dontreplace": 1,
                                     "id": "obj-17",
-                                    "linecount": 2,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 666.0, 454.0, 50.0, 35.0 ],
-                                    "text": "1240 1754"
+                                    "patching_rect": [ 666.0, 454.0, 50.0, 22.0 ]
                                 }
                             },
                             {

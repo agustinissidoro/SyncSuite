@@ -9,7 +9,7 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 34.0, 95.0, 1051.0, 853.0 ],
+        "rect": [ 197.0, 288.0, 1051.0, 853.0 ],
         "description": "Wrapper around jit.world with extended mapping and compositing functionalities.",
         "digest": "Wrapper around jit.world",
         "showrootpatcherontab": 0,
@@ -31,9 +31,8 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 1051.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 1051.0, 827.0 ],
                         "showontab": 1,
-                        "visible": 1,
                         "boxes": [
                             {
                                 "box": {
@@ -120,7 +119,7 @@
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
                                     "patching_rect": [ 628.0, 421.0, 50.0, 35.0 ],
-                                    "text": "640 477"
+                                    "text": "640 480"
                                 }
                             },
                             {
@@ -943,9 +942,19 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 1051.0, 827.0 ],
+                        "rect": [ 197.0, 314.0, 1051.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
+                            {
+                                "box": {
+                                    "id": "obj-28",
+                                    "maxclass": "message",
+                                    "numinlets": 2,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "" ],
+                                    "patching_rect": [ 263.0, 424.0, 50.0, 22.0 ]
+                                }
+                            },
                             {
                                 "box": {
                                     "bubble": 1,
@@ -1392,6 +1401,12 @@
                             }
                         ],
                         "lines": [
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-28", 1 ],
+                                    "source": [ "obj-1", 2 ]
+                                }
+                            },
                             {
                                 "patchline": {
                                     "destination": [ "obj-2", 0 ],

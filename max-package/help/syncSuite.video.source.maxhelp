@@ -9,7 +9,7 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 34.0, 95.0, 1262.0, 853.0 ],
+        "rect": [ 182.0, 250.0, 1262.0, 853.0 ],
         "description": "Wrapper around jit.world with extended mapping and compositing functionalities.",
         "digest": "Wrapper around jit.world",
         "showrootpatcherontab": 0,
@@ -31,9 +31,8 @@
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 34.0, 121.0, 1262.0, 827.0 ],
+                        "rect": [ 182.0, 276.0, 1262.0, 827.0 ],
                         "showontab": 1,
-                        "visible": 1,
                         "boxes": [
                             {
                                 "box": {
