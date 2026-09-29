@@ -31,7 +31,7 @@ function load() {
     const api = new Function(...Object.keys(g), code + `
         return { speaker_coords, num_sources, algorithm, speaker, speaker_weight, source, source_xy, source_azimuth, source_distance,
                  get_source, output_source_position, setSource, bypass_ui,
-                 sources_mode, stereo_width, source_stereo_width, mirror_sources, haloRadius,
+                 sources_mode, stereo_width, source_stereo_width, spread_focus, mirror_sources, haloRadius,
                  distance_attenuation, source_distance_attenuation,
                  source_spread, source_blur, dbap_rolloff, dbap_hull, vbap_center_blend,
                  get_gains, get_geometry, speaker_azimuth, speaker_distance, get_speakers, getvalueof, setvalueof, dump,
@@ -276,30 +276,58 @@ section("VBAP: groups, centre blend, MDAP smoothness");
     // on the ring (the perimeter) the blend is off: pure VBAP
     api.source(1, 15, 1);
     check(vecClose(g(), refVBAP([-30, 30, 0, 110, -110], 15)), "on the ring -> pure VBAP");
-    // MDAP sampling (1 deg) vs a 0.01 deg MDAP built on the reference VBAP
+    // spread (1 deg sampling) vs an independent 0.05 deg bell-weighted sum of the reference VBAP
     api.vbap_center_blend(0);
+    const bellP = sp => { const h = 180 * Math.pow(sp, 1.6); return h >= 180 - 1e-9 ? 0 : Math.log(0.5) / Math.log((1 + Math.cos(h * RAD)) / 2); };
     let worst = 0;
     for (const L of [[0, 45, 90, 135, 180, 225, 270, 315], [-30, 30, 0, 110, -110], [-45, 45, 135, -135]]) {
         api.speaker_coords(...L);
-        for (const spread of [10, 45, 90, 200, 360]) {
-            api.source_spread(1, spread / 360);
-            for (let a = -180; a < 180; a += 17.3) {
-                api.source(1, a, 0.45);
-                const n = Math.round(spread / 0.01);
+        for (const sp of [0.1, 0.3, 0.5, 0.7, 0.9]) {
+            api.source_spread(1, sp);
+            const p = bellP(sp);
+            for (let a = -180; a < 180; a += 37) {
+                api.source(1, a, 1);
                 const acc = new Array(L.length).fill(0);
-                for (let i = 0; i < n; i++) {
-                    const r = refVBAP(L, a - spread / 2 + (spread * (i + 0.5)) / n);
-                    r.forEach((v, j) => { acc[j] += v; });
+                for (let k = -180; k < 180; k += 0.05) {
+                    const w = Math.pow((1 + Math.cos(k * RAD)) / 2, p);
+                    if (w < 1e-9) continue;
+                    refVBAP(L, a + k).forEach((v, j) => { acc[j] += v * w; });
                 }
                 const nrm = Math.hypot(...acc);
-                const ref = acc.map(v => v / nrm);
+                const e = Math.pow(sp, 8);
+                const ref = acc.map(v => Math.sqrt((1 - e) * (v / nrm) ** 2 + e / L.length));
                 const got = g();
                 worst = Math.max(worst, ...got.map((v, j) => Math.abs(v - ref[j])));
             }
         }
     }
-    check(worst < 2e-3, "MDAP 1 deg sampling vs 0.01 deg reference, worst error " + worst);
-    console.log("  MDAP worst error vs fine reference: " + worst.toExponential(2));
+    check(worst < 2e-3, "spread: 1 deg sampling vs 0.05 deg bell reference, worst error " + worst);
+    console.log("  spread worst error vs fine reference: " + worst.toExponential(2));
+
+    // what spread promises
+    api.speaker_coords(-30, 30, 0, 110, -110);          // irregular
+    api.source(1, 17, 1);
+    api.source_spread(1, 1);
+    check(g().every(v => close(v, 1 / Math.sqrt(5), 1e-12)), "spread 1: every speaker equal, even on 5.0");
+    api.speaker_coords(0, 45, 90, 135, 180, 225, 270, 315);
+    api.source(1, 0, 1);
+    api.source_spread(1, 0.5);
+    const hs = g();
+    check(hs[0] > hs[1] && close(hs[1], hs[7]) && hs[1] > hs[2] && hs[2] > hs[3] && hs[3] >= hs[4] - 1e-12,
+          "spread 0.5: level falls off with angle from the source (no flat top)");
+    check(close(20 * Math.log10(hs[0] / hs[1]), 3, 0.05), "spread 0.5: speakers 45 deg away are 3 dB below the pointed-at one (" + (20 * Math.log10(hs[0] / hs[1])).toFixed(2) + " dB)");
+    api.source_spread(1, 0.001);
+    const tiny = g();
+    api.source_spread(1, 0);
+    check(vecClose(tiny, g(), 1e-3), "tiny spread = plain VBAP");
+    let prevS = null, jumpS = 0;
+    for (let sp = 0; sp <= 1.0000001; sp += 0.005) {
+        api.source_spread(1, Math.min(sp, 1));
+        const v = g();
+        if (prevS) jumpS = Math.max(jumpS, ...v.map((x, i) => Math.abs(x - prevS[i])));
+        prevS = v;
+    }
+    check(jumpS < 0.05, "gains change smoothly as spread goes 0 -> 1 (max step " + jumpS.toFixed(4) + ")");
 }
 
 // ================================================================ DBAP
@@ -753,8 +781,11 @@ section("Stereo sources");
     api.sources_mode(1, 1);
     api.source(2, 0, 1);
     api.source_stereo_width(2, 30);
+    check(vecClose(G(1)[0], monoAt(-15, 1)), "source_stereo_width 2 30 overrides the global 120");
     api.stereo_width(10);
-    check(vecClose(G(1)[0], monoAt(-15, 1)) && vecClose(G(0)[0], monoAt(15, 1)), "global change keeps source 2's own maximum");
+    check(vecClose(G(1)[0], monoAt(-5, 1)) && vecClose(G(0)[0], monoAt(15, 1)), "stereo_width 10 resets every source, including source 2's own 30");
+    api.source_stereo_width(2, 50);
+    check(vecClose(G(1)[0], monoAt(-25, 1)) && vecClose(G(0)[0], monoAt(15, 1)), "then source_stereo_width 2 50 overrides again (source 1 stays at 10)");
     api.posts.length = 0;
     api.stereo_width(1, 60);
     check(api.posts.length === 1, "stereo_width with an index is refused with a hint");
@@ -861,7 +892,7 @@ section("Spread / blur halo size");
     const o = () => api.state().src[0];
     check(api.haloRadius(o(), 300) === 0, "spread 0 -> no halo");
     api.source_spread(1, 1);
-    check(close(api.haloRadius(o(), 300), 8 + 3 + 0.2 * 300), "spread 1 -> knob + 3 + 20% of the field");
+    check(close(api.haloRadius(o(), 300), 8 + 6 + 0.06 * 300), "spread 1 -> knob + 6 + 6% of the field (kept small)");
     api.source_spread(1, 0.25);
     const r90 = api.haloRadius(o(), 300);
     api.source_spread(1, 0.5);
@@ -877,9 +908,11 @@ section("Spread / blur halo size");
 section("Drawing runs without errors (mock mgraphics), selection");
 {
     const clicks = [];
+    const texts = [];
     const calls = [];
     const mg = new Proxy({ size: [300, 300] }, {
-        get: (o, k) => k in o ? o[k] : k === "text_measure" ? () => [20, 9] : (...a) => { calls.push(k); },
+        get: (o, k) => k in o ? o[k] : k === "text_measure" ? () => [20, 9]
+            : k === "show_text" ? (t) => { calls.push(k); texts.push(t); } : (...a) => { calls.push(k); },
         set: (o, k, v) => { o[k] = v; return true; },
     });
     const g = {
@@ -892,7 +925,7 @@ section("Drawing runs without errors (mock mgraphics), selection");
                  source_blur, mirror_sources, select_source, fmtDb, edit_speakers, draw_distance, draw_spread,
                  draw_sources, draw_speakers, draw_intensity, bypass_ui, speaker_size, source_size,
                  readout, readoutRight, levelOf, haloRadius, distance_attenuation, stereo_width, source_stereo_width,
-                 srcs: () => src, sel: () => selected };`)(...Object.values(g));
+                 spreadWeight, spread_focus, srcs: () => src, sel: () => selected };`)(...Object.values(g));
     api.speaker_coords(-45, 45, 135, -135);
     api.num_sources(3);
     api.sources_mode(0, 1, 0);
@@ -912,15 +945,38 @@ section("Drawing runs without errors (mock mgraphics), selection");
     try { api.paint(); } catch (e) { errors++; }
     check(errors === 0, "paint() runs with custom sizes");
     api.source_spread(2, 0.5);
-    check(close(api.haloRadius({ algorithm: 0, spread: 0.5 }, 300), 20 + 3 + 0.5 * 0.2 * 300), "halo starts outside a 40 px knob");
+    check(close(api.haloRadius({ algorithm: 0, spread: 0.5 }, 300), 20 + 6 + 0.5 * 0.06 * 300), "halo starts outside a 40 px knob");
     api.speaker_size(14); api.source_size(16);
     api.source_size(1000);
-    check(close(api.haloRadius({ algorithm: 0, spread: 1 }, 300), 30 + 3 + 0.2 * 300), "source_size clamps at 60 px");
+    check(close(api.haloRadius({ algorithm: 0, spread: 1 }, 300), 30 + 6 + 0.06 * 300), "source_size clamps at 60 px");
     api.source_size(16);
     // speaker colour scale
     check(api.levelOf(1) === 1 && close(api.levelOf(0.5), 1 - 3.0103 / 24, 1e-4) && api.levelOf(0) === 0
           && api.levelOf(Math.pow(10, -3)) === 0, "levelOf: 0 dB = 1, -3 dB ~ 0.87, -30 dB = 0");
     check(calls.includes("show_text") && calls.includes("ellipse"), "paint draws");
+    check(calls.includes("arc"), "a VBAP source with spread draws its arch");
+    // top-left label: algorithm of the selected source, with the spread focus for VBAP
+    api.bypass_ui(0); api.draw_sources(1); api.draw_speakers(1);
+    texts.length = 0;
+    api.paint();
+    check(texts.includes("VBAP  \u00b7  focus 1.6"), "top left: VBAP · focus 1.6 (no source number)");
+    api.spread_focus(2.25);
+    texts.length = 0;
+    api.paint();
+    check(texts.includes("VBAP  \u00b7  focus 2.25"), "label follows spread_focus");
+    api.spread_focus(1.6);
+    api.select_source(3);                // source 3 is DBAP
+    texts.length = 0;
+    api.paint();
+    check(texts.includes("DBAP") && !texts.some(t => /source \d/.test(t) && /VBAP|DBAP/.test(t)), "DBAP source: just DBAP");
+    api.select_source(1);
+    // arch weights: peak at the source's direction, halving at 180 x spread^1.6, flat at 1
+    const sw = api.spreadWeight;
+    check(close(sw(0.5, 0), 1, 1e-12) && sw(0.5, 30) < 1 && sw(0.5, 90) < sw(0.5, 30) && sw(0.5, 180) < 0.01, "spread 0.5 arch: peak ahead, falling off");
+    const halfAt = 180 * Math.pow(0.5, 1.6), e5 = Math.pow(0.5, 8);
+    check(close(sw(0.5, halfAt), 0.5 * (1 - e5) + e5, 1e-9), "spread 0.5 arch: half weight at 180 x 0.5^1.6 = " + halfAt.toFixed(0) + " deg");
+    check([0, 60, 120, 180].every(a => close(sw(1, a), 1, 1e-12)), "spread 1 arch: an even ring");
+    check(sw(0, 0) === 1 && sw(0, 10) === 0, "spread 0: just the source's direction");
     // selection: default source 1, click selects, select_source, shrinking clamps
     api.bypass_ui(0); api.draw_sources(1); api.edit_speakers(0);
     check(api.sel() === 0, "source 1 selected by default");
@@ -944,7 +1000,7 @@ section("Drawing runs without errors (mock mgraphics), selection");
     clicks.length = 0;
     api.onclick(18 + 0.5 * 264, 18 + 0.2 * 264, 1, 0, 0, 0, 0, 0);   // click, no drag
     const names = clicks.map(m => m[1]).join(" ");
-    check(names === "source source_spread source_attenuation", "click -> source, source_spread, source_attenuation: " + names);
+    check(names === "source source_spread source_attenuation", "mono click -> source, source_spread, source_attenuation (no stereo width): " + names);
     check(clicks[0][2] === 1 && close(clicks[0][3], 0) && close(clicks[0][4], 0.6), "position: source 1 0 0.6");
     check(close(clicks[1][3], 0.25), "spread: source_spread 1 0.25");
     check(clicks[2][3] === 0, "attenuation 0 dB with distance_attenuation 0");
@@ -962,6 +1018,26 @@ section("Drawing runs without errors (mock mgraphics), selection");
     check(clicks.map(m => m[1]).join(" ") === "source source_spread source_blur source_attenuation", "DBAP click adds source_blur");
     api.ondrag(18 + 0.5 * 264, 18 + 0.2 * 264, 0);
     api.algorithm(1, 0);
+    // a stereo source also reports its maximum stereo width (its own, or the global one)
+    api.sources_mode(1, 1, 0);
+    api.stereo_width(75);
+    api.paint();
+    const L1 = api.srcs()[0].ch[0];
+    clicks.length = 0;
+    api.onclick(18 + L1.x * 264, 18 + L1.y * 264, 1, 0, 0, 0, 0, 0);
+    check(clicks.map(m => m[1]).join(" ") === "source source_spread source_stereo_width source_attenuation",
+          "stereo click adds source_stereo_width: " + clicks.map(m => m[1]).join(" "));
+    check(clicks[2][2] === 1 && clicks[2][3] === 75, "source_stereo_width 1 75 (follows the global maximum)");
+    api.ondrag(0, 0, 0);
+    api.source_stereo_width(1, 40);
+    api.paint();
+    const L1b = api.srcs()[0].ch[0];
+    clicks.length = 0;
+    api.onclick(18 + L1b.x * 264, 18 + L1b.y * 264, 1, 0, 0, 0, 0, 0);
+    check(clicks[2][3] === 40, "source_stereo_width 1 40 (its own maximum)");
+    api.ondrag(0, 0, 0);
+    api.sources_mode(0, 1, 0);
+    api.stereo_width(60);
     // speaker click in edit mode
     api.edit_speakers(1);
     api.paint();
@@ -1037,7 +1113,9 @@ section("distance_attenuation (global + per source)");
     api.source_distance_attenuation(1, -12);
     check(close(dB(pw(0)), -12, 1e-9) && close(dB(pw(2)), -6, 1e-9), "source 1 override -12, source 3 global -6");
     api.distance_attenuation(-3);
-    check(close(dB(pw(0)), -12, 1e-9) && close(dB(pw(2)), -3, 1e-9), "global change keeps the override");
+    check(close(dB(pw(0)), -3, 1e-9) && close(dB(pw(2)), -3, 1e-9), "distance_attenuation -3 resets every source (last one wins)");
+    api.source_distance_attenuation(1, -12);
+    check(close(dB(pw(0)), -12, 1e-9) && close(dB(pw(2)), -3, 1e-9), "then source 1 -12 overrides again");
     api.source_distance_attenuation(1);
     check(close(dB(pw(0)), -3, 1e-9), "no value -> back to global");
     // DBAP too
@@ -1052,8 +1130,8 @@ section("distance_attenuation (global + per source)");
     api.source_distance_attenuation(2, -9);
     const v = api.getvalueof();
     const b = load();
+    b.distance_attenuation(-3);            // global first, as embedded messages restore it
     b.setvalueof(...v);
-    b.distance_attenuation(-3);
     check(JSON.stringify(b.getvalueof()) === JSON.stringify(v), "override saved in state");
     api.out.length = 0;
     api.dump();
@@ -1096,6 +1174,62 @@ section("Speakers in azimuths: speaker_coords, speaker, get_speakers");
     check(sp && close(sp[3], 0) && close(sp[4], 0.8), "dump reports speaker <i> <az> <dist> (0..1)");
 }
 
+
+section("spread_focus");
+{
+    const api = load();
+    api.num_sources(2);
+    api.vbap_center_blend(0);
+    const g = k => Array.from(api.state().gains[k][0]);
+    const bell = (sp, f, L, a) => {
+        const h = 180 * Math.pow(sp, f);
+        const p = h >= 180 - 1e-9 ? 0 : Math.log(0.5) / Math.log((1 + Math.cos(h * RAD)) / 2);
+        const acc = new Array(L.length).fill(0);
+        for (let k = -180; k < 180; k += 0.05) {
+            const w = Math.pow((1 + Math.cos(k * RAD)) / 2, p);
+            if (w < 1e-9) continue;
+            refVBAP(L, a + k).forEach((v, j) => { acc[j] += v * w; });
+        }
+        const n = Math.hypot(...acc), e = Math.pow(sp, 8);
+        return acc.map(v => Math.sqrt((1 - e) * (v / n) ** 2 + e / L.length));
+    };
+    let worst = 0;
+    for (const L of [[0, 45, 90, 135, 180, 225, 270, 315], [-30, 30, 0, 110, -110]]) {
+        api.speaker_coords(...L);
+        for (const f of [0.5, 1, 3, 6]) {
+            api.spread_focus(f);
+            for (const sp of [0.3, 0.6, 0.85]) {
+                api.source_spread(1, sp);
+                for (const a of [0, 20, 100]) {
+                    api.source(1, a, 1);
+                    worst = Math.max(worst, ...g(0).map((v, j) => Math.abs(v - bell(sp, f, L, a)[j])));
+                }
+            }
+        }
+    }
+    check(worst < 2e-3, "spread_focus 0.5..6: engine = independent bell reference (worst " + worst.toExponential(2) + ")");
+    // higher focus = more pointed at mid spread; the ends do not change
+    api.speaker_coords(0, 45, 90, 135, 180, 225, 270, 315);
+    api.source(1, 0, 1);
+    api.source_spread(1, 0.5);
+    const drop = f => { api.spread_focus(f); const v = g(0); return 20 * Math.log10(v[0] / v[1]); };
+    check(drop(0.75) < drop(1.6) && drop(1.6) < drop(3), "focus 0.75 < 1.6 < 3: neighbours drop more with focus");
+    check(close(drop(1.6), 3, 0.05), "default focus 1.6: 3 dB at spread 0.5");
+    for (const f of [0.5, 4]) {
+        api.spread_focus(f);
+        api.source_spread(1, 1);
+        check(g(0).every(v => close(v, Math.sqrt(1 / 8), 1e-12)), "focus " + f + ": spread 1 still all equal");
+        api.source_spread(1, 0);
+        check(close(g(0)[0], 1, 1e-12), "focus " + f + ": spread 0 still a point");
+    }
+    // global: applies to every source
+    api.source_spread(0.5);
+    api.source(2, 0, 1);
+    api.spread_focus(4);
+    check(close(g(0)[0], g(1)[0], 1e-12), "spread_focus applies to all sources alike");
+    api.spread_focus(1.6);
+}
+
 section("State round-trip");
 {
     const a = load();
@@ -1107,8 +1241,8 @@ section("State round-trip");
     a.speaker_weight(3, 0.5);
     a.source_xy(3, 0.1, 0.9);
     a.sources_mode(0, 1, 0);
-    a.source_stereo_width(2, 80);
     a.stereo_width(45);
+    a.source_stereo_width(2, 80);          // after the global one (which would reset it)
     a.mirror_sources(1, 3, "fb");
     const v = a.getvalueof();
     const b = load();

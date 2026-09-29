@@ -156,7 +156,7 @@
                 <arg name="degrees" optional="0" type="float" />
             </arglist>
             <digest>Maximum stereo width, for all stereo sources</digest>
-            <description>The L/R angle a stereo source reaches at full distance (distance 1, on the perimeter), 0..180, default 60. The width grows with distance: width = maximum x distance, so it halves at distance 0.5 and L and R meet at the centre. Sources with their own source_stereo_width keep it.</description>
+            <description>The L/R angle a stereo source reaches at full distance (distance 1, on the perimeter), 0..180, default 60. The width grows with distance: width = maximum x distance, so it halves at distance 0.5 and L and R meet at the centre. Sending it resets every source to this value, replacing their own source_stereo_width (the last one sent wins).</description>
         </method>
 
         <method name="source_stereo_width">
@@ -165,7 +165,7 @@
                 <arg name="degrees" optional="1" type="float" />
             </arglist>
             <digest>Per-source maximum stereo width</digest>
-            <description>Overrides stereo_width for one source; later global changes do not affect it. Without a value the source follows stereo_width again. Shift-drag a stereo source up/down to change it.</description>
+            <description>Overrides stereo_width for one source, until the next stereo_width, which resets all sources. Without a value the source follows stereo_width again. Shift-drag a stereo source up/down to change it.</description>
         </method>
 
         <method name="mirror_sources">
@@ -193,7 +193,15 @@
                 <arg name="spread" optional="0" type="float" />
             </arglist>
             <digest>VBAP spread (MDAP)</digest>
-            <description>0..1: the fraction of the full circle the source covers (0 = point source, plain VBAP; 0.25 = 90 degrees; 1 = 360 degrees, the whole circle). Spread 1 (100%) means all speakers receive the same level when the speakers are evenly spaced (ring, quad, octagon...); on irregular layouts such as 5.0, speakers covering wider gaps receive more. Pans virtual sources 1 degree apart across that width and renormalizes (MDAP), so the source reaches more speakers while keeping its loudness. Drawn as a halo around the source; cmd-drag a source up/down to change it. Without an index it applies to all sources.</description>
+            <description>0..1. 0 = a point source (plain VBAP). Higher values let the source reach more speakers with a smooth rolloff: virtual sources all around the circle are weighted by a bell centred on the source's direction, which halves at 180 degrees x spread^focus (spread_focus, default 1.6). With the default focus, at 0.5 the speakers 45 degrees away are 3 dB below the one the source points at (octagon: -3.2 / -6.3 / -16 dB at 0 / 45 / 90 degrees); 1 means every speaker receives the same level, on any layout. Loudness stays constant (sum of squared gains = 1). Drawn as an arch in the halo around the source: its thickness and brightness follow the spread's weight in each direction (a short bright arch for a narrow spread, an even ring at 1). Cmd-drag a source up/down to change it. Without an index it applies to all sources.</description>
+        </method>
+
+        <method name="spread_focus">
+            <arglist>
+                <arg name="focus" optional="0" type="float" />
+            </arglist>
+            <digest>Shape of the spread, for all sources</digest>
+            <description>How quickly spread goes from pointed to flat (0.25..8, default 1.6). The spread bell halves at 180 degrees x spread^focus: higher focus keeps sources pointed until spread is high (well-defined spatialization), lower focus goes flat sooner (diffuse). Spread 0 (a point) and spread 1 (all speakers equal) are the same for any focus. At spread 0.5 on an octagon, the speakers 45 degrees away are 0.9 dB (focus 0.75), 1.3 dB (1), 3 dB (1.6), 7.9 dB (2.5) or 18.6 dB (4) below the one the source points at. Shown top left next to VBAP.</description>
         </method>
 
         <method name="vbap_center_blend">
@@ -234,7 +242,7 @@
                 <arg name="dB" optional="0" type="float" />
             </arglist>
             <digest>Level at the centre for all sources</digest>
-            <description>0 dB on the speaker ring (the speakers' average distance from the centre), fading linearly in dB to this value at the exact centre; sources on or outside the ring are not changed. "distance_attenuation -6": every source is -6 dB at the centre and -3 dB halfway. Applied after panning, to VBAP and DBAP, to both channels of stereo sources. Sources with their own source_distance_attenuation keep it. Default 0.</description>
+            <description>0 dB on the speaker ring (the speakers' average distance from the centre), fading linearly in dB to this value at the exact centre; sources on or outside the ring are not changed. "distance_attenuation -6": every source is -6 dB at the centre and -3 dB halfway. Applied after panning, to VBAP and DBAP, to both channels of stereo sources. Sending it resets every source to this value, replacing their own source_distance_attenuation (the last one sent wins). Default 0.</description>
         </method>
 
         <method name="source_distance_attenuation">
@@ -243,7 +251,7 @@
                 <arg name="dB" optional="1" type="float" />
             </arglist>
             <digest>Per-source level at the centre</digest>
-            <description>Overrides distance_attenuation for one source; later global changes do not affect it. Without a value the source follows the global setting again.</description>
+            <description>Overrides distance_attenuation for one source, until the next distance_attenuation, which resets all sources. Without a value the source follows the global setting again.</description>
         </method>
 
         <method name="get_gains">
@@ -301,7 +309,7 @@
                 <arg name="state" optional="0" type="int" />
             </arglist>
             <digest>Report mouse moves</digest>
-            <description>1: mouse edits are reported on the right outlet. Dragging a source sends source &lt;i&gt; &lt;az&gt; &lt;dist&gt; (and its mirrored partner). Clicking a source, even without moving it, sends source &lt;i&gt; &lt;az&gt; &lt;dist&gt;, source_spread &lt;i&gt; &lt;v&gt; (plus source_blur for DBAP sources) and source_attenuation &lt;i&gt; &lt;dB&gt;: the distance attenuation applied at its current position (information only; sending it back in is not a message of this object). Clicking a speaker with edit_speakers 1 sends speaker &lt;i&gt; &lt;az&gt; &lt;dist&gt;. Default 0.</description>
+            <description>1: mouse edits are reported on the right outlet. Dragging a source sends source &lt;i&gt; &lt;az&gt; &lt;dist&gt; (and its mirrored partner). Clicking a source, even without moving it, sends source &lt;i&gt; &lt;az&gt; &lt;dist&gt;, source_spread &lt;i&gt; &lt;v&gt; (plus source_blur for DBAP sources), source_stereo_width &lt;i&gt; &lt;deg&gt; for stereo sources (their maximum width, own or global) and source_attenuation &lt;i&gt; &lt;dB&gt;: the distance attenuation applied at its current position (information only; sending it back in is not a message of this object). Clicking a speaker with edit_speakers 1 sends speaker &lt;i&gt; &lt;az&gt; &lt;dist&gt;. Default 0.</description>
         </method>
 
         <method name="edit_speakers">
@@ -324,8 +332,8 @@
             <arglist>
                 <arg name="state" optional="0" type="int" />
             </arglist>
-            <digest>Draw the spread / blur halo around sources</digest>
-            <description>Default 1.</description>
+            <digest>Draw the spread arch / blur halo around sources</digest>
+            <description>VBAP sources: a halo with an arch showing how the spread is distributed around the source's direction. DBAP sources: a halo of the blur radius. Default 1.</description>
         </method>
 
         <method name="draw_sources">
@@ -349,8 +357,8 @@
             <arglist>
                 <arg name="state" optional="0" type="int" />
             </arglist>
-            <digest>Write the selected source's level next to each speaker</digest>
-            <description>With 1, each speaker shows the gain it receives from the selected source in dB and as amplitude (L and R lines for a stereo source). Default 1.</description>
+            <digest>Write the selected source's level (dB) next to each speaker</digest>
+            <description>With 1, each speaker shows the level it receives from the selected source in dB (L and R lines for a stereo source). Default 1.</description>
         </method>
 
         <method name="select_source">

@@ -26,11 +26,16 @@
  * VBAP (Pulkki 1997, 2D pairwise; spread = MDAP, Pulkki 1999)
  *   Speakers are sorted by azimuth around the centre; adjacent speakers form
  *   pairs and g = p^T L^-1, normalized to unit power. Source distance is
- *   ignored, only its azimuth counts. source_spread (0..1, the fraction of
- *   the full circle: 1 = 360 deg) pans virtual sources 1 deg apart across that
- *   width, sums them and renormalizes (MDAP). Spread 1 (100%) = all speakers
- *   receive the same level on evenly spaced layouts; on irregular layouts
- *   (e.g. 5.0) speakers covering wider gaps receive more.
+ *   ignored, only its azimuth counts. source_spread (0..1) pans virtual
+ *   sources 1 deg apart all around the circle, weighted by a smooth bell
+ *   centred on the source, w = ((1 + cos a) / 2)^p, sums them and
+ *   renormalizes (a weighted MDAP). The bell halves at 180 deg x spread^focus
+ *   (spread_focus, default 1.6), so
+ *   levels fall off smoothly from the source's direction: 0 = point (plain
+ *   VBAP), 0.5 = the speakers 45 deg away are 3 dB below the one it points at,
+ *   1 = flat. Spread 1 = every speaker receives the
+ *   same level on any layout: near the top the gains blend, at constant
+ *   power, into equal gains (weight spread^8).
  *   Extensions (not in Pulkki), all constant power:
  *   - pairs wider than 170 deg, where VBAP breaks down (e.g. stereo L/R at
  *     +-90), use a sin/cos crossfade across the gap;
@@ -61,7 +66,8 @@
  * grows with distance: width = maximum width x distance, so a source on the
  * perimeter is at the full width and L and R meet at the centre. The maximum
  * is stereo_width (global, default 60 deg) or the source's own
- * source_stereo_width. L and R are always linked: moving either moves the
+ * source_stereo_width; the last one sent wins (stereo_width resets every
+ * source to the global value). L and R are always linked: moving either moves the
  * source. Each channel is panned on its own at unit power, with the
  * source's algorithm, spread and blur. Channel 1 = mono or L, 2 = R.
  *
@@ -126,15 +132,19 @@
  *     stereo_width <deg>              maximum L/R angle of stereo sources, reached at
  *                                     full distance (0..180, default 60); narrower
  *                                     towards the centre (width x distance)
- *     source_stereo_width <i> [deg]   per-source maximum; without a value the
+ *     source_stereo_width <i> [deg]   per-source maximum, until the next stereo_width
+ *                                     (which resets all sources); without a value the
  *                                     source follows stereo_width again
  *     mirror_sources <a> <b> [lr|fb|point]   link b as a's mirror (b jumps to it)
  *     mirror_sources <a>              unlink a (and its partner)
  *     mirror_sources                  unlink all
  *   panning
  *     algorithm [i] <0|1>             0 = VBAP (default), 1 = DBAP
- *     source_spread [i] <0..1>        VBAP spread (MDAP): 0 = point, 1 = full circle
- *                                     (1 = all speakers equal on evenly spaced layouts)
+ *     source_spread [i] <0..1>        VBAP spread: 0 = point, 0.5 = pointy with a smooth
+ *                                     rolloff, 1 = all speakers equal
+ *     spread_focus <v>                shape of the spread in between, for all sources
+ *                                     (0.25..8, default 1.6): higher = stays pointed
+ *                                     longer, lower = goes flat sooner
  *     vbap_center_blend <0|1>
  *     source_blur [i] <v>             DBAP spatial blur
  *     dbap_rolloff <dB>               dbap_hull <0|1>
@@ -142,8 +152,9 @@
  *     distance_attenuation <dB>       level at the centre for all sources (default 0):
  *                                     0 dB on the speaker ring, fading linearly in dB
  *                                     to <dB> at the centre; applied after panning
- *     source_distance_attenuation <i> [dB]   per-source override; without a value
- *                                     the source follows the global setting again
+ *     source_distance_attenuation <i> [dB]   per-source value, until the next
+ *                                     distance_attenuation (which resets all sources);
+ *                                     without a value the source follows the global again
  *   output
  *     get_gains [i]                   -> out 0 (all channels of the source)
  *     get_source [i]                  -> out 2: source <i> <az> <dist>
@@ -151,14 +162,15 @@
  *     get_speakers | dump             -> out 2
  *     output_source_position <0|1>    report mouse edits on out 2 (default 0): dragging a
  *                                     source sends source <i> <az> <dist>; clicking one
- *                                     also sends source_spread (+ source_blur for DBAP)
- *                                     and source_attenuation <i> <dB> (distance
+ *                                     also sends source_spread (+ source_blur for DBAP),
+ *                                     source_stereo_width (stereo sources) and
+ *                                     source_attenuation <i> <dB> (distance
  *                                     attenuation applied now; information only);
  *                                     clicking a speaker (edit_speakers 1) sends speaker
  *   UI
  *     edit_speakers <0|1>             unlock speakers for mouse editing
  *     draw_distance | draw_spread | draw_sources | draw_speakers <0|1>
- *     draw_intensity <0|1>            per-speaker level of the selected source, dB + amplitude
+ *     draw_intensity <0|1>            per-speaker level of the selected source, in dB
  *     speaker_size <px> | source_size <px>   drawn size (defaults 14 and 16)
  *     select_source <i>               the source whose levels the speakers show
  *                                     (also set by clicking a source)
@@ -167,7 +179,8 @@
  * Mouse: drag = move source (either knob of a stereo pair), cmd-drag =
  *        spread (VBAP) or blur (DBAP), shift-drag = source_stereo_width, both up/down.
  *        With edit_speakers 1: drag speaker = move.
- *        Spread and blur are drawn as a halo around the source.
+ *        Spread is drawn as an arch in a halo around the source (thicker and
+ *        brighter where more of it goes); blur as a plain halo.
  *
  * The engine section has no Max/UI dependencies, so it can be moved to a
  * UI-less [v8] object later without changes.
@@ -194,12 +207,15 @@ const SRC_RING = 0.3;       // new sources: distance 0.6
 const VBAP = 0;
 const DBAP = 1;
 const WIDE_SPAN = 170;      // deg; wider VBAP pairs use a constant-power crossfade
-const VS_STEP = 1;          // deg between MDAP virtual sources
+const VS_STEP = 1;          // deg between spread virtual sources
 const MAX_BLUR = 10;
 const AZ_EPS = 1e-6;        // deg; speakers closer than this share a VBAP group
 const CENTRE_EPS = 1e-3;    // speakers closer than this to the centre have no direction
 const DIST_TOLERANCE = 0.2; // VBAP warning when a speaker's distance is off the mean by more
 const DEFAULT_STEREO_WIDTH = 60;
+const DEFAULT_SPREAD_FOCUS = 1.6;         // spread curve, see spreadExponent
+const MIN_SPREAD_FOCUS = 0.25;
+const MAX_SPREAD_FOCUS = 8;
 const MIRROR_MODES = ["lr", "fb", "point"];
 const DEFAULT_ROLLOFF = 6;  // dB per doubling of distance (inverse distance law)
 
@@ -223,6 +239,7 @@ let dbapHull = 1;
 let vbapCenterBlend = 1;
 let distAtten = 0;          // dB at the centre, for sources without their own value
 let stereoWidthMax = DEFAULT_STEREO_WIDTH;   // deg at full distance, for sources without their own value
+let spreadFocus = DEFAULT_SPREAD_FOCUS;   // spread curve for all sources (see spreadExponent)
 
 const flags = {
     edit_speakers: 0,
@@ -504,7 +521,7 @@ function computeGains(k) {
         g.fill(0);
         if (!n) continue;
         if (o.algorithm === DBAP) computeDBAP(o.ch[j], o.blur, g);
-        else computeVBAP(o.ch[j], o.spread * 360, g);
+        else computeVBAP(o.ch[j], o.spread, spreadFocus, g);
     }
     const a = attenuation(o);
     if (a !== 1) for (const g of gains[k]) for (let s = 0; s < n; s++) g[s] *= a;
@@ -524,9 +541,10 @@ function addGroup(group, gain, out) {
     for (const i of group.members) out[i] += share;
 }
 
-// adds the unit-power gains of one virtual source at azimuth phi into out
-function vbapPoint(phi, out) {
-    if (groups.length === 1) { addGroup(groups[0], 1, out); return; }
+// adds the unit-power gains of one virtual source at azimuth phi into out,
+// scaled by weight
+function vbapPoint(phi, out, weight = 1) {
+    if (groups.length === 1) { addGroup(groups[0], weight, out); return; }
     // arcs are sorted by start and cover the circle: last arc starting <= phi
     const p = wrap360(phi);
     let lo = 0;
@@ -553,19 +571,58 @@ function vbapPoint(phi, out) {
         gb = Math.sin(t);
     }
     const norm = Math.sqrt(ga * ga + gb * gb) || 1;
-    addGroup(arc.a, ga / norm, out);
-    addGroup(arc.b, gb / norm, out);
+    addGroup(arc.a, (ga / norm) * weight, out);
+    addGroup(arc.b, (gb / norm) * weight, out);
 }
 
-// c: one channel {x, y}; width = spread in degrees
-function computeVBAP(c, width, g) {
+// Spread: virtual sources all around the circle (1 deg apart), weighted by a
+// smooth bell centred on the source, w = ((1 + cos a) / 2)^p. p is set so the
+// weight halves at 180 deg x spread^focus (spread_focus, default 1.6: spread
+// 0.25 -> 20 deg, 0.5 -> 59 deg, 0.75 -> 114 deg; 1 -> p = 0, a flat weight,
+// all directions equal). 1.6 puts the speakers 45 deg away 3 dB below the one
+// the source points at, at spread 0.5 (octagon). Higher focus keeps sources
+// pointed until spread is high, lower focus goes flat sooner.
+
+// the spread's weight in a direction a (deg from the source's direction), 0..1,
+// as the listener gets it (bell, plus the equal blend near spread 1): for drawing
+function spreadWeight(spread, a, focus = DEFAULT_SPREAD_FOCUS) {
+    if (spread < EPS) return Math.abs(a) < 1 ? 1 : 0;
+    const p = spreadExponent(spread, focus);
+    const w = p === 0 ? 1 : Math.pow((1 + Math.cos(a * RAD)) / 2, p);
+    const e = Math.pow(spread, 8);
+    return (1 - e) * w + e;
+}
+
+function spreadExponent(spread, focus = DEFAULT_SPREAD_FOCUS) {
+    const half = 180 * Math.pow(spread, focus);
+    if (half >= 180 - 1e-9) return 0;
+    return Math.log(0.5) / Math.log((1 + Math.cos(half * RAD)) / 2);
+}
+
+// c: one channel {x, y}; spread 0..1
+function computeVBAP(c, spread, focus, g) {
     const az = azOf(c.x, c.y);
-    const n = width < EPS ? 1 : Math.max(2, Math.ceil(width / VS_STEP - 1e-9)); // 40.000...1 deg -> 40
-    for (let i = 0; i < n; i++) vbapPoint(az - width / 2 + (width * (i + 0.5)) / n, g);
-    let p = 0;
-    for (let s = 0; s < g.length; s++) p += g[s] * g[s];
-    p = Math.sqrt(p);
-    if (p > 0) for (let s = 0; s < g.length; s++) g[s] /= p;
+    if (spread < EPS) {
+        vbapPoint(az, g);
+    } else {
+        const p = spreadExponent(spread, focus);
+        for (let k = -179; k <= 180; k += VS_STEP) {
+            const w = p === 0 ? 1 : Math.pow((1 + Math.cos(k * RAD)) / 2, p);
+            if (w > 1e-6) vbapPoint(az + k, g, w);
+        }
+    }
+    let pw = 0;
+    for (let s = 0; s < g.length; s++) pw += g[s] * g[s];
+    pw = Math.sqrt(pw);
+    if (pw > 0) for (let s = 0; s < g.length; s++) g[s] /= pw;
+
+    // spread 1 = every speaker equal on any layout: near the top the result
+    // blends (constant power) into equal gains. weight spread^8: 0.4% at 0.5,
+    // 43% at 0.9, 100% at 1
+    if (spread > 0) {
+        const e = Math.pow(spread, 8);
+        for (let s = 0; s < g.length; s++) g[s] = Math.sqrt((1 - e) * g[s] * g[s] + e / g.length);
+    }
 
     // constant-power blend towards all-equal inside the ring
     const r = radiusOf(c.x, c.y);
@@ -828,7 +885,16 @@ function stereo_width(...a) {
         return;
     }
     stereoWidthMax = clamp(+a[0] || 0, 0, 180);
-    for (const o of src) if (o.stereo && o.stereoWidth === null) o.dirty = true;
+    for (const o of src) {               // last one wins: the global value replaces every source's own
+        if (o.stereo) o.dirty = true;
+        o.stereoWidth = null;
+    }
+    changed();
+}
+
+function spread_focus(v) {
+    spreadFocus = clamp(+v || 0, MIN_SPREAD_FOCUS, MAX_SPREAD_FOCUS);
+    for (const o of src) if (o.algorithm === VBAP && o.spread > 0) o.dirty = true;
     changed();
 }
 
@@ -897,7 +963,10 @@ function clampDb(v) { return clamp(+v || 0, -120, 24); }
 
 function distance_attenuation(dB) {
     distAtten = clampDb(dB);
-    for (const o of src) if (o.distAtten === null) o.dirty = true;
+    for (const o of src) {               // last one wins: the global value replaces every source's own
+        o.distAtten = null;
+        o.dirty = true;
+    }
     changed();
 }
 
@@ -959,6 +1028,7 @@ function get_speakers() {
 function dump() {
     outlet(2, ["distance_attenuation", distAtten]);
     outlet(2, ["stereo_width", stereoWidthMax]);
+    outlet(2, ["spread_focus", spreadFocus]);
     spk.forEach((o, i) => {
         outlet(2, ["speaker", i + 1, ...speakerPolar(i)]);
         outlet(2, ["speaker_weight", i + 1, o.weight]);
@@ -977,7 +1047,7 @@ function dump() {
 
 // ================================================================ pattr / embedding
 
-const STATE_VERSION = 7;
+const STATE_VERSION = 8;
 const SRC_FIELDS = 12;
 
 // flat: <version> <nspk> <nsrc> [x y weight]*nspk
@@ -1026,6 +1096,7 @@ function save() {
     embedmessage("vbap_center_blend", vbapCenterBlend);
     embedmessage("distance_attenuation", distAtten);
     embedmessage("stereo_width", stereoWidthMax);
+    embedmessage("spread_focus", spreadFocus);
     embedmessage("output_source_position", outputSourcePosition);
     embedmessage("setvalueof", ...getvalueof());
     for (const name in flags) embedmessage(name, flags[name]);
@@ -1037,9 +1108,12 @@ function save() {
 
 // ================================================================ mouse
 
+const TEXT_INSET = 4;       // overlay text distance from the object's edges, px
+const TEXT_TOP = 11;        // baseline of the top-left label, px
 const PAD = 18;             // speakers sit on the perimeter: leave room for them and their glow
 let knobR = 8;              // source knob radius, px (source_size = diameter)
-const HALO_MAX = 0.2;       // VBAP halo radius at spread 1, in field units
+const ARCH_STEP = 4;        // deg per segment of the spread arch
+const HALO_MAX = 0.06;      // VBAP halo growth at spread 1, in field units (kept small: the arch shows the spread)
 let spkR = 7;               // speaker half-width, px (speaker_size = width)
 const DB_FLOOR = -24;       // speaker colour: 0 dB = full, DB_FLOOR and below = off
 
@@ -1051,13 +1125,15 @@ function toScreen(x, y) { return [view.x0 + x * view.side, view.y0 + y * view.si
 function toWorld(px, py) { return [(px - view.x0) / view.side, (py - view.y0) / view.side]; }
 
 // top-most speaker under the mouse, or -1
-// on click (output_source_position 1): position, spread (blur for DBAP) and
-// the distance attenuation currently applied, in dB
+// on click (output_source_position 1): position, spread (blur for DBAP), the
+// maximum stereo width (stereo sources) and the distance attenuation
+// currently applied, in dB
 function reportSource(k) {
     const o = src[k];
     outlet(2, ["source", k + 1, ...sourcePolar(k)]);
     outlet(2, ["source_spread", k + 1, o.spread]);
     if (o.algorithm === DBAP) outlet(2, ["source_blur", k + 1, o.blur]);
+    if (o.stereo) outlet(2, ["source_stereo_width", k + 1, maxStereoWidth(o)]);
     const a = attenuation(o);
     outlet(2, ["source_attenuation", k + 1, a === 1 ? 0 : 20 * Math.log10(a)]);
 }
@@ -1183,6 +1259,8 @@ function levelOf(p) {
 
 function mix(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
 
+function fmtFocus(v) { return (Math.round(v * 100) / 100).toString(); }
+
 function fmtDb(v) { return v > 1e-6 ? (20 * Math.log10(v)).toFixed(1) : "-inf"; }
 
 function label(str, x, y) {
@@ -1239,7 +1317,7 @@ function haloRadius(o, side) {
     if (o.algorithm === DBAP) {
         return o.blur > 0 ? Math.max(knobR + 3, o.blur * sigma * side) : 0;
     }
-    return o.spread > 0 ? knobR + 3 + o.spread * HALO_MAX * side : 0;
+    return o.spread > 0 ? knobR + 6 + o.spread * HALO_MAX * side : 0;
 }
 
 function paint() {
@@ -1263,7 +1341,6 @@ function paint() {
 
     const side = Math.max(1, Math.min(w, h) - 2 * PAD);
     view = { x0: (w - side) / 2, y0: (h - side) / 2, side };
-    const { x0, y0 } = view;
     const [cx, cy] = toScreen(CX, CY);
     const anyDBAP = src.some(o => o.algorithm === DBAP);
     const anyVBAP = src.some(o => o.algorithm === VBAP);
@@ -1318,11 +1395,37 @@ function paint() {
             const c = PALETTE[k % PALETTE.length];
             for (const ch of o.ch) {
                 const [x, y] = toScreen(ch.x, ch.y);
-                rgba(c, 0.13);
+                if (o.algorithm === DBAP) {
+                    rgba(c, 0.13);
+                    circle(x, y, r);
+                    g.fill_preserve();
+                    rgba(c, 0.45);
+                    g.stroke();
+                    continue;
+                }
+                // VBAP: faint halo + an arch whose thickness and brightness follow the
+                // spread weight in each direction (as seen from the listener)
+                rgba(c, 0.06);
                 circle(x, y, r);
-                g.fill_preserve();
-                rgba(c, 0.45);
-                g.stroke();
+                g.fill();
+                const az = azOf(ch.x, ch.y);
+                for (const pass of [0, 1]) {            // dark edge underneath, then the colour
+                    for (let a = -180; a < 180; a += ARCH_STEP) {
+                        const w = spreadWeight(o.spread, a + ARCH_STEP / 2, spreadFocus);
+                        if (w < 0.02) continue;
+                        const lw = 1.5 + 7 * w;
+                        if (pass === 0) {
+                            rgba(C.bg, 0.5 * w);
+                            g.set_line_width(lw + 2);
+                        } else {
+                            rgba(c, 0.3 + 0.7 * w);
+                            g.set_line_width(lw);
+                        }
+                        g.arc(x, y, r, (az + a - 90) * RAD, (az + a + ARCH_STEP - 90) * RAD);
+                        g.stroke();
+                    }
+                }
+                g.set_line_width(1);
             }
         });
     }
@@ -1389,7 +1492,7 @@ function paint() {
         const stereo = sel.length === 2;
         spk.forEach((o, s) => {
             const [x, y] = toScreen(o.x, o.y);
-            const lines = sel.map((gc, j) => (stereo ? (j === 0 ? "L " : "R ") : "") + fmtDb(gc[s]) + " dB  " + gc[s].toFixed(2));
+            const lines = sel.map((gc, j) => (stereo ? (j === 0 ? "L " : "R ") : "") + fmtDb(gc[s]) + " dB");
             lines.forEach((str, j) => {
                 const ty = y + 3 + (stereo ? (j === 0 ? -5 : 6) : 0);
                 rgba(sel[j][s] > 1e-6 ? C.text : C.dim);
@@ -1446,27 +1549,28 @@ function paint() {
         });
     }
 
-    // overlays: algorithm of the selected source top left, edit mode under it,
-    // drag info bottom left, attenuation bottom right
+    // overlays, anchored to the object's corners (outside the circle): algorithm of
+    // the selected source top left (with the spread focus for VBAP), edit mode under
+    // it, drag info bottom left, attenuation bottom right
     g.select_font_face(FONT_BOLD);
     if (selected >= 0 && selected < src.length) {
         rgba(C.text);
-        text((src[selected].algorithm === DBAP ? "DBAP" : "VBAP") + "  \u00b7  source " + (selected + 1), x0 + 7, y0 + 13);
+        text(src[selected].algorithm === DBAP ? "DBAP" : "VBAP  \u00b7  focus " + fmtFocus(spreadFocus), TEXT_INSET, TEXT_TOP);
     }
     if (flags.edit_speakers) {
         rgba(C.edit);
-        text("EDIT SPEAKERS", x0 + 7, y0 + 26);
+        text("EDIT SPEAKERS", TEXT_INSET, TEXT_TOP + 11);
     }
     g.select_font_face(FONT);
     const info = readout();
     if (info) {
         rgba(C.text);
-        text(info, x0 + 7, y0 + side - 7);
+        text(info, TEXT_INSET, h - TEXT_INSET);
     }
     const right = readoutRight();
     if (right) {
         rgba(C.text);
-        text(right, x0 + side - 7 - mgraphics.text_measure(right)[0], y0 + side - 7);
+        text(right, w - TEXT_INSET - mgraphics.text_measure(right)[0], h - TEXT_INSET);
     }
 }
 
@@ -1480,7 +1584,7 @@ function paint() {
     addGroup, vbapPoint, computeVBAP, computeDBAP, invalidateAll, emitGains, perSource, pair,
     emitGeometry, changed, sourcePolar, speakerPolar, place, setSource, setSourceParam, unmirror, setSpeaker,
     setWeight, perItem, setFlag, toScreen, toWorld, hitSpeaker, hitChannel, reportSource, rgba,
-    circle, roundRect, label, text, readout, readoutRight, haloRadius, fmtDb, attenuation, clampDb, levelOf, mix,
+    spreadExponent, spreadWeight, circle, roundRect, label, text, readout, readoutRight, haloRadius, fmtDb, fmtFocus, attenuation, clampDb, levelOf, mix,
 ].forEach(f => { f.local = 1; });
 
 // ================================================================ init
