@@ -586,23 +586,35 @@ function vbapPoint(phi, out, weight = 1) {
 // the spread's weight in a direction a (deg from the source's direction), 0..1,
 // as the listener gets it (bell, plus the equal blend near spread 1): for drawing
 function spreadWeight(spread, a, focus = DEFAULT_SPREAD_FOCUS) {
-    if (spread < EPS) return Math.abs(a) < 1 ? 1 : 0;
+    if (isPointSpread(spread, focus)) return Math.abs(a) < 1 ? 1 : 0;
     const p = spreadExponent(spread, focus);
     const w = p === 0 ? 1 : Math.pow((1 + Math.cos(a * RAD)) / 2, p);
     const e = Math.pow(spread, 8);
     return (1 - e) * w + e;
 }
 
+// bells narrower than this exponent are below the 1 deg sampling: a point
+const MAX_SPREAD_EXPONENT = 1e6;
+
 function spreadExponent(spread, focus = DEFAULT_SPREAD_FOCUS) {
     const half = 180 * Math.pow(spread, focus);
     if (half >= 180 - 1e-9) return 0;
-    return Math.log(0.5) / Math.log((1 + Math.cos(half * RAD)) / 2);
+    // ln((1 + cos h) / 2) = ln(1 - sin^2(h / 2)), exact even for tiny h (where
+    // (1 + cos h) / 2 rounds to 1 and a plain log would give 0 -> division by 0)
+    const s = Math.sin((half * RAD) / 2);
+    const lnBase = Math.log1p(-s * s);
+    return lnBase < 0 ? Math.min(MAX_SPREAD_EXPONENT, Math.log(0.5) / lnBase) : MAX_SPREAD_EXPONENT;
+}
+
+// spread too narrow to matter: pan as a point
+function isPointSpread(spread, focus) {
+    return spread < EPS || spreadExponent(spread, focus) >= MAX_SPREAD_EXPONENT;
 }
 
 // c: one channel {x, y}; spread 0..1
 function computeVBAP(c, spread, focus, g) {
     const az = azOf(c.x, c.y);
-    if (spread < EPS) {
+    if (isPointSpread(spread, focus)) {
         vbapPoint(az, g);
     } else {
         const p = spreadExponent(spread, focus);
@@ -959,7 +971,8 @@ function dbap_rolloff(R) {
 function dbap_hull(v) { dbapHull = v ? 1 : 0; invalidateAll(); changed(); }
 function vbap_center_blend(v) { vbapCenterBlend = v ? 1 : 0; invalidateAll(); changed(); }
 
-function clampDb(v) { return clamp(+v || 0, -120, 24); }
+// attenuations only: never above 0 dB (a source is never boosted)
+function clampDb(v) { return clamp(+v || 0, -120, 0); }
 
 function distance_attenuation(dB) {
     distAtten = clampDb(dB);
@@ -1584,7 +1597,7 @@ function paint() {
     addGroup, vbapPoint, computeVBAP, computeDBAP, invalidateAll, emitGains, perSource, pair,
     emitGeometry, changed, sourcePolar, speakerPolar, place, setSource, setSourceParam, unmirror, setSpeaker,
     setWeight, perItem, setFlag, toScreen, toWorld, hitSpeaker, hitChannel, reportSource, rgba,
-    spreadExponent, spreadWeight, circle, roundRect, label, text, readout, readoutRight, haloRadius, fmtDb, fmtFocus, attenuation, clampDb, levelOf, mix,
+    spreadExponent, spreadWeight, isPointSpread, circle, roundRect, label, text, readout, readoutRight, haloRadius, fmtDb, fmtFocus, attenuation, clampDb, levelOf, mix,
 ].forEach(f => { f.local = 1; });
 
 // ================================================================ init

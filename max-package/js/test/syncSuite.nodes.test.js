@@ -32,6 +32,7 @@ function load() {
         return { speaker_coords, num_sources, algorithm, speaker, speaker_weight, source, source_xy, source_azimuth, source_distance,
                  get_source, output_source_position, setSource, bypass_ui,
                  sources_mode, stereo_width, source_stereo_width, spread_focus, mirror_sources, haloRadius,
+                 attenuation, dbap_rolloff_: dbap_rolloff,
                  distance_attenuation, source_distance_attenuation,
                  source_spread, source_blur, dbap_rolloff, dbap_hull, vbap_center_blend,
                  get_gains, get_geometry, speaker_azimuth, speaker_distance, get_speakers, getvalueof, setvalueof, dump,
@@ -1227,6 +1228,65 @@ section("spread_focus");
     api.source(2, 0, 1);
     api.spread_focus(4);
     check(close(g(0)[0], g(1)[0], 1e-12), "spread_focus applies to all sources alike");
+    api.spread_focus(1.6);
+}
+
+
+section("Gain invariants across every feature (randomized)");
+{
+    const api = load();
+    const layouts = [[0, 45, 90, 135, 180, 225, 270, 315], [-30, 30, 0, 110, -110], [-30, 30], [-90, 90], [-45, 45, 135, -135], [0],
+                     [-45, 45, -135, 135, 0, -90, 90, 180], [-30, 30, -150, 150, 0, -90, 90, 180]];
+    let bad = 0, maxGain = 0, powErr = 0, lists = 0;
+    for (let t = 0; t < 6000; t++) {
+        const L = layouts[t % layouts.length];
+        api.speaker_coords(...L);
+        if (rnd() < 0.3) for (let i = 1; i <= L.length; i++) api.speaker(i, L[i - 1] + (rnd() - 0.5) * 20, 0.5 + 0.5 * rnd());
+        if (rnd() < 0.3) for (let i = 1; i <= L.length; i++) api.speaker_weight(i, rnd() < 0.2 ? 0 : rnd() * 2);
+        api.num_sources(3);
+        api.sources_mode(rnd() < 0.5 ? 1 : 0, rnd() < 0.5 ? 1 : 0, 0);
+        api.vbap_center_blend(rnd() < 0.8 ? 1 : 0);
+        api.dbap_hull(rnd() < 0.5 ? 1 : 0);
+        api.dbap_rolloff_(1 + rnd() * 10);
+        api.spread_focus(0.25 + rnd() * 7.75);
+        api.stereo_width(rnd() * 180);
+        api.distance_attenuation(rnd() < 0.5 ? 0 : -rnd() * 24);
+        for (let k = 1; k <= 3; k++) {
+            api.algorithm(k, rnd() < 0.3 ? 1 : 0);
+            // include tiny spreads: with a high focus they once produced NaN
+            api.source_spread(k, rnd() < 0.2 ? 0 : rnd() < 0.2 ? 1 : rnd() < 0.2 ? rnd() * 0.02 : rnd());
+            api.source_blur(k, rnd() * 3);
+            api.source(k, rnd() * 360 - 180, rnd() < 0.1 ? 0 : rnd() < 0.1 ? 1 : rnd());
+            if (rnd() < 0.2) api.source_stereo_width(k, rnd() * 180);
+            if (rnd() < 0.2) api.source_distance_attenuation(k, -rnd() * 20);
+        }
+        if (rnd() < 0.2) api.mirror_sources(1, 2, ["lr", "fb", "point"][t % 3]);
+        const st = api.state();
+        st.gains.forEach((chs, k) => chs.forEach(gc => {
+            lists++;
+            const v = Array.from(gc);
+            if (v.some(x => !Number.isFinite(x) || x < -1e-12)) bad++;
+            maxGain = Math.max(maxGain, ...v.filter(Number.isFinite));
+            const a = api.attenuation(st.src[k]);
+            const pw = v.reduce((q, x) => q + x * x, 0);
+            if (pw > 0) powErr = Math.max(powErr, Math.abs(pw - a * a));
+        }));
+    }
+    check(bad === 0, "no NaN / negative gains in " + lists + " gain lists (got " + bad + ")");
+    check(maxGain <= 1 + 1e-12, "no gain above 1 (0 dB): max " + maxGain);
+    check(powErr < 1e-12, "sum of g^2 = attenuation^2 for every list (worst error " + powErr.toExponential(2) + ")");
+    // the case that broke: tiny spread + high focus
+    api.speaker_coords(-45, 45, 135, -135);
+    api.num_sources(1);
+    api.spread_focus(8);
+    api.source(1, 20, 1);
+    for (const sp of [1e-9, 1e-4, 0.003, 0.02]) {
+        api.source_spread(1, sp);
+        const v = Array.from(api.state().gains[0][0]);
+        check(v.every(Number.isFinite) && close(v.reduce((q, x) => q + x * x, 0), 1, 1e-12), "spread " + sp + " with focus 8: valid, unit power");
+    }
+    api.distance_attenuation(12);
+    check(api.attenuation(api.state().src[0]) === 1, "positive distance_attenuation is clamped to 0 dB (never boosts)");
     api.spread_focus(1.6);
 }
 
