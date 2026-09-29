@@ -31,7 +31,7 @@ function load() {
     const api = new Function(...Object.keys(g), code + `
         return { speaker_coords, num_sources, algorithm, speaker, speaker_weight, source, source_xy, source_azimuth, source_distance,
                  get_source, output_source_position, setSource, bypass_ui,
-                 sources_mode, stereo_width, mirror_sources, haloRadius,
+                 sources_mode, stereo_width, source_stereo_width, mirror_sources, haloRadius,
                  distance_attenuation, source_distance_attenuation,
                  source_spread, source_blur, dbap_rolloff, dbap_hull, vbap_center_blend,
                  get_gains, get_geometry, speaker_azimuth, speaker_distance, get_speakers, getvalueof, setvalueof, dump,
@@ -64,6 +64,14 @@ const RAD = Math.PI / 180;
 const wrap360 = a => ((a % 360) + 360) % 360;
 const azOf = (x, y) => Math.atan2(x - 0.5, 0.5 - y) / RAD;
 
+// random point inside the circular field (radius 0.5 around 0.5, 0.5)
+function rndIn(radius = 0.5) {
+    for (;;) {
+        const x = rnd() * 2 - 1, y = rnd() * 2 - 1;
+        if (x * x + y * y <= 1) return [0.5 + x * radius, 0.5 + y * radius];
+    }
+}
+
 function power(g) { return g.reduce((s, v) => s + v * v, 0); }
 
 function sane(g, label) {
@@ -71,9 +79,9 @@ function sane(g, label) {
     check(g.every(v => v >= -1e-12), label + ": negative gain " + JSON.stringify(Array.from(g)));
 }
 
-// speaker at a normalized x/y position (the object itself takes azimuth + distance)
+// speaker at an x/y position (the object itself takes azimuth + distance 0..1)
 function spkXY(api, i, x, y) {
-    api.speaker(i, Math.atan2(x - 0.5, 0.5 - y) / RAD, Math.hypot(x - 0.5, y - 0.5));
+    api.speaker(i, Math.atan2(x - 0.5, 0.5 - y) / RAD, Math.hypot(x - 0.5, y - 0.5) / 0.5);   // distance: 1 = perimeter
 }
 
 // place speakers at arbitrary x/y
@@ -265,9 +273,9 @@ section("VBAP: groups, centre blend, MDAP smoothness");
     api.speaker_coords(-30, 30, 0, 110, -110);
     api.source_xy(1, 0.5, 0.5);
     check(g().every(v => close(v, 1 / Math.sqrt(5), 1e-12)), "5.0, centre -> 1/sqrt(5) each");
-    // outside the ring the blend is off: pure VBAP
-    api.source(1, 15, 0.45);
-    check(vecClose(g(), refVBAP([-30, 30, 0, 110, -110], 15)), "outside ring -> pure VBAP");
+    // on the ring (the perimeter) the blend is off: pure VBAP
+    api.source(1, 15, 1);
+    check(vecClose(g(), refVBAP([-30, 30, 0, 110, -110], 15)), "on the ring -> pure VBAP");
     // MDAP sampling (1 deg) vs a 0.01 deg MDAP built on the reference VBAP
     api.vbap_center_blend(0);
     let worst = 0;
@@ -306,7 +314,7 @@ section("DBAP: random layouts vs Jamoma j.dbap reference (hull off)");
     for (let trial = 0; trial < 300; trial++) {
         const n = 2 + Math.floor(rnd() * 15);
         const pts = [];
-        for (let i = 0; i < n; i++) pts.push([rnd(), rnd()]);
+        for (let i = 0; i < n; i++) pts.push(rndIn());
         const weights = pts.map(() => (rnd() < 0.2 ? 0 : 0.1 + rnd() * 2));
         if (weights.every(w => w === 0)) weights[0] = 1;
         const rolloff = [6, 3, 4.5, 12, 1][trial % 5];
@@ -315,7 +323,7 @@ section("DBAP: random layouts vs Jamoma j.dbap reference (hull off)");
         api.dbap_rolloff(rolloff);
         for (let s = 0; s < 10; s++) {
             const blur = [0.000001, 0.1, 0.5, 2][s % 4];
-            const sx = rnd(), sy = rnd();
+            const [sx, sy] = rndIn();
             api.source_blur(1, blur);
             api.source_xy(1, sx, sy);
             const got = Array.from(api.state().gains[0][0]);
@@ -416,7 +424,7 @@ section("DBAP: convex hull projection vs brute force");
             }
         }
         for (let s = 0; s < 10; s++) {
-            const sx = rnd(), sy = rnd();
+            const [sx, sy] = rndIn();
             api.source_xy(1, sx, sy);
             const o = api.state().src[0].ch[0];
             // brute force nearest point on the hull polygon boundary
@@ -472,7 +480,7 @@ section("Fuzz: degenerate layouts, both algorithms");
         [[0.3, 0.3], [0.3, 0.3], [0.7, 0.7]],
         [[0.1, 0.5], [0.5, 0.5], [0.9, 0.5]],
         [[0.5, 0.5], [0.9, 0.5]],
-        [[0, 0], [1, 0], [1, 1], [0, 1]],
+        [[0.15, 0.15], [0.85, 0.15], [0.85, 0.85], [0.15, 0.85]],
     ];
     for (const L of layouts) {
         layout(api, L);
@@ -483,8 +491,9 @@ section("Fuzz: degenerate layouts, both algorithms");
                 for (let s = 0; s < 200; s++) {
                     api.source_spread(1, rnd());
                     api.source_blur(1, rnd() < 0.5 ? 0 : rnd() * 3);
-                    const sx = rnd() < 0.2 ? L[0][0] : rnd();
-                    const sy = rnd() < 0.2 ? L[0][1] : rnd();
+                    const [rx, ry] = rndIn();
+                    const sx = rnd() < 0.2 ? L[0][0] : rx;
+                    const sy = rnd() < 0.2 ? L[0][1] : ry;
                     api.source_xy(1, sx, sy);
                     const g = Array.from(api.state().gains[0][0]);
                     sane(g, `alg=${alg} L=${JSON.stringify(L)} src=${sx},${sy}`);
@@ -589,7 +598,7 @@ section("Speaker index = position in the speakers list (never re-sorted)");
             api.algorithm(1, alg);
             api.source_blur(1, 0);
             api.dbap_hull(0);
-            api.source(1, +az, 0.4);
+            api.source(1, +az, 1);
             const v = g();
             check(v[idx] > 0.999 && v.every((x, i) => i === idx || x < 1e-6),
                   `alg ${alg}: source at ${az} deg -> only speaker ${idx + 1} (got ${v.map(x => x.toFixed(3))})`);
@@ -597,7 +606,7 @@ section("Speaker index = position in the speakers list (never re-sorted)");
     }
     api.algorithm(1, 0);
     // between list-speakers 3 (0 deg) and 5 (45 deg): only indices 2 and 4 sound
-    api.source(1, 22.5, 0.4);
+    api.source(1, 22.5, 1);
     const v = g();
     check(close(v[2], Math.SQRT1_2) && close(v[4], Math.SQRT1_2) && v[0] + v[1] + v[3] < 1e-9, "22.5 deg -> speakers 3 and 5 only");
     // get_gains keeps list order, get_speakers too
@@ -605,7 +614,7 @@ section("Speaker index = position in the speakers list (never re-sorted)");
     api.get_gains(1);
     check(vecClose(api.out[0].slice(3), v), "get_gains outputs gains in list order");
     const s = api.state().spk;
-    check(close(s[0].x, 0.9) && close(s[1].x, 0.1) && close(s[3].y, 0.9), "speaker i is placed at the i-th azimuth");
+    check(close(s[0].x, 1) && close(s[1].x, 0) && close(s[3].y, 1), "speaker i is placed at the i-th azimuth, on the perimeter");
     // moving one speaker via "speaker i" does not change anyone's index
     spkXY(api, 2, 0.5, 0.05); // speaker 2 to the front
     api.source(1, 0, 0.45);
@@ -620,13 +629,13 @@ section("Source messages, lazy computation, output_source_position");
     api.speaker_coords(-45, 45, 135, -135);
     api.num_sources(2);
     // source <i> <az> <dist>
-    api.source(1, 90, 0.3);
+    api.source(1, 90, 0.6);
     let o = api.state().src[0];
-    check(close(o.x, 0.8) && close(o.y, 0.5), "source 1 90 0.3 -> x 0.8 y 0.5");
+    check(close(o.x, 0.8) && close(o.y, 0.5), "source 1 90 0.6 -> x 0.8 y 0.5");
     api.out.length = 0;
     api.get_source(1);
     check(api.out.length === 1 && api.out[0][1] === "source" && api.out[0][2] === 1
-          && close(api.out[0][3], 90) && close(api.out[0][4], 0.3), "get_source 1 -> source 1 90 0.3");
+          && close(api.out[0][3], 90) && close(api.out[0][4], 0.6), "get_source 1 -> source 1 90 0.6");
     api.out.length = 0;
     api.get_source();
     check(api.out.length === 2, "get_source -> all sources");
@@ -639,18 +648,20 @@ section("Source messages, lazy computation, output_source_position");
     api.source_azimuth(1, 180);
     o = api.state().src[0];
     check(close(o.x, 0.5) && close(o.y, 0.8), "source_azimuth keeps distance");
-    api.source_distance(1, 0.1);
+    api.source_distance(1, 0.2);
     o = api.state().src[0];
     check(close(o.x, 0.5) && close(o.y, 0.6), "source_distance keeps azimuth");
     // beyond the field: azimuth kept, distance shortened to the edge
     api.source(1, 30, 2);
     api.out.length = 0;
     api.get_source(1);
-    check(close(api.out[0][3], 30, 1e-9) && close(api.out[0][4], 0.5 / Math.cos(30 * RAD), 1e-9), "far source keeps azimuth 30, lands on the edge");
+    check(close(api.out[0][3], 30, 1e-9) && close(api.out[0][4], 1, 1e-9), "distance 2 -> clamped to the perimeter (1), azimuth kept");
     api.source(1, -135, 5);
     api.out.length = 0;
     api.get_source(1);
-    check(close(api.out[0][3], -135, 1e-9) && close(api.out[0][4], Math.SQRT1_2, 1e-9), "far source at -135 lands in the corner");
+    check(close(api.out[0][3], -135, 1e-9) && close(api.out[0][4], 1, 1e-9), "distance 5 at -135 -> on the perimeter, no corners");
+    api.source_xy(1, 0, 0);
+    check(close(Math.hypot(api.state().src[0].x - 0.5, api.state().src[0].y - 0.5), 0.5), "source_xy in a corner -> pulled onto the circle");
     // moving sources computes nothing and outputs nothing
     const st = api.state();
     api.out.length = 0;
@@ -663,8 +674,8 @@ section("Source messages, lazy computation, output_source_position");
     check(api.out.length === 0, "mouse move silent by default");
     api.output_source_position(1);
     api.setSource(0, 0.8, 0.5, true);
-    check(api.out.length === 1 && api.out[0][1] === "source" && close(api.out[0][3], 90) && close(api.out[0][4], 0.3),
-          "output_source_position 1 -> mouse move reports source 1 90 0.3");
+    check(api.out.length === 1 && api.out[0][1] === "source" && close(api.out[0][3], 90) && close(api.out[0][4], 0.6),
+          "output_source_position 1 -> mouse move reports source 1 90 0.6");
     api.out.length = 0;
     api.source(1, 0, 0.2);
     check(api.out.length === 0, "inlet messages never echo, even with output_source_position 1");
@@ -710,23 +721,46 @@ section("Stereo sources");
         r.source(1, az, dist);
         return Array.from(r.state().gains[0][0]);
     };
-    api.source(1, 20, 0.45);
+    api.source(1, 20, 1);                        // full distance: full width
     check(G(0).length === 1, "mono by default: one channel");
     api.sources_mode(1, 0);
     let g = G(0);
     check(g.length === 2 && G(1).length === 1, "sources_mode 1 0 -> source 1 stereo, source 2 mono");
-    check(vecClose(g[0], monoAt(-10, 0.45)) && vecClose(g[1], monoAt(50, 0.45)), "L at az - 30, R at az + 30 (default width 60)");
+    check(vecClose(g[0], monoAt(-10, 1)) && vecClose(g[1], monoAt(50, 1)), "full distance: L at az - 30, R at az + 30 (default max 60)");
     check(g.every(c => close(power(c), 1)), "each channel unit power");
-    api.stereo_width(1, 90);
+    // width scales with distance
+    api.source(1, 20, 0.5);
+    g = G(0);
+    check(vecClose(g[0], monoAt(5, 0.5)) && vecClose(g[1], monoAt(35, 0.5)), "distance 0.5: half the width (L -15, R +15)");
+    api.source(1, 20, 0);
+    g = G(0);
+    check(vecClose(g[0], g[1]), "centre: L and R meet");
+    api.source(1, 20, 1);
+    // per-source maximum
+    api.source_stereo_width(1, 90);
     api.source_spread(1, 40 / 360);
     g = G(0);
-    check(vecClose(g[0], monoAt(-25, 0.45, 40)) && vecClose(g[1], monoAt(65, 0.45, 40)), "width 90 + spread 40 per channel");
-    api.stereo_width(1, 0);
+    check(vecClose(g[0], monoAt(-25, 1, 40)) && vecClose(g[1], monoAt(65, 1, 40)), "source_stereo_width 90 + spread 40 per channel");
+    api.source_stereo_width(1, 0);
     api.source_spread(1, 0);
     g = G(0);
-    check(vecClose(g[0], g[1]) && vecClose(g[0], monoAt(20, 0.45)), "width 0 -> L = R = mono");
-    // output format
+    check(vecClose(g[0], g[1]) && vecClose(g[0], monoAt(20, 1)), "width 0 -> L = R = mono");
+    // global maximum, override kept, override cleared
+    api.source_stereo_width(1);                  // back to the global maximum
+    api.stereo_width(120);
+    g = G(0);
+    check(vecClose(g[0], monoAt(-40, 1)) && vecClose(g[1], monoAt(80, 1)), "stereo_width 120 (global): L -60, R +60 around 20");
+    api.sources_mode(1, 1);
+    api.source(2, 0, 1);
+    api.source_stereo_width(2, 30);
+    api.stereo_width(10);
+    check(vecClose(G(1)[0], monoAt(-15, 1)) && vecClose(G(0)[0], monoAt(15, 1)), "global change keeps source 2's own maximum");
+    api.posts.length = 0;
     api.stereo_width(1, 60);
+    check(api.posts.length === 1, "stereo_width with an index is refused with a hint");
+    api.sources_mode(1, 0);
+    // output format
+    api.stereo_width(60);
     api.out.length = 0;
     api.get_gains();
     const rows = api.out.filter(m => m[0] === 0).map(m => m.slice(1, 3).join(":"));
@@ -842,21 +876,23 @@ section("Spread / blur halo size");
 
 section("Drawing runs without errors (mock mgraphics), selection");
 {
+    const clicks = [];
     const calls = [];
     const mg = new Proxy({ size: [300, 300] }, {
         get: (o, k) => k in o ? o[k] : k === "text_measure" ? () => [20, 9] : (...a) => { calls.push(k); },
         set: (o, k, v) => { o[k] = v; return true; },
     });
     const g = {
-        inlets: 0, outlets: 0, setinletassist() {}, setoutletassist() {}, post() {}, outlet() {},
+        inlets: 0, outlets: 0, setinletassist() {}, setoutletassist() {}, post() {}, outlet: (i, v) => clicks.push([i, ...v]),
         mgraphics: mg, jsarguments: ["x", 0, 0],
     };
     const code = fs.readFileSync(path.join(__dirname, "..", "syncSuite.nodes.js"), "utf8");
     const api = new Function(...Object.keys(g), code + `
-        return { paint, onclick, ondrag, speaker_coords, num_sources, sources_mode, algorithm, source, source_spread,
+        return { paint, onclick, ondrag, output_source_position, distance_attenuation, speaker_coords, num_sources, sources_mode, algorithm, source, source_spread,
                  source_blur, mirror_sources, select_source, fmtDb, edit_speakers, draw_distance, draw_spread,
                  draw_sources, draw_speakers, draw_intensity, bypass_ui, speaker_size, source_size,
-                 readout, readoutRight, levelOf, haloRadius, distance_attenuation, sel: () => selected };`)(...Object.values(g));
+                 readout, readoutRight, levelOf, haloRadius, distance_attenuation, stereo_width, source_stereo_width,
+                 srcs: () => src, sel: () => selected };`)(...Object.values(g));
     api.speaker_coords(-45, 45, 135, -135);
     api.num_sources(3);
     api.sources_mode(0, 1, 0);
@@ -888,20 +924,58 @@ section("Drawing runs without errors (mock mgraphics), selection");
     // selection: default source 1, click selects, select_source, shrinking clamps
     api.bypass_ui(0); api.draw_sources(1); api.edit_speakers(0);
     check(api.sel() === 0, "source 1 selected by default");
-    api.paint();                                   // sets the view: field 280 px at offset 10
+    api.paint();                                   // sets the view: field 264 px at offset 18
     api.source(2, 90, 0.3);                        // stereo source 2 centre at x 0.8
     api.select_source(3);
     check(api.sel() === 2, "select_source 3");
     // click on source 1 (az 0, r 0.3 -> x 0.5, y 0.2)
-    api.onclick(10 + 0.5 * 280, 10 + 0.2 * 280, 1, 0, 0, 0, 0, 0);
+    api.onclick(18 + 0.5 * 264, 18 + 0.2 * 264, 1, 0, 0, 0, 0, 0);
     check(/spread 0\.25/.test(api.readout()), "readout while dragging shows spread: " + api.readout());
     check(!/VBAP|DBAP/.test(api.readout()), "readout has no algorithm");
     check(api.readoutRight() === "distance attenuation 0.0 dB", "bottom right: distance attenuation 0.0 dB");
     api.distance_attenuation(-6);
-    check(api.readoutRight() === "distance attenuation -1.5 dB", "bottom right follows distance: " + api.readoutRight());
+    check(api.readoutRight() === "distance attenuation -2.4 dB", "bottom right follows distance: " + api.readoutRight());
     api.distance_attenuation(0);
-    api.ondrag(10 + 0.5 * 280, 10 + 0.2 * 280, 0);
+    api.ondrag(18 + 0.5 * 264, 18 + 0.2 * 264, 0);
     check(api.sel() === 0, "clicking a source selects it");
+    // a click reports the source only with output_source_position 1
+    check(!clicks.some(m => m[1] === "source"), "click without output_source_position: no output");
+    api.output_source_position(1);
+    clicks.length = 0;
+    api.onclick(18 + 0.5 * 264, 18 + 0.2 * 264, 1, 0, 0, 0, 0, 0);   // click, no drag
+    const names = clicks.map(m => m[1]).join(" ");
+    check(names === "source source_spread source_attenuation", "click -> source, source_spread, source_attenuation: " + names);
+    check(clicks[0][2] === 1 && close(clicks[0][3], 0) && close(clicks[0][4], 0.6), "position: source 1 0 0.6");
+    check(close(clicks[1][3], 0.25), "spread: source_spread 1 0.25");
+    check(clicks[2][3] === 0, "attenuation 0 dB with distance_attenuation 0");
+    api.distance_attenuation(-6);
+    clicks.length = 0;
+    api.onclick(18 + 0.5 * 264, 18 + 0.2 * 264, 1, 0, 0, 0, 0, 0);
+    check(close(clicks[2][3], -2.4), "attenuation follows distance_attenuation (distance 0.6): " + clicks[2][3]);
+    api.ondrag(18 + 0.5 * 264, 18 + 0.2 * 264, 0);
+    api.distance_attenuation(0);
+    // DBAP source also reports its blur
+    api.algorithm(1, 1);
+    api.paint();
+    clicks.length = 0;
+    api.onclick(18 + 0.5 * 264, 18 + 0.2 * 264, 1, 0, 0, 0, 0, 0);
+    check(clicks.map(m => m[1]).join(" ") === "source source_spread source_blur source_attenuation", "DBAP click adds source_blur");
+    api.ondrag(18 + 0.5 * 264, 18 + 0.2 * 264, 0);
+    api.algorithm(1, 0);
+    // speaker click in edit mode
+    api.edit_speakers(1);
+    api.paint();
+    clicks.length = 0;
+    api.onclick(18 + (0.5 + 0.5 * Math.sin(45 * RAD)) * 264, 18 + (0.5 - 0.5 * Math.cos(45 * RAD)) * 264, 1, 0, 0, 0, 0, 0);
+    check(clicks.length === 1 && clicks[0][1] === "speaker" && clicks[0][2] === 2 && close(clicks[0][3], 45) && close(clicks[0][4], 1),
+          "speaker click (edit_speakers 1) -> speaker 2 45 1");
+    api.ondrag(0, 0, 0);
+    api.edit_speakers(0);
+    api.ondrag(18 + 0.5 * 264, 18 + 0.2 * 264, 0);
+    clicks.length = 0;
+    api.onclick(5, 5, 1, 0, 0, 0, 0, 0);                            // empty space
+    check(clicks.length === 0, "click on empty space: no output");
+    api.output_source_position(0);
     api.num_sources(1);
     api.select_source(1);
     api.num_sources(3);
@@ -909,6 +983,27 @@ section("Drawing runs without errors (mock mgraphics), selection");
     api.num_sources(2);
     check(api.sel() === 1, "num_sources below the selection clamps it");
     check(api.fmtDb(1) === "0.0" && api.fmtDb(0.5) === "-6.0" && api.fmtDb(0) === "-inf", "dB formatting");
+    // dragging the L knob of a stereo source: the grabbed knob follows the mouse exactly
+    for (const [dist, maxW] of [[1, 60], [0.5, 90], [0.8, 150]]) {
+        api.num_sources(2);
+        api.sources_mode(0, 1);
+        api.source(2, 40, dist);
+        api.source_stereo_width(2, maxW);
+        api.paint();
+        const L = api.srcs()[1].ch[0];
+        const px = 18 + L.x * 264, py = 18 + L.y * 264;
+        // drag 14 px towards the centre (dragging past the perimeter would be clamped)
+        const len = Math.hypot(0.5 - L.x, 0.5 - L.y) * 264;
+        const dx = (0.5 - L.x) * 264 / len * 14, dy = (0.5 - L.y) * 264 / len * 14;
+        api.onclick(px, py, 1, 0, 0, 0, 0, 0);
+        api.ondrag(px + dx, py + dy, 1);
+        api.paint();
+        const L2 = api.srcs()[1].ch[0];
+        const want = [L.x + dx / 264, L.y + dy / 264];
+        check(close(L2.x, want[0], 1e-9) && close(L2.y, want[1], 1e-9),
+              `drag L knob (distance ${dist}, max width ${maxW}): knob lands under the mouse`);
+        api.ondrag(px + dx, py + dy, 0);
+    }
 }
 
 
@@ -925,14 +1020,17 @@ section("distance_attenuation (global + per source)");
     api.distance_attenuation(-6);
     check(close(dB(pw(0)), -6, 1e-9) && close(dB(pw(2)), -6, 1e-9), "global -6: sources at the centre are -6 dB");
     check(close(dB(pw(1, 0)), -6, 1e-9) && close(dB(pw(1, 1)), -6, 1e-9), "stereo: both channels -6 dB");
-    api.source(1, 30, 0.2);                              // halfway to the ring (rRef 0.4)
+    api.source(1, 30, 0.5);                              // halfway to the ring (the perimeter)
     check(close(dB(pw(0)), -3, 1e-9), "halfway: -3 dB (linear in dB)");
+    api.source(1, 30, 1);
+    check(close(dB(pw(0)), 0, 1e-9), "on the ring (perimeter): 0 dB");
+    for (let i = 1; i <= 8; i++) api.speaker_distance(i, 0.8);   // pull the speakers in
+    check(close(dB(pw(0)), 0, 1e-9), "outside the (pulled-in) ring: 0 dB");
     api.source(1, 30, 0.4);
-    check(close(dB(pw(0)), 0, 1e-9), "on the ring: 0 dB");
-    api.source(1, 30, 0.6);
-    check(close(dB(pw(0)), 0, 1e-9), "outside the ring: 0 dB");
+    check(close(dB(pw(0)), -3, 1e-9), "halfway to a ring at 0.8: -3 dB");
+    for (let i = 1; i <= 8; i++) api.speaker_distance(i, 1);
     // on a speaker at the ring: that speaker at exactly 0 dB
-    api.source(1, 45, 0.4);
+    api.source(1, 45, 1);
     check(close(api.state().gains[0][0][1], 1, 1e-12), "source on a speaker -> 0 dB on it");
     // per-source override survives global changes
     api.source(1, 0, 0);
@@ -948,8 +1046,8 @@ section("distance_attenuation (global + per source)");
     // continuity across the ring
     api.algorithm(3, 0);
     let prev = null, jump = 0;
-    for (let r = 0; r <= 0.5; r += 0.001) { api.source(3, 10, r); const v = dB(pw(2)); if (prev !== null) jump = Math.max(jump, Math.abs(v - prev)); prev = v; }
-    check(jump < 0.05, "level is continuous from centre to outside the ring (max step " + jump.toFixed(4) + " dB)");
+    for (let r = 0; r <= 1; r += 0.002) { api.source(3, 10, r); const v = dB(pw(2)); if (prev !== null) jump = Math.max(jump, Math.abs(v - prev)); prev = v; }
+    check(jump < 0.05, "level is continuous from the centre to the perimeter (max step " + jump.toFixed(4) + " dB)");
     // state + dump
     api.source_distance_attenuation(2, -9);
     const v = api.getvalueof();
@@ -969,16 +1067,16 @@ section("Speakers in azimuths: speaker_coords, speaker, get_speakers");
     const api = load();
     api.speaker_coords(-30, 30, 110, -110);
     api.num_sources(1);
-    api.speaker(2, 90);                  // default distance: the ring
+    api.speaker(2, 90);                  // default distance: the perimeter (1)
     let o = api.state().spk[1];
-    check(close(o.x, 0.9) && close(o.y, 0.5), "speaker 2 90 -> on the ring at 90 deg");
-    api.speaker(3, 180, 0.2);
+    check(close(o.x, 1) && close(o.y, 0.5), "speaker 2 90 -> on the perimeter at 90 deg");
+    api.speaker(3, 180, 0.4);
     o = api.state().spk[2];
-    check(close(o.x, 0.5) && close(o.y, 0.7), "speaker 3 180 0.2 -> behind, closer");
+    check(close(o.x, 0.5) && close(o.y, 0.7), "speaker 3 180 0.4 -> behind, closer");
     api.speaker_azimuth(3, 0);
     o = api.state().spk[2];
     check(close(o.x, 0.5) && close(o.y, 0.3), "speaker_azimuth keeps the distance");
-    api.speaker_distance(3, 0.4);
+    api.speaker_distance(3, 0.8);
     o = api.state().spk[2];
     check(close(o.x, 0.5) && close(o.y, 0.1), "speaker_distance keeps the azimuth");
     api.out.length = 0;
@@ -991,11 +1089,11 @@ section("Speakers in azimuths: speaker_coords, speaker, get_speakers");
     const b = load();
     b.num_sources(1);
     b.speaker_coords(...m.slice(2));
-    check(b.state().spk.length === 4 && close(b.state().spk[1].x, 0.9), "speaker_coords round-trips");
+    check(b.state().spk.length === 4 && close(b.state().spk[1].x, 1), "speaker_coords round-trips");
     api.out.length = 0;
     api.dump();
     const sp = api.out.find(x => x[1] === "speaker" && x[2] === 3);
-    check(sp && close(sp[3], 0) && close(sp[4], 0.4), "dump reports speaker <i> <az> <dist>");
+    check(sp && close(sp[3], 0) && close(sp[4], 0.8), "dump reports speaker <i> <az> <dist> (0..1)");
 }
 
 section("State round-trip");
@@ -1009,7 +1107,8 @@ section("State round-trip");
     a.speaker_weight(3, 0.5);
     a.source_xy(3, 0.1, 0.9);
     a.sources_mode(0, 1, 0);
-    a.stereo_width(2, 80);
+    a.source_stereo_width(2, 80);
+    a.stereo_width(45);
     a.mirror_sources(1, 3, "fb");
     const v = a.getvalueof();
     const b = load();

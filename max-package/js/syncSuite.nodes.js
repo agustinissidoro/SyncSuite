@@ -13,8 +13,10 @@
  * speakers and 4 sources; as a plain [v8ui syncSuite.nodes.js <speakers>
  * <sources>] the counts can also be given as arguments.
  *
- * Space: normalized 0..1 on both axes, same as [nodes]: (0, 0) = top-left,
- * y grows downwards, listener at the centre (0.5, 0.5). Front = up.
+ * Space: a circular field, listener at the centre, speakers on its perimeter
+ * by default. Positions are azimuth + distance: distance 0 = centre, 1 = the
+ * perimeter (the speaker circle); nothing can go outside it. Front = up.
+ * (source_xy uses x/y 0..1 with the centre at 0.5 0.5, y down.)
  * Indices are 1-based everywhere. Speaker i is always the i-th value of the
  * "speaker_coords" list, and gain i is always for that speaker, whatever the
  * layout: the list is never re-ordered (VBAP sorts by azimuth only
@@ -54,9 +56,12 @@
  *   reported as hull_distance.
  *
  * Mono / stereo sources (sources_mode, default all mono): a stereo source has
- * two channels, L and R, placed at azimuth -/+ stereo_width/2 around the
- * source's centre, at the same distance (width as seen from the listener,
- * default 60 deg). L and R are always linked: moving either moves the
+ * two channels, L and R, placed at azimuth -/+ width/2 around the source's
+ * centre, at the same distance (width as seen from the listener). The width
+ * grows with distance: width = maximum width x distance, so a source on the
+ * perimeter is at the full width and L and R meet at the centre. The maximum
+ * is stereo_width (global, default 60 deg) or the source's own
+ * source_stereo_width. L and R are always linked: moving either moves the
  * source. Each channel is panned on its own at unit power, with the
  * source's algorithm, spread and blur. Channel 1 = mono or L, 2 = R.
  *
@@ -91,7 +96,8 @@
  *                    source <i> <az> <dist>   (mouse: only with output_source_position 1)
  *                    source_spread <i> <0..1> source_blur <i> <v>
  *                    speaker <i> <az> <dist>
- *                    stereo_width <i> <deg>
+ *                    source_stereo_width <i> <deg>   (shift-drag)
+ *                    source_attenuation <i> <dB>   (click, information only)
  *                    dump also: algorithm, sources_mode, mirror_sources, speaker_weight
  *                    get_speakers: speaker_coords <az1> <az2> ...
  *                                  (same message syncSuite.virtualspeakers~ takes)
@@ -102,8 +108,8 @@
  *   speakers
  *     speaker_coords <deg1> <deg2> ...   the layout: one speaker per azimuth
  *                                     (0 = front, clockwise), on a ring
- *     speaker <i> <az> [dist]         move one speaker (distance from the centre,
- *                                     default the ring, 0.4)
+ *     speaker <i> <az> [dist]         move one speaker (distance 0..1, default 1 =
+ *                                     the perimeter)
  *     speaker_azimuth | speaker_distance <i> <v>
  *     speaker_weight [i] <w>          DBAP speaker weight
  *   sources
@@ -115,9 +121,13 @@
  *     source <i> <az> <dist>          azimuth (deg) + distance from the centre
  *     source_azimuth | source_distance <i> <v>
  *     source_xy <i> <x> <y>           normalized x/y
- *     (polar positions beyond the field are pulled in along their ray, so the
- *     azimuth is kept and only the distance shortens)
- *     stereo_width [i] <deg>          L/R angle of stereo sources (0..180, default 60)
+ *     (distance 0 = centre, 1 = perimeter; larger values, and x/y outside the
+ *     circle, are pulled onto the perimeter keeping the azimuth)
+ *     stereo_width <deg>              maximum L/R angle of stereo sources, reached at
+ *                                     full distance (0..180, default 60); narrower
+ *                                     towards the centre (width x distance)
+ *     source_stereo_width <i> [deg]   per-source maximum; without a value the
+ *                                     source follows stereo_width again
  *     mirror_sources <a> <b> [lr|fb|point]   link b as a's mirror (b jumps to it)
  *     mirror_sources <a>              unlink a (and its partner)
  *     mirror_sources                  unlink all
@@ -139,7 +149,12 @@
  *     get_source [i]                  -> out 2: source <i> <az> <dist>
  *     get_geometry [i]                -> out 1, per geometry polar|cartesian, format pair|list
  *     get_speakers | dump             -> out 2
- *     output_source_position <0|1>    report mouse moves on out 2 (default 0)
+ *     output_source_position <0|1>    report mouse edits on out 2 (default 0): dragging a
+ *                                     source sends source <i> <az> <dist>; clicking one
+ *                                     also sends source_spread (+ source_blur for DBAP)
+ *                                     and source_attenuation <i> <dB> (distance
+ *                                     attenuation applied now; information only);
+ *                                     clicking a speaker (edit_speakers 1) sends speaker
  *   UI
  *     edit_speakers <0|1>             unlock speakers for mouse editing
  *     draw_distance | draw_spread | draw_sources | draw_speakers <0|1>
@@ -150,7 +165,7 @@
  *     bypass_ui <0|1>                 stop drawing (gains still available)
  *
  * Mouse: drag = move source (either knob of a stereo pair), cmd-drag =
- *        spread (VBAP) or blur (DBAP), shift-drag = stereo_width, both up/down.
+ *        spread (VBAP) or blur (DBAP), shift-drag = source_stereo_width, both up/down.
  *        With edit_speakers 1: drag speaker = move.
  *        Spread and blur are drawn as a halo around the source.
  *
@@ -160,10 +175,10 @@
 
 inlets = 1;
 outlets = 3;
-setinletassist(0, "get_gains, speakers, num_sources, sources_mode, source*, speaker*, stereo_width, mirror_sources, algorithm, dbap_*, vbap_*, get_*, draw_*, edit_speakers, bypass_ui, dump");
+setinletassist(0, "get_gains, speaker_coords, num_sources, sources_mode, source*, speaker*, stereo_width, mirror_sources, algorithm, dbap_*, vbap_*, get_*, draw_*, edit_speakers, bypass_ui, dump");
 setoutletassist(0, "gains (get_gains): <source> <channel> <g1> ... <gN>");
 setoutletassist(1, "analysis: hull_distance <source> <channel> <d> (get_gains) | geometry (get_geometry)");
-setoutletassist(2, "state (get_source, get_speakers, dump, mouse edits): source <i> <az> <dist>, source_spread, source_blur, stereo_width, speaker <i> <az> <dist>, speaker_coords <az...>");
+setoutletassist(2, "state (get_source, get_speakers, dump, mouse edits): source <i> <az> <dist>, source_spread, source_blur, source_stereo_width, speaker <i> <az> <dist>, speaker_coords <az...>");
 
 mgraphics.init();
 mgraphics.relative_coords = 0;
@@ -173,8 +188,9 @@ const EPS = 1e-6;
 const RAD = Math.PI / 180;
 const CX = 0.5;
 const CY = 0.5;
-const SPK_RING = 0.4;
-const SRC_RING = 0.3;
+const FIELD_R = 0.5;        // the field is a circle of this radius (x/y units); distance 1 = its perimeter
+const SPK_RING = FIELD_R;   // speakers sit on the perimeter by default
+const SRC_RING = 0.3;       // new sources: distance 0.6
 const VBAP = 0;
 const DBAP = 1;
 const WIDE_SPAN = 170;      // deg; wider VBAP pairs use a constant-power crossfade
@@ -188,7 +204,7 @@ const MIRROR_MODES = ["lr", "fb", "point"];
 const DEFAULT_ROLLOFF = 6;  // dB per doubling of distance (inverse distance law)
 
 let spk = [];               // {x, y, weight, az}
-let src = [];               // {x, y, algorithm, spread, blur, stereo, stereoWidth, mirror, mirrorMode, ch, dirty}
+let src = [];               // {x, y, algorithm, spread, blur, stereo, stereoWidth (null = global), mirror, mirrorMode, ch, dirty}
                             // ch: channels [{x, y, px, py, hullDist}], 1 (mono) or 2 (L, R)
 let gains = [];             // per source, per channel: Float64Array(spk.length)
 let dia = new Float64Array(0); // DBAP scratch: d_i^a
@@ -206,6 +222,7 @@ let dbapA = rolloffToA(DEFAULT_ROLLOFF);
 let dbapHull = 1;
 let vbapCenterBlend = 1;
 let distAtten = 0;          // dB at the centre, for sources without their own value
+let stereoWidthMax = DEFAULT_STEREO_WIDTH;   // deg at full distance, for sources without their own value
 
 const flags = {
     edit_speakers: 0,
@@ -224,24 +241,30 @@ let outputSourcePosition = 0;
 // ================================================================ helpers
 
 function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
-function clampPos(v) { return clamp(+v || 0, 0, 1); }
+// x/y kept inside the circular field: points beyond it move onto the perimeter
+// along their ray from the centre (azimuth kept)
+function clampToField(x, y) {
+    x = +x || 0;
+    y = +y || 0;
+    const r = radiusOf(x, y);
+    if (r <= FIELD_R) return [x, y];
+    const k = FIELD_R / r;
+    return [CX + (x - CX) * k, CY + (y - CY) * k];
+}
 function wrap360(a) { a %= 360; return a < 0 ? a + 360 : a; }
 function azOf(x, y) { return Math.atan2(x - CX, CY - y) / RAD; }
 function radiusOf(x, y) { return Math.sqrt((x - CX) ** 2 + (y - CY) ** 2); }
 function rolloffToA(R) { return R / (20 * Math.log10(2)); }
 
-// polar around the centre -> normalized x/y (y down, 0 deg = up); a point
-// beyond the field is pulled in along its ray, so the azimuth is kept
+// polar around the centre (distance in x/y units) -> x/y, kept inside the field
 function polarToXY(az, dist) {
-    dist = Math.max(0, +dist || 0);
-    const dx = dist * Math.sin((+az || 0) * RAD);
-    const dy = -dist * Math.cos((+az || 0) * RAD);
-    let s = 1;
-    if (Math.abs(dx) > 0.5) s = Math.min(s, 0.5 / Math.abs(dx));
-    if (Math.abs(dy) > 0.5) s = Math.min(s, 0.5 / Math.abs(dy));
-    return [clampPos(CX + dx * s), clampPos(CY + dy * s)];
+    const r = clamp(+dist || 0, 0, FIELD_R);
+    return [CX + r * Math.sin((+az || 0) * RAD), CY - r * Math.cos((+az || 0) * RAD)];
 }
 
+// public distances are normalized: 0 = centre, 1 = perimeter
+function toNorm(r) { return r / FIELD_R; }
+function fromNorm(d) { return (+d || 0) * FIELD_R; }
 // default ring straddles the front: 2 = L/R, 4 = quad, 8 = octagon
 function ringDegrees(n) {
     const out = [];
@@ -264,7 +287,7 @@ function newSpeaker(x, y, weight) {
 }
 
 function newSource(x, y) {
-    return { x, y, algorithm: VBAP, spread: 0, blur: 0, stereo: 0, stereoWidth: DEFAULT_STEREO_WIDTH,
+    return { x, y, algorithm: VBAP, spread: 0, blur: 0, stereo: 0, stereoWidth: null,
              mirror: -1, mirrorMode: 0, distAtten: null, ch: [], dirty: true };
 }
 
@@ -280,9 +303,16 @@ function updateChannels(o) {
     }
     const az = azOf(o.x, o.y);
     const r = radiusOf(o.x, o.y);
-    o.ch = [newChannel(...polarToXY(az - o.stereoWidth / 2, r)),
-            newChannel(...polarToXY(az + o.stereoWidth / 2, r))];
+    const w = stereoWidthAt(o, r);
+    o.ch = [newChannel(...polarToXY(az - w / 2, r)),
+            newChannel(...polarToXY(az + w / 2, r))];
 }
+
+// maximum stereo width of a source (deg, reached at full distance)
+function maxStereoWidth(o) { return o.stereoWidth === null ? stereoWidthMax : o.stereoWidth; }
+
+// stereo width at radius r (x/y units): maximum x distance (0 centre .. 1 perimeter)
+function stereoWidthAt(o, r) { return maxStereoWidth(o) * clamp(r / FIELD_R, 0, 1); }
 
 // position of b mirroring a
 function mirrorXY(x, y, mode) {
@@ -437,8 +467,8 @@ function checkLayout() {
             spk.forEach((o, i) => {
                 const r = radiusOf(o.x, o.y);
                 if (r < CENTRE_EPS || Math.abs(r - rRef) / rRef <= DIST_TOLERANCE) return;
-                found.set("dist:" + i, "speaker " + (i + 1) + " is at distance " + r.toFixed(3) + " from the centre, while the average is "
-                    + rRef.toFixed(3) + ". VBAP assumes all speakers are equally far from the listener: only its direction ("
+                found.set("dist:" + i, "speaker " + (i + 1) + " is at distance " + toNorm(r).toFixed(2) + " from the centre, while the average is "
+                    + toNorm(rRef).toFixed(2) + ". VBAP assumes all speakers are equally far from the listener: only its direction ("
                     + fmtAz(o.az) + ") is used and the distance is ignored (no level or delay compensation). "
                     + "Place speakers at equal distance for accurate VBAP.");
             });
@@ -616,8 +646,8 @@ function perSource(args, fn) {
 function pair(k, s) {
     const dx = src[k].x - spk[s].x;
     const dy = src[k].y - spk[s].y;
-    if (geomMode === "cartesian") return [dx, dy];
-    return [Math.atan2(dx, -dy) / RAD, Math.sqrt(dx * dx + dy * dy)];
+    if (geomMode === "cartesian") return [toNorm(dx), toNorm(dy)];
+    return [Math.atan2(dx, -dy) / RAD, toNorm(Math.sqrt(dx * dx + dy * dy))];
 }
 
 function emitGeometry(k) {
@@ -638,12 +668,12 @@ function changed(fromMouse) {
 
 function speakerPolar(s) {
     const o = spk[s];
-    return [azOf(o.x, o.y), radiusOf(o.x, o.y)];
+    return [azOf(o.x, o.y), toNorm(radiusOf(o.x, o.y))];
 }
 
 function sourcePolar(k) {
     const o = src[k];
-    return [azOf(o.x, o.y), radiusOf(o.x, o.y)];
+    return [azOf(o.x, o.y), toNorm(radiusOf(o.x, o.y))];
 }
 
 // ================================================================ state setters
@@ -660,8 +690,7 @@ function place(k, x, y) {
 
 // moves a source and its mirror partner
 function setSource(k, x, y, fromMouse) {
-    x = clampPos(x);
-    y = clampPos(y);
+    [x, y] = clampToField(x, y);
     if (!place(k, x, y)) return;
     const o = src[k];
     const m = o.mirror;
@@ -674,7 +703,7 @@ function setSource(k, x, y, fromMouse) {
 }
 
 // state messages for parameters the mouse can change
-const PARAM_MESSAGE = { spread: "source_spread", blur: "source_blur", stereoWidth: "stereo_width" };
+const PARAM_MESSAGE = { spread: "source_spread", blur: "source_blur", stereoWidth: "source_stereo_width" };
 
 // field = "spread" | "blur" | "algorithm" | "stereo" | "stereoWidth"
 function setSourceParam(k, field, v, fromMouse) {
@@ -684,7 +713,7 @@ function setSourceParam(k, field, v, fromMouse) {
     else if (field === "stereoWidth") v = clamp(+v || 0, 0, 180);
     else if (field === "stereo") v = v ? 1 : 0;
     else v = Math.floor(v) === DBAP ? DBAP : VBAP;
-    if (Math.abs(o[field] - v) < EPS) return;
+    if (o[field] !== null && Math.abs(o[field] - v) < EPS) return;
     o[field] = v;
     o.dirty = true;
     if (field === "algorithm") checkLayout();
@@ -699,8 +728,7 @@ function unmirror(k) {
 }
 
 function setSpeaker(s, x, y, fromMouse) {
-    x = clampPos(x);
-    y = clampPos(y);
+    [x, y] = clampToField(x, y);
     const o = spk[s];
     if (Math.abs(o.x - x) < EPS && Math.abs(o.y - y) < EPS) return;
     o.x = x;
@@ -757,7 +785,7 @@ function algorithm(...a) { perItem(a, src, "source", (k, v) => setSourceParam(k,
 
 function speaker(i, az, dist) {
     const s = index(i, spk, "speaker");
-    if (s >= 0) setSpeaker(s, ...polarToXY(az, dist === undefined ? SPK_RING : dist), false);
+    if (s >= 0) setSpeaker(s, ...polarToXY(az, dist === undefined ? SPK_RING : fromNorm(dist)), false);
 }
 function speaker_azimuth(i, az) {
     const s = index(i, spk, "speaker");
@@ -765,13 +793,13 @@ function speaker_azimuth(i, az) {
 }
 function speaker_distance(i, dist) {
     const s = index(i, spk, "speaker");
-    if (s >= 0) setSpeaker(s, ...polarToXY(azOf(spk[s].x, spk[s].y), dist), false);
+    if (s >= 0) setSpeaker(s, ...polarToXY(azOf(spk[s].x, spk[s].y), fromNorm(dist)), false);
 }
 function speaker_weight(...a) { perItem(a, spk, "speaker", setWeight); }
 
 function source(i, az, dist) {
     const k = index(i, src, "source");
-    if (k >= 0) setSource(k, ...polarToXY(az, dist), false);
+    if (k >= 0) setSource(k, ...polarToXY(az, fromNorm(dist)), false);
 }
 function source_azimuth(i, az) {
     const k = index(i, src, "source");
@@ -779,7 +807,7 @@ function source_azimuth(i, az) {
 }
 function source_distance(i, dist) {
     const k = index(i, src, "source");
-    if (k >= 0) setSource(k, ...polarToXY(azOf(src[k].x, src[k].y), dist), false);
+    if (k >= 0) setSource(k, ...polarToXY(azOf(src[k].x, src[k].y), fromNorm(dist)), false);
 }
 function source_xy(i, x, y) { const k = index(i, src, "source"); if (k >= 0) setSource(k, x, y, false); }
 function get_source(...a) { perSource(a, k => outlet(2, ["source", k + 1, ...sourcePolar(k)])); }
@@ -794,7 +822,27 @@ function sources_mode(...flags) {
     const n = Math.min(flags.length, src.length);
     for (let k = 0; k < n; k++) setSourceParam(k, "stereo", flags[k], false);
 }
-function stereo_width(...a) { perItem(a, src, "source", (k, v) => setSourceParam(k, "stereoWidth", v, false)); }
+function stereo_width(...a) {
+    if (a.length !== 1) {
+        post("syncSuite.nodes: stereo_width takes one value (the maximum for all sources); use source_stereo_width <i> <deg> for one source\n");
+        return;
+    }
+    stereoWidthMax = clamp(+a[0] || 0, 0, 180);
+    for (const o of src) if (o.stereo && o.stereoWidth === null) o.dirty = true;
+    changed();
+}
+
+function source_stereo_width(i, deg) {
+    const k = index(i, src, "source");
+    if (k < 0) return;
+    if (deg === undefined) {
+        src[k].stereoWidth = null;
+        src[k].dirty = true;
+        changed();
+    } else {
+        setSourceParam(k, "stereoWidth", deg, false);
+    }
+}
 
 function mirror_sources(...a) {
     if (a.length === 0) {
@@ -910,6 +958,7 @@ function get_speakers() {
 
 function dump() {
     outlet(2, ["distance_attenuation", distAtten]);
+    outlet(2, ["stereo_width", stereoWidthMax]);
     spk.forEach((o, i) => {
         outlet(2, ["speaker", i + 1, ...speakerPolar(i)]);
         outlet(2, ["speaker_weight", i + 1, o.weight]);
@@ -920,7 +969,7 @@ function dump() {
         outlet(2, ["algorithm", i + 1, o.algorithm]);
         outlet(2, ["source_spread", i + 1, o.spread]);
         outlet(2, ["source_blur", i + 1, o.blur]);
-        outlet(2, ["stereo_width", i + 1, o.stereoWidth]);
+        if (o.stereoWidth !== null) outlet(2, ["source_stereo_width", i + 1, o.stereoWidth]);
         if (o.distAtten !== null) outlet(2, ["source_distance_attenuation", i + 1, o.distAtten]);
         if (o.mirror > i) outlet(2, ["mirror_sources", i + 1, o.mirror + 1, MIRROR_MODES[o.mirrorMode]]);
     });
@@ -928,16 +977,18 @@ function dump() {
 
 // ================================================================ pattr / embedding
 
-const STATE_VERSION = 6;
-const SRC_FIELDS = 11;
+const STATE_VERSION = 7;
+const SRC_FIELDS = 12;
 
 // flat: <version> <nspk> <nsrc> [x y weight]*nspk
-//       [x y algorithm spread blur stereo stereoWidth mirror(1-based, 0 = none) mirrorMode
-//        hasOwnAttenuation attenuation]*nsrc
+//       [x y algorithm spread blur stereo hasOwnStereoWidth stereoWidth mirror(1-based, 0 = none)
+//        mirrorMode hasOwnAttenuation attenuation]*nsrc
 function getvalueof() {
     const v = [STATE_VERSION, spk.length, src.length];
     spk.forEach(o => v.push(o.x, o.y, o.weight));
-    src.forEach(o => v.push(o.x, o.y, o.algorithm, o.spread, o.blur, o.stereo, o.stereoWidth, o.mirror + 1, o.mirrorMode,
+    src.forEach(o => v.push(o.x, o.y, o.algorithm, o.spread, o.blur, o.stereo,
+                            o.stereoWidth === null ? 0 : 1, o.stereoWidth === null ? 0 : o.stereoWidth,
+                            o.mirror + 1, o.mirrorMode,
                             o.distAtten === null ? 0 : 1, o.distAtten === null ? 0 : o.distAtten));
     return v;
 }
@@ -957,11 +1008,11 @@ function setvalueof(...v) {
         o.spread = v[p + 3];
         o.blur = v[p + 4];
         o.stereo = v[p + 5] ? 1 : 0;
-        o.stereoWidth = v[p + 6];
-        const m = Math.floor(v[p + 7]) - 1;
+        o.stereoWidth = v[p + 6] ? clamp(+v[p + 7] || 0, 0, 180) : null;
+        const m = Math.floor(v[p + 8]) - 1;
         o.mirror = m >= 0 && m < nk && m !== i ? m : -1;
-        o.mirrorMode = clamp(Math.floor(v[p + 8]) || 0, 0, 2);
-        o.distAtten = v[p + 9] ? clampDb(v[p + 10]) : null;
+        o.mirrorMode = clamp(Math.floor(v[p + 9]) || 0, 0, 2);
+        o.distAtten = v[p + 10] ? clampDb(v[p + 11]) : null;
         src.push(o);
     }
     rebuildLayout();
@@ -974,6 +1025,7 @@ function save() {
     embedmessage("dbap_hull", dbapHull);
     embedmessage("vbap_center_blend", vbapCenterBlend);
     embedmessage("distance_attenuation", distAtten);
+    embedmessage("stereo_width", stereoWidthMax);
     embedmessage("output_source_position", outputSourcePosition);
     embedmessage("setvalueof", ...getvalueof());
     for (const name in flags) embedmessage(name, flags[name]);
@@ -985,7 +1037,7 @@ function save() {
 
 // ================================================================ mouse
 
-const PAD = 10;
+const PAD = 18;             // speakers sit on the perimeter: leave room for them and their glow
 let knobR = 8;              // source knob radius, px (source_size = diameter)
 const HALO_MAX = 0.2;       // VBAP halo radius at spread 1, in field units
 let spkR = 7;               // speaker half-width, px (speaker_size = width)
@@ -999,6 +1051,17 @@ function toScreen(x, y) { return [view.x0 + x * view.side, view.y0 + y * view.si
 function toWorld(px, py) { return [(px - view.x0) / view.side, (py - view.y0) / view.side]; }
 
 // top-most speaker under the mouse, or -1
+// on click (output_source_position 1): position, spread (blur for DBAP) and
+// the distance attenuation currently applied, in dB
+function reportSource(k) {
+    const o = src[k];
+    outlet(2, ["source", k + 1, ...sourcePolar(k)]);
+    outlet(2, ["source_spread", k + 1, o.spread]);
+    if (o.algorithm === DBAP) outlet(2, ["source_blur", k + 1, o.blur]);
+    const a = attenuation(o);
+    outlet(2, ["source_attenuation", k + 1, a === 1 ? 0 : 20 * Math.log10(a)]);
+}
+
 function hitSpeaker(px, py) {
     const r = spkR + 3;
     for (let s = spk.length - 1; s >= 0; s--) {
@@ -1028,16 +1091,20 @@ function onclick(x, y, but, cmd, shift, capslock, option, ctrl) {
     const [wx, wy] = toWorld(x, y);
     if (flags.edit_speakers && flags.draw_speakers) {
         const s = hitSpeaker(x, y);
-        if (s >= 0) drag = { kind: "speaker", i: s, ox: spk[s].x - wx, oy: spk[s].y - wy };
+        if (s >= 0) {
+            drag = { kind: "speaker", i: s, ox: spk[s].x - wx, oy: spk[s].y - wy };
+            if (outputSourcePosition) outlet(2, ["speaker", s + 1, ...speakerPolar(s)]);
+        }
     }
     if (!drag && flags.draw_sources) {
         const [k, j] = hitChannel(x, y);
         if (k >= 0) {
             selected = k;
+            if (outputSourcePosition) reportSource(k);   // clicked, even without moving
             const o = src[k];
             const c = o.ch[j];
             if (cmd) drag = { kind: "width", i: k, py: y, v0: o.algorithm === DBAP ? o.blur : o.spread };
-            else if (shift && o.stereo) drag = { kind: "stereo", i: k, py: y, v0: o.stereoWidth };
+            else if (shift && o.stereo) drag = { kind: "stereo", i: k, py: y, v0: maxStereoWidth(o) };
             else drag = { kind: "source", i: k, j, stereo: o.stereo, ox: c.x - wx, oy: c.y - wy };
         }
     }
@@ -1061,7 +1128,7 @@ function ondrag(x, y, but) {
             if (!drag.stereo) {
                 setSource(i, tx, ty, true);
             } else {
-                const half = src[i].stereoWidth / 2;
+                const half = stereoWidthAt(src[i], Math.min(radiusOf(tx, ty), FIELD_R)) / 2;
                 const az = azOf(tx, ty) + (drag.j === 0 ? half : -half);
                 setSource(i, ...polarToXY(az, radiusOf(tx, ty)), true);
             }
@@ -1143,11 +1210,15 @@ function readout() {
         case "source": {
             const o = src[i];
             return "source " + (i + 1) + (o.stereo ? " stereo" : "")
-                + "   az " + azOf(o.x, o.y).toFixed(1) + "\u00b0   r " + radiusOf(o.x, o.y).toFixed(3)
+                + "   az " + azOf(o.x, o.y).toFixed(1) + "\u00b0   distance " + toNorm(radiusOf(o.x, o.y)).toFixed(2)
                 + (o.algorithm === DBAP ? "   blur " + o.blur.toFixed(2) : "   spread " + o.spread.toFixed(2))
                 + (o.mirror >= 0 ? "   mirror " + (o.mirror + 1) + " (" + MIRROR_MODES[o.mirrorMode] + ")" : "");
         }
-        case "stereo": return "source " + (i + 1) + "   stereo width " + src[i].stereoWidth.toFixed(0) + "\u00b0";
+        case "stereo": {
+            const o = src[i];
+            return "source " + (i + 1) + "   stereo width " + maxStereoWidth(o).toFixed(0) + "\u00b0 at full distance, "
+                + stereoWidthAt(o, radiusOf(o.x, o.y)).toFixed(0) + "\u00b0 here";
+        }
         case "width": {
             const o = src[i];
             return o.algorithm === DBAP
@@ -1156,7 +1227,7 @@ function readout() {
         }
         case "speaker": {
             const o = spk[i];
-            return "speaker " + (i + 1) + "   az " + azOf(o.x, o.y).toFixed(1) + "\u00b0   r " + radiusOf(o.x, o.y).toFixed(3);
+            return "speaker " + (i + 1) + "   az " + azOf(o.x, o.y).toFixed(1) + "\u00b0   distance " + toNorm(radiusOf(o.x, o.y)).toFixed(2);
         }
     }
     return "";
@@ -1197,25 +1268,31 @@ function paint() {
     const anyDBAP = src.some(o => o.algorithm === DBAP);
     const anyVBAP = src.some(o => o.algorithm === VBAP);
 
-    // field + grid
+    // circular field: rings at distance 0.25 / 0.5 / 0.75, cross through the centre
+    const fr = FIELD_R * side;
     rgba(C.field);
-    roundRect(x0, y0, side, side, 6);
+    circle(cx, cy, fr);
     g.fill();
     g.set_line_width(1);
     rgba(C.line, 0.045);
     for (let i = 1; i < 4; i++) {
-        const p = Math.round(x0 + (side * i) / 4) + 0.5;
-        const q = Math.round(y0 + (side * i) / 4) + 0.5;
-        g.move_to(p, y0 + 1); g.line_to(p, y0 + side - 1);
-        g.move_to(x0 + 1, q); g.line_to(x0 + side - 1, q);
+        circle(cx, cy, (fr * i) / 4);
+        g.stroke();
     }
+    g.move_to(cx - fr, cy); g.line_to(cx + fr, cy);
+    g.move_to(cx, cy - fr); g.line_to(cx, cy + fr);
+    g.stroke();
+    rgba(C.line, 0.12);
+    circle(cx, cy, fr);
     g.stroke();
 
-    // VBAP reference ring + listener
+    // VBAP reference ring (when the speakers are not on the perimeter) + listener
     if (anyVBAP) {
-        rgba(C.line, 0.08);
-        circle(cx, cy, rRef * side);
-        g.stroke();
+        if (Math.abs(rRef - FIELD_R) > 1e-3) {
+            rgba(C.line, 0.08);
+            circle(cx, cy, rRef * side);
+            g.stroke();
+        }
         rgba(C.dim);
         g.move_to(cx, cy - 5); g.line_to(cx + 4, cy + 3); g.line_to(cx - 4, cy + 3);
         g.close_path();
@@ -1322,7 +1399,7 @@ function paint() {
         });
     }
 
-    // sources (DBAP: rounded square, VBAP: circle); projection onto the hull
+    // sources (DBAP: rounded square knob, VBAP: circle knob); projection onto the hull
     if (flags.draw_sources) {
         src.forEach((o, k) => {
             const c = PALETTE[k % PALETTE.length];
@@ -1397,12 +1474,12 @@ function paint() {
 
 // every top-level function is a message in Max; hide the internal ones
 [
-    clamp, clampPos, wrap360, azOf, radiusOf, rolloffToA, polarToXY, ringDegrees, index, newSpeaker,
+    clamp, clampToField, maxStereoWidth, stereoWidthAt, toNorm, fromNorm, wrap360, azOf, radiusOf, rolloffToA, polarToXY, ringDegrees, index, newSpeaker,
     newSource, newChannel, updateChannels, mirrorXY, rebuildLayout, cross, convexHull,
     projectOntoHull, fmtAz, fmtList, checkLayout, ensureGains, ensureAllGains, computeGains,
     addGroup, vbapPoint, computeVBAP, computeDBAP, invalidateAll, emitGains, perSource, pair,
     emitGeometry, changed, sourcePolar, speakerPolar, place, setSource, setSourceParam, unmirror, setSpeaker,
-    setWeight, perItem, setFlag, toScreen, toWorld, hitSpeaker, hitChannel, rgba,
+    setWeight, perItem, setFlag, toScreen, toWorld, hitSpeaker, hitChannel, reportSource, rgba,
     circle, roundRect, label, text, readout, readoutRight, haloRadius, fmtDb, attenuation, clampDb, levelOf, mix,
 ].forEach(f => { f.local = 1; });
 
