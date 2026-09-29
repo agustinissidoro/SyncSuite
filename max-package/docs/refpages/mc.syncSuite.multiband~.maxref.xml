@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
+
+<c74object name="mc.syncSuite.multiband~">
+
+    <digest>
+        Multiband compressor for speaker layouts.
+    </digest>
+
+    <description>
+        Up to 6 bands, Linkwitz-Riley 24 dB/octave crossovers, every band phase-aligned with allpasses so that the bands sum to a flat allpass (tested flat within 0.01 dB). The phase rotation is identical on every channel, so inter-channel relations (and with them the image and any downmix) are untouched. Each band is a compressor as mc.syncSuite.compressor~ (detector, linking within groups per band, soft knee, range, attack / release, make-up); per-band parameters are lists, a shorter list repeats its last value. solo n outputs band n only (after its gain). The meters show one reduction bar per band under each channel; the history adds one line per band; the curve shows the band in select_band. Latency: the lookahead. CPU: about 0.15% of a core per channel with 4 bands at 48 kHz. Built for speaker layouts. LINK GROUPS: every channel belongs to a group (groups attribute; default: all mains in one group, the LFE channels in another). Within a group, link 0..1 blends each channel's own control signal with the group's; at 1 every speaker of the group gets the same gain at every sample, so relative levels, and with them the spatial image, cannot move. EXACT REPORTING: the gain reduction shown and output is the gain actually multiplied into the audio (after linking, ballistics, lookahead and mix), excluding make-up / drive. IMAGE: the input and output energy vectors (Gerzon, from speaker_coords) are compared over 400 ms: the display and the image message give how many degrees the processing turned the image and how much it widened (negative) or narrowed it. DISPLAY: meters (input dim, output bright, gain reduction from the top, hold, link-group colour under each channel), history (the last 10 s of gain reduction per channel, deepest reduction on top), curve (static curve and every channel's operating point), image, statistics (max reduction, share of time reducing, latency). BYPASS keeps the latency and the meters (they show what would be done). Latency is output as latency &lt;samples&gt; &lt;ms&gt; whenever it changes. Nothing is emulated: feed-forward, log-domain gain computer, no saturation.
+    </description>
+
+    <!--METADATA-->
+    <metadatalist>
+        <metadata name="author">Agustin Issidoro</metadata>
+        <metadata name="tag">SyncSuite</metadata>
+        <metadata name="tag">Dynamics</metadata>
+        <metadata name="tag">MSP</metadata>
+    </metadatalist>
+
+    <!--MESSAGES-->
+    <methodlist>
+        <method name="reset">
+            <arglist />
+            <digest>Clear max values and statistics</digest>
+        </method>
+        <method name="get">
+            <arglist />
+            <digest>Output all measurements</digest>
+            <description>gr, gr_max, in_peak_max, out_peak_max (per channel, dB), gr_band &lt;band&gt; &lt;per channel&gt;, image (shift deg, width change, azimuth in, azimuth out), stats (max reduction dB, % of time reducing, seconds, clips), latency (samples, ms).</description>
+        </method>
+        <method name="signal">
+            <arglist />
+            <digest>Speaker feeds, channel i = speaker i</digest>
+        </method>
+    </methodlist>
+
+    <!--ATTRIBUTES-->
+    <attributelist>
+        <attribute name="bands" get="1" set="1" type="int" size="1">
+            <digest>Number of bands</digest>
+            <description>1 to 6, default 4.</description>
+        </attribute>
+        <attribute name="crossovers" get="1" set="1" type="float64" size="1">
+            <digest>Crossover frequencies (Hz)</digest>
+            <description>bands - 1 values, default 120 800 5000; sorted, at least 1/6 octave apart.</description>
+        </attribute>
+        <attribute name="threshold" get="1" set="1" type="float64" size="1">
+            <digest>Thresholds (dB), per band</digest>
+            <description></description>
+        </attribute>
+        <attribute name="ratio" get="1" set="1" type="float64" size="1">
+            <digest>Ratios, per band</digest>
+            <description></description>
+        </attribute>
+        <attribute name="knee" get="1" set="1" type="float64" size="1">
+            <digest>Knee widths (dB), per band</digest>
+            <description></description>
+        </attribute>
+        <attribute name="attack" get="1" set="1" type="float64" size="1">
+            <digest>Attacks (ms), per band</digest>
+            <description></description>
+        </attribute>
+        <attribute name="release" get="1" set="1" type="float64" size="1">
+            <digest>Releases (ms), per band</digest>
+            <description></description>
+        </attribute>
+        <attribute name="makeup" get="1" set="1" type="float64" size="1">
+            <digest>Make-up (dB), per band</digest>
+            <description></description>
+        </attribute>
+        <attribute name="range" get="1" set="1" type="float64" size="1">
+            <digest>Ranges (dB), per band</digest>
+            <description></description>
+        </attribute>
+        <attribute name="detector" get="1" set="1" type="int" size="1">
+            <digest>peak or rms</digest>
+            <description></description>
+        </attribute>
+        <attribute name="rms_time" get="1" set="1" type="float64" size="1">
+            <digest>RMS time constant (ms)</digest>
+            <description></description>
+        </attribute>
+        <attribute name="link_detect" get="1" set="1" type="int" size="1">
+            <digest>Group level: loudest or mean_power</digest>
+            <description></description>
+        </attribute>
+        <attribute name="lookahead" get="1" set="1" type="float64" size="1">
+            <digest>Lookahead (ms)</digest>
+            <description></description>
+        </attribute>
+        <attribute name="mix" get="1" set="1" type="float64" size="1">
+            <digest>Mix</digest>
+            <description></description>
+        </attribute>
+        <attribute name="solo" get="1" set="1" type="int" size="1">
+            <digest>Solo band (0 = all)</digest>
+            <description></description>
+        </attribute>
+        <attribute name="select_band" get="1" set="1" type="int" size="1">
+            <digest>Band shown in the curve</digest>
+            <description></description>
+        </attribute>
+        <attribute name="speaker_coords" get="1" set="1" type="float64" size="1">
+            <digest>Speaker azimuths</digest>
+            <description>One per channel, deg, 0 = front, clockwise (as syncSuite.nodes). Empty = even ring of the non-LFE channels. Used for the image and the fold-down.</description>
+        </attribute>
+        <attribute name="speaker_elevations" get="1" set="1" type="float64" size="1">
+            <digest>Speaker elevations (deg)</digest>
+            <description></description>
+        </attribute>
+        <attribute name="lfe" get="1" set="1" type="int" size="1">
+            <digest>LFE channels (1-based)</digest>
+            <description>Not positioned; own group by default.</description>
+        </attribute>
+        <attribute name="groups" get="1" set="1" type="int" size="1">
+            <digest>Link group per channel</digest>
+            <description>Any integers, one per channel (a shorter list repeats its last value). Empty = mains / LFE.</description>
+        </attribute>
+        <attribute name="link" get="1" set="1" type="float64" size="1">
+            <digest>Link within groups</digest>
+            <description>0 = independent channels, 1 = the same gain for the whole group (default).</description>
+        </attribute>
+        <attribute name="bypass" get="1" set="1" type="int" size="1">
+            <digest>Bypass</digest>
+            <description>Output = input (latency-aligned; multiband: the band sum); meters keep showing what would be done.</description>
+        </attribute>
+        <attribute name="view" get="1" set="1" type="int" size="1">
+            <digest>all, meters, history, curve, image</digest>
+            <description></description>
+        </attribute>
+        <attribute name="gr_range" get="1" set="1" type="float64" size="1">
+            <digest>Gain reduction scale (dB)</digest>
+            <description></description>
+        </attribute>
+        <attribute name="meter_min" get="1" set="1" type="float64" size="1">
+            <digest>Meter floor (dB)</digest>
+            <description></description>
+        </attribute>
+        <attribute name="select" get="1" set="1" type="int" size="1">
+            <digest>Highlighted channel</digest>
+            <description>Also by clicking a meter.</description>
+        </attribute>
+        <attribute name="output" get="1" set="1" type="int" size="1">
+            <digest>Output every frame</digest>
+            <description></description>
+        </attribute>
+        <attribute name="interval" get="1" set="1" type="int" size="1">
+            <digest>Refresh interval (ms)</digest>
+            <description></description>
+        </attribute>
+    </attributelist>
+
+    <!--INLETS-->
+    <inletlist>
+        <inlet id="0" type="multichannelsignal">
+            <digest>Speaker feeds and messages</digest>
+        </inlet>
+    </inletlist>
+
+    <!--OUTLETS-->
+    <outletlist>
+        <outlet id="0" type="multichannelsignal">
+            <digest>Processed speaker feeds (same channels as the input)</digest>
+        </outlet>
+        <outlet id="1" type="list">
+            <digest>Measurements</digest>
+        </outlet>
+    </outletlist>
+
+    <!--SEEALSO-->
+    <seealsolist>
+        <seealso name="mc.syncSuite.limiter~" />
+        <seealso name="mc.syncSuite.compressor~" />
+        <seealso name="mc.syncSuite.multiband~" />
+        <seealso name="mc.syncSuite.analyzer~" />
+        <seealso name="syncSuite.nodes" />
+    </seealsolist>
+
+</c74object>
