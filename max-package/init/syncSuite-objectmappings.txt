@@ -1,1 +1,0 @@
-max define syncSuite.nodes v8ui @filename syncSuite.nodes.js;

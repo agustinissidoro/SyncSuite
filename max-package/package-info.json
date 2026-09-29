@@ -6,16 +6,11 @@
     "authors": [
         "Agustin Issidoro"
     ],
-    "description": "Sound, video and score synchronization for live multimedia performance, and tools for multichannel speaker layouts: panning (syncSuite.nodes), trajectories, virtual speakers, a spatial reverb, decorrelation, loudness levelling, multichannel dynamics (limiter, compressor, multiband) and measurement (analyzer, correlation). macOS.",
+    "description": "Sound, video and score synchronization for live multimedia performance (Max and Ableton Live). macOS.",
     "tags": [
         "synchronization",
         "video",
         "score",
-        "multichannel",
-        "spatialization",
-        "dynamics",
-        "loudness",
-        "analysis",
         "Max for Live"
     ],
     "website": "https://github.com/agustinissidoro/SyncSuite",
