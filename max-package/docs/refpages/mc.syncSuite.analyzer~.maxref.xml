@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
+
+<c74object name="mc.syncSuite.analyzer~">
+
+    <digest>
+        Multichannel measurement display: speaker levels and energy vectors, meters, loudness (EBU R128) and spectra.
+    </digest>
+
+    <description>
+        A measurement tool for speaker layouts. One multichannel inlet, channel i = speaker i (as syncSuite.nodes and mc.syncSuite.virtualspeakers~). It does not touch or output audio: switch it off (or bypass its device) when not measuring and it costs nothing. Four panels (all at once, or one with @view): FIELD, the layout seen from above, each speaker coloured by its RMS level, a radar polygon of the levels, the Gerzon energy vector (white arrow: where the energy comes from; its length rE is 1 when everything comes from one direction and 0 when it is balanced around the listener) and the same vector for the low (red, below 250 Hz), mid (green) and high (blue, above 4 kHz) bands. METERS, per channel: RMS (bar), sample or true peak with IEC 60268-18 ballistics (20 dB in 1.7 s), peak hold, and a red cap once a channel went over 0 dBFS / dBTP since reset. LOUDNESS, ITU-R BS.1770-4 / EBU R128: momentary (400 ms), short-term (3 s), integrated (gated at -70 LUFS and -10 LU), loudness range (EBU Tech 3342), max momentary, max short-term, max true peak, time since reset. SPECTRUM: fractional-octave band powers (1/1 to 1/24 octave, IEC 61260 base-2 bands) of one channel or the power sum of all channels, as a curve with a max-hold line, and as a speakers x bands heat map. Click a speaker, a meter or a heat-map row to show that channel's spectrum; click it again for all channels. Accuracy: the engine passes the EBU Tech 3341 minimum-requirement cases (+-0.1 LU) and the Tech 3342 LRA cases; K-weighting matches the BS.1770 48 kHz coefficients and is derived exactly at other rates; true peak is measured by 4x oversampling below 88.2 kHz and 2x below 176.4 kHz (never above the true value by more than 0.03 dB, below it by at most the 4x sampling limit, 0.47 dB at 20 kHz / 48 kHz). The band powers add up to the signal's power (Blackman-Harris window, power-normalized, bins shared between bands in proportion to their overlap). Levels: 0 dB = a full-scale square wave, so a full-scale sine reads -3.01 dB RMS (@aes17 1 for the AES17 convention, sine = 0 dB). Loudness weights: LFE channels are excluded; with speaker_coords, speakers at 60-120 degrees azimuth and less than 30 degrees elevation get the BS.1770 surround weight 1.41 (@loudness_weights flat to use 1 for all); without speaker_coords the layout is unknown and all weights are 1. The loudness figures do not depend on the display: the audio thread accumulates every 10 ms frame, and the main thread has 10 seconds of buffer. CPU: the audio thread uses about 1% of a core for 32 channels at 48 kHz (true peak on); the spectrum and display about 1.6%.
+    </description>
+
+    <!--METADATA-->
+    <metadatalist>
+        <metadata name="author">Agustin Issidoro</metadata>
+        <metadata name="tag">SyncSuite</metadata>
+        <metadata name="tag">Analysis</metadata>
+        <metadata name="tag">Spatialization</metadata>
+        <metadata name="tag">MSP</metadata>
+    </metadatalist>
+
+    <!--MESSAGES-->
+    <methodlist>
+        <method name="reset">
+            <arglist />
+            <digest>Restart the loudness measurement</digest>
+            <description>Clears the integrated loudness, the loudness range, the time, the max values, the peak holds and the spectrum max hold. Momentary / short-term are not affected.</description>
+        </method>
+        <method name="reset_peaks">
+            <arglist />
+            <digest>Clear the max values only</digest>
+            <description>Max peak / true peak per channel, max momentary, max short-term, peak holds and the spectrum max hold. The integrated loudness and LRA keep running.</description>
+        </method>
+        <method name="get">
+            <arglist />
+            <digest>Output all measurements</digest>
+            <description>loudness M S I LRA; max M S TP; time seconds; rms, peak, peak_max, channel_loudness (one value per channel, dB / dBTP / LUFS); energy, energy_low, energy_mid, energy_high (az el r). -inf is output as -200.</description>
+        </method>
+        <method name="get_spectrum">
+            <arglist>
+                <arg name="channel" optional="1" type="int" />
+            </arglist>
+            <digest>Output band powers</digest>
+            <description>spectrum channel dB... one value per band (get_bands). Channel 0 (default) = power sum of all channels.</description>
+        </method>
+        <method name="get_bands">
+            <arglist />
+            <digest>Output band centre frequencies</digest>
+            <description>bands f1 f2 ... (Hz), matching get_spectrum.</description>
+        </method>
+        <method name="signal">
+            <arglist />
+            <digest>Speaker feeds</digest>
+            <description>One multichannel signal, channel i = speaker i. Up to 128 channels.</description>
+        </method>
+    </methodlist>
+
+    <!--ATTRIBUTES-->
+    <attributelist>
+        <attribute name="speaker_coords" get="1" set="1" type="float64" size="128">
+            <digest>Speaker azimuths</digest>
+            <description>One azimuth per channel (deg, 0 = front, clockwise), the same message syncSuite.nodes uses and outputs (get_speakers). Empty = an even ring of the non-LFE channels. An azimuth given for an LFE channel is ignored; channels past the end of the list have no position (they are metered, and count in the loudness with weight 1, but not in the energy vectors).</description>
+        </attribute>
+        <attribute name="speaker_elevations" get="1" set="1" type="float64" size="128">
+            <digest>Speaker elevations</digest>
+            <description>Degrees, up, per channel (missing = 0). Used by the energy vectors, the BS.1770 weights (elevated speakers get 1) and the field (elevated speakers are drawn nearer the centre, at cos(elevation)).</description>
+        </attribute>
+        <attribute name="lfe" get="1" set="1" type="int" size="128">
+            <digest>LFE channels</digest>
+            <description>1-based channel numbers. Excluded from the loudness and the energy vectors, drawn in purple. lfe with no values = none.</description>
+        </attribute>
+        <attribute name="loudness_weights" get="1" set="1" type="int" size="1">
+            <digest>Channel weights: bs1770 or flat</digest>
+            <description>bs1770 (default): 1.41 for speakers at 60-120 degrees (either side) below 30 degrees elevation, 1 elsewhere, only when speaker_coords are given. flat: 1 for every non-LFE channel.</description>
+        </attribute>
+        <attribute name="view" get="1" set="1" type="int" size="1">
+            <digest>all, field, meters, spectrum, loudness</digest>
+            <description>all: the panels side by side (those that do not fit are left out); the others fill the box with one panel. The loudness view adds a graph of the last minute (momentary and short-term, target line).</description>
+        </attribute>
+        <attribute name="spectrum_view" get="1" set="1" type="int" size="1">
+            <digest>both, curve, heatmap</digest>
+            <description>What the spectrum panel shows. both: curve above, heat map below (curve only when the panel is shorter than 90 pixels).</description>
+        </attribute>
+        <attribute name="select" get="1" set="1" type="int" size="1">
+            <digest>Channel shown in the spectrum curve</digest>
+            <description>0 (default) = power sum of all channels. Also set by clicking.</description>
+        </attribute>
+        <attribute name="resolution" get="1" set="1" type="int" size="1">
+            <digest>Bands per octave</digest>
+            <description>1, 3, 6 (default), 12 or 24. 1 and 3 are drawn as bars, finer ones as a curve. Bands from 20 Hz to 20 kHz (or Nyquist).</description>
+        </attribute>
+        <attribute name="fftsize" get="1" set="1" type="int" size="1">
+            <digest>FFT size</digest>
+            <description>1024 to 16384 (default), rounded up to a power of two. Bands narrower than the FFT's resolution (low frequencies, fine resolution, small FFT) share a bin with their neighbours: use 16384 for 1/12 or 1/24 octave below 100 Hz.</description>
+        </attribute>
+        <attribute name="spectrum_avg" get="1" set="1" type="float64" size="1">
+            <digest>Spectrum averaging (ms)</digest>
+            <description>Time constant of the exponential average of the band powers. 0 = none. Default 300.</description>
+        </attribute>
+        <attribute name="rms_window" get="1" set="1" type="float64" size="1">
+            <digest>RMS window (ms)</digest>
+            <description>Rectangular window of the RMS meters and the field, 10 to 3000 ms. Default 300.</description>
+        </attribute>
+        <attribute name="peak_hold" get="1" set="1" type="float64" size="1">
+            <digest>Peak hold (ms)</digest>
+            <description>How long the hold line stays before it follows the peak down. Default 2000.</description>
+        </attribute>
+        <attribute name="truepeak" get="1" set="1" type="int" size="1">
+            <digest>True peak on / off</digest>
+            <description>On (default): peaks are measured on the oversampled signal (dBTP). Off: sample peak (dBFS), cheaper.</description>
+        </attribute>
+        <attribute name="aes17" get="1" set="1" type="int" size="1">
+            <digest>AES17 RMS convention</digest>
+            <description>Adds 3.01 dB to RMS readings and spectra, so a full-scale sine reads 0 dB. Off by default. Loudness and peaks are not affected.</description>
+        </attribute>
+        <attribute name="target" get="1" set="1" type="float64" size="1">
+            <digest>Integrated loudness target (LUFS)</digest>
+            <description>The integrated value turns green within 1 LU of it, amber within 2 LU, red beyond. Default -23 (EBU R128).</description>
+        </attribute>
+        <attribute name="meter_min" get="1" set="1" type="float64" size="1">
+            <digest>Meter floor (dB)</digest>
+            <description>Bottom of the meters and centre of the field's radar. Default -60.</description>
+        </attribute>
+        <attribute name="spectrum_min" get="1" set="1" type="float64" size="1">
+            <digest>Spectrum floor (dB)</digest>
+            <description>Default -100.</description>
+        </attribute>
+        <attribute name="spectrum_max" get="1" set="1" type="float64" size="1">
+            <digest>Spectrum ceiling (dB)</digest>
+            <description>Default 0.</description>
+        </attribute>
+        <attribute name="output" get="1" set="1" type="int" size="1">
+            <digest>Output every frame</digest>
+            <description>On: the get messages are output at every refresh with new data. Off (default): only on get.</description>
+        </attribute>
+        <attribute name="interval" get="1" set="1" type="int" size="1">
+            <digest>Refresh interval (ms)</digest>
+            <description>Display / output rate. Default 33. The measurements do not depend on it.</description>
+        </attribute>
+    </attributelist>
+
+    <!--INLETS-->
+    <inletlist>
+        <inlet id="0" type="multichannelsignal">
+            <digest>Speaker feeds (channel i = speaker i) and messages</digest>
+        </inlet>
+    </inletlist>
+
+    <!--OUTLETS-->
+    <outletlist>
+        <outlet id="0" type="list">
+            <digest>Measurements</digest>
+            <description>See get, get_spectrum, get_bands.</description>
+        </outlet>
+    </outletlist>
+
+    <!--SEEALSO-->
+    <seealsolist>
+        <seealso name="syncSuite.nodes" />
+        <seealso name="mc.syncSuite.virtualspeakers~" />
+        <seealso name="meter~" />
+        <seealso name="spectroscope~" />
+    </seealsolist>
+
+</c74object>

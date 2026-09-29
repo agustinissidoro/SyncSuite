@@ -25,6 +25,7 @@ The Max package (`max-package/`) exposes the following objects/abstractions, eac
 | `syncSuite.video.subs` | Utility for rendering text in the SyncSuite video context. |
 | `syncSuite.nodes` | Multi-source spatializer UI (v8ui): speakers and mono/stereo sources on a 2D field, VBAP / DBAP gains on request. |
 | `syncSuite.virtualspeakers~` / `mc.syncSuite.virtualspeakers~` | Virtual speakers: hear a speaker layout on headphones (binaural, built-in MIT KEMAR or any SOFA file) or as a stereo downmix, for prototyping multichannel pieces. Plain version: one inlet per speaker; mc version: one multichannel inlet. Pairs with `syncSuite.nodes`. Source: `../syncSuite.virtualspeakers-package`. |
+| `mc.syncSuite.analyzer~` | Multichannel measurement display: speaker levels on the layout with energy vectors, meters (RMS, true peak), loudness (BS.1770-4 / EBU R128: M, S, I, LRA) and fractional-octave spectra (curve + speakers x bands heat map). Takes the same `speaker_coords` as `syncSuite.nodes`. Source: `../syncSuite.analyzer-package`. |
 | `jit.pdfmatrix` | Renders a page of a PDF file into a Jitter matrix (macOS-only external). |
 
 ## M4L devices
