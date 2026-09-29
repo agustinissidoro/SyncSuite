@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
+
+<c74object name="mc.syncSuite.leveller~">
+
+    <digest>
+        Slow loudness leveller for speaker layouts: one transparent gain towards a BS.1770 target.
+    </digest>
+
+    <description>
+        A slow gain rider that brings the programme to a loudness target. Measurement: ITU-R BS.1770-4 over the whole layout (K-weighting, the 1.41 surround weight for speakers at 60..120 degrees, LFE excluded), momentary (400 ms) or short-term (3 s), every 100 ms. ONE GAIN FOR EVERY CHANNEL: levels between speakers, and the image, never change. The gain moves towards target - loudness at most up / down dB per second, within +max_boost / -max_cut; below the gate (target + gate) it holds, so silence and pauses are not pumped up; inside the tolerance it does not move. No lookahead, no latency, no compression: a slow fader. The gain applied is exactly the gain metered. Display: the last minute of input and output loudness against the target (cyan) and the gate (dashed), gated stretches shaded, the gain underneath (pink = boost, cyan = cut), IN / OUT / GAIN and the state (LEVELLING, GATED, FROZEN). Pair it with mc.syncSuite.limiter~ after it for a safe output.
+    </description>
+
+    <!--METADATA-->
+    <metadatalist>
+        <metadata name="author">Agustin Issidoro</metadata>
+        <metadata name="tag">SyncSuite</metadata>
+        <metadata name="tag">Dynamics</metadata>
+        <metadata name="tag">Loudness</metadata>
+        <metadata name="tag">MSP</metadata>
+    </metadatalist>
+
+    <!--MESSAGES-->
+    <methodlist>
+        <method name="signal">
+            <arglist />
+            <digest>Speaker feeds (channel i = speaker i)</digest>
+            <description>A multichannel signal, one channel per speaker (up to 128).</description>
+        </method>
+        <method name="get">
+            <arglist />
+            <digest>Output the loudness and the gain</digest>
+            <description>loudness &lt;in M&gt; &lt;in S&gt; &lt;out M&gt; &lt;out S&gt; (LUFS), gain &lt;applied&gt; &lt;desired&gt; (dB), gated &lt;0|1&gt;.</description>
+        </method>
+        <method name="reset">
+            <arglist />
+            <digest>Gain back to 0 dB</digest>
+            <description>The gain returns to 0 dB at once (at the next audio block).</description>
+        </method>
+    </methodlist>
+
+    <!--ATTRIBUTES-->
+    <attributelist>
+        <attribute name="speaker_coords" get="1" set="1" type="float64" size="128">
+            <digest>Speaker azimuths (deg, 0 = front, clockwise)</digest>
+            <description>One azimuth per channel (channel i = speaker i), the same message syncSuite.nodes uses and outputs (get_speakers). Empty = an even ring of the non-LFE channels straddling the front (2 = L/R, 4 = quad, 8 = octagon).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Speaker azimuths (deg, 0 = front, clockwise)" />
+            </attributelist>
+        </attribute>
+        <attribute name="speaker_elevations" get="1" set="1" type="float64" size="128">
+            <digest>Speaker elevations (deg)</digest>
+            <description>Degrees, up, one per channel (missing = 0). All spatial computations are in 3D; the displays are top views.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Speaker elevations (deg)" />
+            </attributelist>
+        </attribute>
+        <attribute name="lfe" get="1" set="1" type="int" size="128">
+            <digest>LFE channels (1-based)</digest>
+            <description>Channels that are LFE: they have no position and are kept out of the spatial processing and the loudness. lfe with no values = none.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="LFE channels (1-based)" />
+            </attributelist>
+        </attribute>
+        <attribute name="target" get="1" set="1" type="float64" size="1">
+            <digest>Target loudness (LUFS)</digest>
+            <description>Loudness target (LUFS). -23 = EBU R128 broadcast, -16 / -14 = streaming.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Target loudness (LUFS)" />
+            </attributelist>
+        </attribute>
+        <attribute name="window" get="1" set="1" type="int" size="1">
+            <digest>Measurement: momentary (400 ms) or short-term (3 s)</digest>
+            <description>What the gain follows: momentary (400 ms, faster) or short (short-term, 3 s, default). Values: 0 = momentary, 1 = short (a number or the name). Default: 1.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Measurement: momentary (400 ms) or short-term (3 s)" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="2">
+                    <enumlist>
+                        <enum name="momentary"><digest>momentary</digest></enum>
+                        <enum name="short"><digest>short</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
+        </attribute>
+        <attribute name="max_boost" get="1" set="1" type="float64" size="1">
+            <digest>Most boost (dB)</digest>
+            <description>Most the gain can go up (dB). Default: 9.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Most boost (dB)" />
+            </attributelist>
+        </attribute>
+        <attribute name="max_cut" get="1" set="1" type="float64" size="1">
+            <digest>Most cut (dB)</digest>
+            <description>Most the gain can go down (dB). Default: 12.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Most cut (dB)" />
+            </attributelist>
+        </attribute>
+        <attribute name="up" get="1" set="1" type="float64" size="1">
+            <digest>Rise speed (dB/s)</digest>
+            <description>Fastest rise (dB per second). Default: 1.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Rise speed (dB/s)" />
+            </attributelist>
+        </attribute>
+        <attribute name="down" get="1" set="1" type="float64" size="1">
+            <digest>Fall speed (dB/s)</digest>
+            <description>Fastest fall (dB per second). Default: 3.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Fall speed (dB/s)" />
+            </attributelist>
+        </attribute>
+        <attribute name="gate" get="1" set="1" type="float64" size="1">
+            <digest>Gate (LU below the target: holds below it)</digest>
+            <description>Below target + gate (LU) the gain holds (default -20: with target -23, below -43 LUFS).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Gate (LU below the target: holds below it)" />
+            </attributelist>
+        </attribute>
+        <attribute name="tolerance" get="1" set="1" type="float64" size="1">
+            <digest>Tolerance (LU: no move inside it)</digest>
+            <description>The gain does not move for deviations inside +- tolerance (LU). Default: 0.5.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Tolerance (LU: no move inside it)" />
+            </attributelist>
+        </attribute>
+        <attribute name="loudness_weights" get="1" set="1" type="int" size="1">
+            <digest>Loudness channel weights</digest>
+            <description>bs1770: 1.41 for speakers at 60..120 degrees (with speaker_coords), 1 elsewhere; flat: 1 for every non-LFE channel. Values: 0 = bs1770, 1 = flat (a number or the name).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Loudness channel weights" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="2">
+                    <enumlist>
+                        <enum name="bs1770"><digest>bs1770</digest></enum>
+                        <enum name="flat"><digest>flat</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
+        </attribute>
+        <attribute name="freeze" get="1" set="1" type="int" size="1">
+            <digest>Freeze the gain</digest>
+            <description>1: the gain holds where it is. Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Leveller" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Freeze the gain" />
+            </attributelist>
+        </attribute>
+        <attribute name="view" get="1" set="1" type="int" size="1">
+            <digest>View</digest>
+            <description>Which panels are drawn: all, or one of them filling the box. Values: 0 = all, 1 = history, 2 = numbers (a number or the name). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="View" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="3">
+                    <enumlist>
+                        <enum name="all"><digest>all</digest></enum>
+                        <enum name="history"><digest>history</digest></enum>
+                        <enum name="numbers"><digest>numbers</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
+        </attribute>
+        <attribute name="bypass_ui" get="1" set="1" type="int" size="1">
+            <digest>Stop drawing</digest>
+            <description>1: nothing is drawn and the display timer stops; the audio and the message output are not affected (use it when the box is hidden or while performing). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Stop drawing" />
+            </attributelist>
+        </attribute>
+        <attribute name="output" get="1" set="1" type="int" size="1">
+            <digest>Output measurements every frame</digest>
+            <description>1: the measurements (see get) are output at every display refresh with new data. 0: only on get.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Output measurements every frame" />
+            </attributelist>
+        </attribute>
+        <attribute name="interval" get="1" set="1" type="int" size="1">
+            <digest>Refresh interval (ms)</digest>
+            <description>Display refresh and output rate. The processing does not depend on it. Default: 33.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Refresh interval (ms)" />
+            </attributelist>
+        </attribute>
+        <attribute name="no_ui" get="1" set="1" type="int" size="1">
+            <digest>No UI: a plain object box</digest>
+            <description>Type it with the object (mc.syncSuite.limiter~ @no_ui 1): the box looks and sizes like a standard object box, draws nothing, runs no display timer and skips the display-only metering. Max decides per class whether a box is a UI box, so the box stays resizable, but it behaves as a standard object: audio, messages and get work as usual. Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="No UI: a plain object box" />
+            </attributelist>
+        </attribute>
+        <attribute name="bgcolor" get="1" set="1" type="float64" size="4">
+            <digest>Background Color</digest>
+            <description>Box background (syncSuite style: near black).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Background Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="panelcolor" get="1" set="1" type="float64" size="4">
+            <digest>Panel Color</digest>
+            <description>Panel background.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Panel Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="textcolor" get="1" set="1" type="float64" size="4">
+            <digest>Text Color</digest>
+            <description>Labels and numbers.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Text Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="gridcolor" get="1" set="1" type="float64" size="4">
+            <digest>Grid Color</digest>
+            <description>Scales and guides.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Grid Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="color" get="1" set="1" type="float64" size="4">
+            <digest>Signal Color</digest>
+            <description>Main signal colour (syncSuite hot pink).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Signal Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="alarmcolor" get="1" set="1" type="float64" size="4">
+            <digest>Alarm Color</digest>
+            <description>Overs, clips, gated / frozen states (acid yellow).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Alarm Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+    </attributelist>
+
+    <!--INLETS-->
+    <inletlist>
+        <inlet id="0" type="multichannelsignal">
+            <digest>Speaker feeds (channel i = speaker i) and messages</digest>
+        </inlet>
+    </inletlist>
+
+    <!--OUTLETS-->
+    <outletlist>
+        <outlet id="0" type="multichannelsignal">
+            <digest>Levelled speaker feeds (one gain for all)</digest>
+        </outlet>
+        <outlet id="1" type="list">
+            <digest>Measurements: loudness &lt;in M&gt; &lt;in S&gt; &lt;out M&gt; &lt;out S&gt;, gain &lt;applied&gt; &lt;desired&gt;, gated &lt;0|1&gt;</digest>
+        </outlet>
+    </outletlist>
+
+    <!--SEEALSO-->
+    <seealsolist>
+        <seealso name="mc.syncSuite.analyzer~" />
+        <seealso name="mc.syncSuite.limiter~" />
+        <seealso name="mc.syncSuite.compressor~" />
+    </seealsolist>
+
+</c74object>

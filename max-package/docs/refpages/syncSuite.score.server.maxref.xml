@@ -716,18 +716,17 @@
                 to report its screen size, pixel ratio and fullscreen state back to Max.
             </description>
         </method>
+        <method name="getServerState">
+            <arglist />
+            <digest>Output whether the server is running</digest>
+            <description>
+                Outputs the server state stored by the object (1 = running, 0 = stopped), without asking the server.
+            </description>
+        </method>
     </methodlist>
 
     <!--ATTRIBUTES-->
     <attributelist>
-        <attribute name="port" get="1" set="1" type="int32" size="1">
-            <digest>Port the server listens on</digest>
-            <description>
-                HTTP/WebSocket port used when the server (re)starts. Default 8111. Takes effect only at
-                launch time — set it before sending "start", or set it as a creation argument; there is
-                currently no message to change the port of an already-running server.
-            </description>
-        </attribute>
 
         <attribute name="watch" get="1" set="1" type="int32" size="1">
             <digest>Auto-reloads the server when its script file changes</digest>

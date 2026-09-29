@@ -1,12 +1,24 @@
 {
     "name": "syncSuite",
-    "displayname": "",
+    "displayname": "syncSuite",
     "version": "1.0.0",
-    "author": "",
-    "authors": [],
-    "description": "",
-    "tags": [],
-    "website": "",
+    "author": "Agustin Issidoro",
+    "authors": [
+        "Agustin Issidoro"
+    ],
+    "description": "Sound, video and score synchronization for live multimedia performance, and tools for multichannel speaker layouts: panning (syncSuite.nodes), trajectories, virtual speakers, a spatial reverb, decorrelation, loudness levelling, multichannel dynamics (limiter, compressor, multiband) and measurement (analyzer, correlation). macOS.",
+    "tags": [
+        "synchronization",
+        "video",
+        "score",
+        "multichannel",
+        "spatialization",
+        "dynamics",
+        "loudness",
+        "analysis",
+        "Max for Live"
+    ],
+    "website": "https://github.com/agustinissidoro/SyncSuite",
     "extends": "",
     "extensible": 0,
     "max_version_min": "9.0",
@@ -14,11 +26,16 @@
     "os": {
         "macintosh": {
             "min_version": "none",
-            "platform": [ "x64", "aarch64" ]
+            "platform": [
+                "x64",
+                "aarch64"
+            ]
         },
         "windows": {
             "min_version": "none",
-            "platform": [ "x64" ]
+            "platform": [
+                "x64"
+            ]
         }
     },
     "homepatcher": "",

@@ -13,7 +13,7 @@
    60,
    60,
    1030,
-   840
+   910
   ],
   "gridsize": [
    15,
@@ -718,7 +718,7 @@
      "numoutlets": 4,
      "patching_rect": [
       20,
-      506,
+      576,
       240,
       240
      ],
@@ -749,7 +749,7 @@
      "numoutlets": 1,
      "patching_rect": [
       280,
-      506,
+      576,
       80,
       22
      ],
@@ -767,7 +767,7 @@
      "numoutlets": 2,
      "patching_rect": [
       280,
-      534,
+      604,
       70,
       22
      ],
@@ -786,7 +786,7 @@
      "numoutlets": 0,
      "patching_rect": [
       356,
-      534,
+      604,
       80,
       20
      ],
@@ -801,7 +801,7 @@
      "numoutlets": 1,
      "patching_rect": [
       280,
-      566,
+      636,
       80,
       22
      ],
@@ -819,7 +819,7 @@
      "numoutlets": 2,
      "patching_rect": [
       280,
-      594,
+      664,
       70,
       22
      ],
@@ -838,7 +838,7 @@
      "numoutlets": 0,
      "patching_rect": [
       356,
-      594,
+      664,
       80,
       20
      ],
@@ -853,7 +853,7 @@
      "numoutlets": 1,
      "patching_rect": [
       280,
-      626,
+      696,
       80,
       22
      ],
@@ -871,7 +871,7 @@
      "numoutlets": 2,
      "patching_rect": [
       280,
-      654,
+      724,
       70,
       22
      ],
@@ -890,7 +890,7 @@
      "numoutlets": 0,
      "patching_rect": [
       356,
-      654,
+      724,
       80,
       20
      ],
@@ -905,7 +905,7 @@
      "numoutlets": 0,
      "patching_rect": [
       460,
-      506,
+      576,
       100,
       22
      ],
@@ -920,7 +920,7 @@
      "numoutlets": 2,
      "patching_rect": [
       460,
-      536,
+      606,
       110,
       22
      ],
@@ -939,7 +939,7 @@
      "numoutlets": 1,
      "patching_rect": [
       460,
-      566,
+      636,
       70,
       22
      ],
@@ -957,7 +957,7 @@
      "numoutlets": 1,
      "patching_rect": [
       460,
-      596,
+      666,
       200,
       22
      ],
@@ -975,7 +975,7 @@
      "numoutlets": 0,
      "patching_rect": [
       460,
-      622,
+      692,
       520,
       48
      ],
@@ -991,12 +991,82 @@
      "numoutlets": 0,
      "patching_rect": [
       20,
-      760,
+      830,
       980,
       62
      ],
      "text": "In a Live device (one per source): your transport position in beats -> this object; its azimuth / distance signals -> live.remote~ mapped to MultipanSync's s<n>_az and s<n>_d (ranges -180..180 and 0..1, the same as these outputs). live.remote~ writes no automation and no undo steps. Elevation is ready for 3D layouts (syncSuite.nodes is 2D today).",
      "linecount": 3
+    }
+   },
+   {
+    "box": {
+     "maxclass": "attrui",
+     "attr": "bypass_ui",
+     "numinlets": 1,
+     "numoutlets": 1,
+     "outlettype": [
+      ""
+     ],
+     "patching_rect": [
+      20,
+      512,
+      160,
+      22
+     ],
+     "parameter_enable": 0,
+     "id": "obj-56"
+    }
+   },
+   {
+    "box": {
+     "maxclass": "comment",
+     "text": "bypass_ui: stop drawing (the audio / measurement goes on)",
+     "numinlets": 1,
+     "numoutlets": 0,
+     "patching_rect": [
+      186,
+      512,
+      330,
+      20
+     ],
+     "id": "obj-57"
+    }
+   },
+   {
+    "box": {
+     "maxclass": "comment",
+     "text": "@no_ui 1 (type it with the object): a standard object box, no display, no timer ->",
+     "numinlets": 1,
+     "numoutlets": 0,
+     "patching_rect": [
+      20,
+      542,
+      470,
+      20
+     ],
+     "id": "obj-58"
+    }
+   },
+   {
+    "box": {
+     "maxclass": "syncSuite.trajectory~",
+     "numinlets": 1,
+     "numoutlets": 4,
+     "outlettype": [
+      "signal",
+      "signal",
+      "signal",
+      ""
+     ],
+     "patching_rect": [
+      500,
+      540,
+      213.0,
+      22
+     ],
+     "no_ui": 1,
+     "id": "obj-59"
     }
    }
   ],
@@ -1453,6 +1523,18 @@
      ],
      "destination": [
       "obj-53",
+      0
+     ]
+    }
+   },
+   {
+    "patchline": {
+     "source": [
+      "obj-56",
+      0
+     ],
+     "destination": [
+      "obj-40",
       0
      ]
     }

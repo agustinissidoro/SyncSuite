@@ -21,102 +21,289 @@
 
     <!--MESSAGES-->
     <methodlist>
+        <method name="signal">
+            <arglist />
+            <digest>Speaker feeds, channel i = speaker i</digest>
+            <description></description>
+        </method>
         <method name="reset">
             <arglist />
             <digest>Clear max values and statistics</digest>
+            <description></description>
         </method>
         <method name="get">
             <arglist />
             <digest>Output all measurements</digest>
             <description>gr, gr_max, in_peak_max, out_peak_max (per channel, dB), image (shift deg, width change, azimuth in, azimuth out), stats (max reduction dB, % of time reducing, seconds, clips), latency (samples, ms).</description>
         </method>
-        <method name="signal">
-            <arglist />
-            <digest>Speaker feeds, channel i = speaker i</digest>
-        </method>
     </methodlist>
 
     <!--ATTRIBUTES-->
     <attributelist>
+        <attribute name="speaker_coords" get="1" set="1" type="float64" size="128">
+            <digest>Speaker azimuths (deg, 0 = front, clockwise)</digest>
+            <description>One per channel, deg, 0 = front, clockwise (as syncSuite.nodes). Empty = even ring of the non-LFE channels. Used for the image and the fold-down.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Speaker azimuths (deg, 0 = front, clockwise)" />
+            </attributelist>
+        </attribute>
+        <attribute name="speaker_elevations" get="1" set="1" type="float64" size="128">
+            <digest>Speaker elevations (deg)</digest>
+            <description>Degrees, up, one per channel (missing = 0). All spatial computations are in 3D; the displays are top views.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Speaker elevations (deg)" />
+            </attributelist>
+        </attribute>
+        <attribute name="lfe" get="1" set="1" type="int" size="128">
+            <digest>LFE channels (1-based)</digest>
+            <description>Not positioned; own group by default.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="LFE channels (1-based)" />
+            </attributelist>
+        </attribute>
+        <attribute name="groups" get="1" set="1" type="int" size="128">
+            <digest>Link group per channel (empty = mains / LFE)</digest>
+            <description>Any integers, one per channel (a shorter list repeats its last value). Empty = mains / LFE.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Link group per channel (empty = mains / LFE)" />
+            </attributelist>
+        </attribute>
+        <attribute name="link" get="1" set="1" type="float64" size="1">
+            <digest>Link within groups (0 = independent, 1 = same gain)</digest>
+            <description>0 = independent channels, 1 = the same gain for the whole group (default).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Link within groups (0 = independent, 1 = same gain)" />
+            </attributelist>
+        </attribute>
+        <attribute name="bypass" get="1" set="1" type="int" size="1">
+            <digest>Bypass (latency-aligned, meters keep showing)</digest>
+            <description>Output = input (latency-aligned; multiband: the band sum); meters keep showing what would be done. Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Dynamics" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Bypass (latency-aligned, meters keep showing)" />
+            </attributelist>
+        </attribute>
         <attribute name="ceiling" get="1" set="1" type="float64" size="1">
             <digest>Ceiling (dBTP)</digest>
             <description>Default -1. dBFS when truepeak is off.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Dynamics" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Ceiling (dBTP)" />
+            </attributelist>
         </attribute>
         <attribute name="drive" get="1" set="1" type="float64" size="1">
             <digest>Input gain (dB)</digest>
-            <description>Applied before the limiter, smoothed. Not part of the gain reduction.</description>
+            <description>Applied before the limiter, smoothed. Not part of the gain reduction. Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Dynamics" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Input gain (dB)" />
+            </attributelist>
         </attribute>
-        <attribute name="release" get="1" set="1" type="float64" size="1">
+        <attribute name="release" get="1" set="1" type="float64" size="6">
             <digest>Release (ms)</digest>
             <description>Exponential, upwards only. Default 80.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Dynamics" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Release (ms)" />
+            </attributelist>
         </attribute>
         <attribute name="lookahead" get="1" set="1" type="float64" size="1">
             <digest>Lookahead = attack (ms)</digest>
             <description>0.02 to 20 ms, default 3. Changing it while playing clicks (the delay changes).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Dynamics" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Lookahead = attack (ms)" />
+            </attributelist>
         </attribute>
         <attribute name="truepeak" get="1" set="1" type="int" size="1">
             <digest>True-peak detection</digest>
-            <description>On (default) or sample peak.</description>
+            <description>On (default) or sample peak. Default: 1.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Dynamics" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="True-peak detection" />
+            </attributelist>
         </attribute>
         <attribute name="fold" get="1" set="1" type="int" size="1">
-            <digest>Fold-down guard: off, stereo, mono</digest>
-            <description></description>
+            <digest>Fold-down guard</digest>
+            <description>Values: 0 = off, 1 = stereo, 2 = mono (a number or the name). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Dynamics" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Fold-down guard" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="3">
+                    <enumlist>
+                        <enum name="off"><digest>off</digest></enum>
+                        <enum name="stereo"><digest>stereo</digest></enum>
+                        <enum name="mono"><digest>mono</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
         </attribute>
         <attribute name="fold_ceiling" get="1" set="1" type="float64" size="1">
             <digest>Fold-down ceiling (dBTP)</digest>
             <description>Default -1.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Dynamics" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Fold-down ceiling (dBTP)" />
+            </attributelist>
         </attribute>
         <attribute name="safety_clip" get="1" set="1" type="int" size="1">
-            <digest>Safety clip</digest>
-            <description>On (default): samples still over the ceiling are clipped and counted.</description>
-        </attribute>
-        <attribute name="speaker_coords" get="1" set="1" type="float64" size="1">
-            <digest>Speaker azimuths</digest>
-            <description>One per channel, deg, 0 = front, clockwise (as syncSuite.nodes). Empty = even ring of the non-LFE channels. Used for the image and the fold-down.</description>
-        </attribute>
-        <attribute name="speaker_elevations" get="1" set="1" type="float64" size="1">
-            <digest>Speaker elevations (deg)</digest>
-            <description></description>
-        </attribute>
-        <attribute name="lfe" get="1" set="1" type="int" size="1">
-            <digest>LFE channels (1-based)</digest>
-            <description>Not positioned; own group by default.</description>
-        </attribute>
-        <attribute name="groups" get="1" set="1" type="int" size="1">
-            <digest>Link group per channel</digest>
-            <description>Any integers, one per channel (a shorter list repeats its last value). Empty = mains / LFE.</description>
-        </attribute>
-        <attribute name="link" get="1" set="1" type="float64" size="1">
-            <digest>Link within groups</digest>
-            <description>0 = independent channels, 1 = the same gain for the whole group (default).</description>
-        </attribute>
-        <attribute name="bypass" get="1" set="1" type="int" size="1">
-            <digest>Bypass</digest>
-            <description>Output = input (latency-aligned; multiband: the band sum); meters keep showing what would be done.</description>
+            <digest>Safety clip (counted)</digest>
+            <description>On (default): samples still over the ceiling are clipped and counted. Default: 1.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Dynamics" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Safety clip (counted)" />
+            </attributelist>
         </attribute>
         <attribute name="view" get="1" set="1" type="int" size="1">
-            <digest>all, meters, history, curve, image</digest>
-            <description></description>
+            <digest>View</digest>
+            <description>Which panels are drawn: all, or one of them filling the box. Values: 0 = all, 1 = meters, 2 = history, 3 = curve, 4 = image (a number or the name). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="View" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="5">
+                    <enumlist>
+                        <enum name="all"><digest>all</digest></enum>
+                        <enum name="meters"><digest>meters</digest></enum>
+                        <enum name="history"><digest>history</digest></enum>
+                        <enum name="curve"><digest>curve</digest></enum>
+                        <enum name="image"><digest>image</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
         </attribute>
         <attribute name="gr_range" get="1" set="1" type="float64" size="1">
             <digest>Gain reduction scale (dB)</digest>
             <description></description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Gain reduction scale (dB)" />
+            </attributelist>
         </attribute>
         <attribute name="meter_min" get="1" set="1" type="float64" size="1">
             <digest>Meter floor (dB)</digest>
-            <description></description>
+            <description>Default: -60.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Meter floor (dB)" />
+            </attributelist>
         </attribute>
         <attribute name="select" get="1" set="1" type="int" size="1">
-            <digest>Highlighted channel</digest>
-            <description>Also by clicking a meter.</description>
+            <digest>Highlighted channel (0 = none)</digest>
+            <description>Also by clicking a meter. Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Highlighted channel (0 = none)" />
+            </attributelist>
+        </attribute>
+        <attribute name="select_band" get="1" set="1" type="int" size="1">
+            <digest>Band shown in the curve</digest>
+            <description>Default: 1.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Band shown in the curve" />
+            </attributelist>
+        </attribute>
+        <attribute name="bypass_ui" get="1" set="1" type="int" size="1">
+            <digest>Stop drawing (audio unaffected)</digest>
+            <description>1: nothing is drawn and the display timer stops; the audio and the message output are not affected (use it when the box is hidden or while performing). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Stop drawing (audio unaffected)" />
+            </attributelist>
+        </attribute>
+        <attribute name="no_ui" get="1" set="1" type="int" size="1">
+            <digest>No UI: a plain object box (set it when typing the object: @no_ui 1)</digest>
+            <description>Type it with the object (mc.syncSuite.limiter~ @no_ui 1): the box looks and sizes like a standard object box, draws nothing, runs no display timer and skips the display-only metering. Max decides per class whether a box is a UI box, so the box stays resizable, but it behaves as a standard object: audio, messages and get work as usual. Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="No UI: a plain object box (set it when typing the object: @no_ui 1)" />
+            </attributelist>
         </attribute>
         <attribute name="output" get="1" set="1" type="int" size="1">
-            <digest>Output every frame</digest>
-            <description></description>
+            <digest>Output measurements every frame</digest>
+            <description>1: the measurements (see get) are output at every display refresh with new data. 0: only on get.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Output measurements every frame" />
+            </attributelist>
         </attribute>
         <attribute name="interval" get="1" set="1" type="int" size="1">
             <digest>Refresh interval (ms)</digest>
-            <description></description>
+            <description>Display refresh and output rate. The processing does not depend on it. Default: 33.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Refresh interval (ms)" />
+            </attributelist>
+        </attribute>
+        <attribute name="bgcolor" get="1" set="1" type="float64" size="4">
+            <digest>Background Color</digest>
+            <description>Box background (syncSuite style: near black).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Background Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="panelcolor" get="1" set="1" type="float64" size="4">
+            <digest>Panel Color</digest>
+            <description>Panel background.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Panel Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="textcolor" get="1" set="1" type="float64" size="4">
+            <digest>Text Color</digest>
+            <description>Labels and numbers.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Text Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="gridcolor" get="1" set="1" type="float64" size="4">
+            <digest>Grid Color</digest>
+            <description>Scales and guides.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Grid Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="color" get="1" set="1" type="float64" size="4">
+            <digest>Signal Color</digest>
+            <description>Main signal colour (syncSuite hot pink).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Signal Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="grcolor" get="1" set="1" type="float64" size="4">
+            <digest>Gain Reduction Color</digest>
+            <description>Gain reduction bars and curve.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Gain Reduction Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="overcolor" get="1" set="1" type="float64" size="4">
+            <digest>Over Color</digest>
+            <description>Overs and clips (acid yellow).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Over Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
         </attribute>
     </attributelist>
 

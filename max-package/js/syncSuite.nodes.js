@@ -1609,3 +1609,7 @@ function paint() {
     speaker_coords(...ringDegrees(ns));
     num_sources(nk);
 })();
+
+// Internal helpers: not messages. Marked local so the object only answers (and
+// Max only autocompletes) its documented messages.
+[addGroup, attenuation, azOf, changed, checkLayout, circle, clamp, clampDb, clampToField, computeDBAP, computeGains, computeVBAP, convexHull, cross, emitGains, emitGeometry, ensureAllGains, ensureGains, fmtAz, fmtDb, fmtFocus, fmtList, fromNorm, haloRadius, hitChannel, hitSpeaker, index, invalidateAll, isPointSpread, label, levelOf, maxStereoWidth, mirrorXY, mix, newChannel, newSource, newSpeaker, pair, perItem, perSource, place, polarToXY, projectOntoHull, radiusOf, readout, readoutRight, rebuildLayout, reportSource, rgba, ringDegrees, rolloffToA, roundRect, setFlag, setSource, setSourceParam, setSpeaker, setWeight, sourcePolar, speakerPolar, spreadExponent, spreadWeight, stereoWidthAt, text, toNorm, toScreen, toWorld, unmirror, updateChannels, vbapPoint, wrap360].forEach(f => { f.local = 1; });

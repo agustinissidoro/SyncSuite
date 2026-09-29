@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-stylesheet href="./c74ref.xsl" type="text/xsl"?>
+
+<c74object name="mc.syncSuite.correlation~">
+
+    <digest>
+        Inter-channel correlation of a speaker layout: matrix, layout ring, fold-down build-up / cancellation, pair scope.
+    </digest>
+
+    <description>
+        Measures how the channels of a layout relate, per 20 ms frame, over a window (default 300 ms), broadband or in low (&lt; 250 Hz), mid and high (&gt; 4 kHz) bands (Linkwitz-Riley). MATRIX: correlation r of every pair (-1 cyan .. 0 dark .. +1 pink; click a cell to scope that pair). RING: the layout, adjacent pairs drawn in their correlation, each speaker in its mono compatibility (its correlation with the sum of all the others: negative = it cancels against the rest). FOLD: what happens when the layout is folded down: energy of the stereo fold (as mc.syncSuite.virtualspeakers~) L and R and of the mono sum, against the sum of the folded channels' energies. 0 dB = the channels add as uncorrelated signals; above (acid yellow) they add coherently: level build-up and comb filtering wherever their delays differ; below (cyan) they cancel. SCOPE: goniometer of the selected pair (vertical = in phase, horizontal = difference). Analysis only; no audio output. CPU with bands: about 0.2 % of a core for 8 channels, 1.4 % for 32.
+    </description>
+
+    <!--METADATA-->
+    <metadatalist>
+        <metadata name="author">Agustin Issidoro</metadata>
+        <metadata name="tag">SyncSuite</metadata>
+        <metadata name="tag">Analysis</metadata>
+        <metadata name="tag">Spatialization</metadata>
+        <metadata name="tag">MSP</metadata>
+    </metadatalist>
+
+    <!--MESSAGES-->
+    <methodlist>
+        <method name="signal">
+            <arglist />
+            <digest>Speaker feeds (channel i = speaker i)</digest>
+            <description>A multichannel signal, one channel per speaker (up to 128).</description>
+        </method>
+        <method name="get">
+            <arglist />
+            <digest>Output the measurements</digest>
+            <description>matrix &lt;C x C correlations&gt;, mono &lt;per channel&gt;, fold &lt;L R M dB&gt;, mean_abs &lt;mean |r|&gt;, for the band shown.</description>
+        </method>
+    </methodlist>
+
+    <!--ATTRIBUTES-->
+    <attributelist>
+        <attribute name="speaker_coords" get="1" set="1" type="float64" size="128">
+            <digest>Speaker azimuths (deg, 0 = front, clockwise)</digest>
+            <description>One azimuth per channel (channel i = speaker i), the same message syncSuite.nodes uses and outputs (get_speakers). Empty = an even ring of the non-LFE channels straddling the front (2 = L/R, 4 = quad, 8 = octagon).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Speaker azimuths (deg, 0 = front, clockwise)" />
+            </attributelist>
+        </attribute>
+        <attribute name="speaker_elevations" get="1" set="1" type="float64" size="128">
+            <digest>Speaker elevations (deg)</digest>
+            <description>Degrees, up, one per channel (missing = 0). All spatial computations are in 3D; the displays are top views.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Speaker elevations (deg)" />
+            </attributelist>
+        </attribute>
+        <attribute name="lfe" get="1" set="1" type="int" size="128">
+            <digest>LFE channels (1-based)</digest>
+            <description>Channels that are LFE: they have no position and are kept out of the spatial processing and the loudness. lfe with no values = none.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="LFE channels (1-based)" />
+            </attributelist>
+        </attribute>
+        <attribute name="window" get="1" set="1" type="float64" size="1">
+            <digest>Window (ms)</digest>
+            <description>Measurement window (ms, 20..2400). Default: 300.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Window (ms)" />
+            </attributelist>
+        </attribute>
+        <attribute name="bands" get="1" set="1" type="int" size="1">
+            <digest>Also measure low / mid / high</digest>
+            <description>1 (default): also measure low / mid / high; 0: broadband only (cheaper).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Also measure low / mid / high" />
+            </attributelist>
+        </attribute>
+        <attribute name="band" get="1" set="1" type="int" size="1">
+            <digest>Band shown and output</digest>
+            <description>Which band the display shows and the outlet reports: broad, low, mid, high. Values: 0 = broad, 1 = low, 2 = mid, 3 = high (a number or the name). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Band shown and output" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="4">
+                    <enumlist>
+                        <enum name="broad"><digest>broad</digest></enum>
+                        <enum name="low"><digest>low</digest></enum>
+                        <enum name="mid"><digest>mid</digest></enum>
+                        <enum name="high"><digest>high</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
+        </attribute>
+        <attribute name="pair" get="1" set="1" type="int" size="2">
+            <digest>Pair in the scope (1-based; also by clicking the matrix)</digest>
+            <description>The two channels in the scope (1-based). Also by clicking the matrix. Default: 1 2.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Pair in the scope (1-based; also by clicking the matrix)" />
+            </attributelist>
+        </attribute>
+        <attribute name="view" get="1" set="1" type="int" size="1">
+            <digest>View</digest>
+            <description>Which panels are drawn: all, or one of them filling the box. Values: 0 = all, 1 = matrix, 2 = ring, 3 = fold, 4 = scope (a number or the name). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="View" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="5">
+                    <enumlist>
+                        <enum name="all"><digest>all</digest></enum>
+                        <enum name="matrix"><digest>matrix</digest></enum>
+                        <enum name="ring"><digest>ring</digest></enum>
+                        <enum name="fold"><digest>fold</digest></enum>
+                        <enum name="scope"><digest>scope</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
+        </attribute>
+        <attribute name="bypass_ui" get="1" set="1" type="int" size="1">
+            <digest>Stop drawing</digest>
+            <description>1: nothing is drawn and the display timer stops; the audio and the message output are not affected (use it when the box is hidden or while performing). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Stop drawing" />
+            </attributelist>
+        </attribute>
+        <attribute name="output" get="1" set="1" type="int" size="1">
+            <digest>Output measurements every frame</digest>
+            <description>1: the measurements (see get) are output at every display refresh with new data. 0: only on get.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Output measurements every frame" />
+            </attributelist>
+        </attribute>
+        <attribute name="interval" get="1" set="1" type="int" size="1">
+            <digest>Refresh interval (ms)</digest>
+            <description>Display refresh and output rate. The processing does not depend on it. Default: 33.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Refresh interval (ms)" />
+            </attributelist>
+        </attribute>
+        <attribute name="bgcolor" get="1" set="1" type="float64" size="4">
+            <digest>Background Color</digest>
+            <description>Box background (syncSuite style: near black).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Background Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="panelcolor" get="1" set="1" type="float64" size="4">
+            <digest>Panel Color</digest>
+            <description>Panel background.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Panel Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="textcolor" get="1" set="1" type="float64" size="4">
+            <digest>Text Color</digest>
+            <description>Labels and numbers.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Text Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="gridcolor" get="1" set="1" type="float64" size="4">
+            <digest>Grid Color</digest>
+            <description>Scales and guides.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Grid Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="color" get="1" set="1" type="float64" size="4">
+            <digest>Signal Color</digest>
+            <description>Main signal colour (syncSuite hot pink).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Signal Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="alarmcolor" get="1" set="1" type="float64" size="4">
+            <digest>Alarm Color</digest>
+            <description>Overs, clips, gated / frozen states (acid yellow).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Alarm Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+    </attributelist>
+
+    <!--INLETS-->
+    <inletlist>
+        <inlet id="0" type="multichannelsignal">
+            <digest>Speaker feeds (channel i = speaker i) and messages</digest>
+        </inlet>
+    </inletlist>
+
+    <!--OUTLETS-->
+    <outletlist>
+        <outlet id="0" type="list">
+            <digest>Measurements: matrix &lt;C x C&gt;, mono &lt;per channel&gt;, fold &lt;L R M dB&gt;, mean_abs</digest>
+        </outlet>
+    </outletlist>
+
+    <!--SEEALSO-->
+    <seealsolist>
+        <seealso name="mc.syncSuite.decorrelator~" />
+        <seealso name="mc.syncSuite.analyzer~" />
+        <seealso name="mc.syncSuite.virtualspeakers~" />
+    </seealsolist>
+
+</c74object>

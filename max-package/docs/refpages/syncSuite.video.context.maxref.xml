@@ -133,12 +133,6 @@
             </description>
         </attribute>
 
-        <attribute name="cameraContext" get="1" set="1" type="symbol" size="1">
-            <digest>Context the pixel-space camera draws into</digest>
-            <description>
-                Same as the "cameraContext" message.
-            </description>
-        </attribute>
 
         <attribute name="enable" get="1" set="1" type="int32" size="1">
             <digest>Enables the context (jit.world attribute)</digest>

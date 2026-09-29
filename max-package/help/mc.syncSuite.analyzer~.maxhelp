@@ -13,7 +13,7 @@
    60,
    60,
    1060,
-   840
+   910
   ],
   "gridsize": [
    15,
@@ -967,7 +967,7 @@
      "numoutlets": 1,
      "patching_rect": [
       20,
-      426,
+      496,
       900,
       190
      ],
@@ -984,7 +984,7 @@
      "numoutlets": 0,
      "patching_rect": [
       940,
-      426,
+      496,
       45,
       45
      ]
@@ -998,7 +998,7 @@
      "numoutlets": 0,
      "patching_rect": [
       940,
-      474,
+      544,
       100,
       34
      ],
@@ -1014,7 +1014,7 @@
      "numoutlets": 0,
      "patching_rect": [
       20,
-      630,
+      700,
       105,
       22
      ],
@@ -1029,7 +1029,7 @@
      "numoutlets": 3,
      "patching_rect": [
       140,
-      630,
+      700,
       190,
       22
      ],
@@ -1049,7 +1049,7 @@
      "numoutlets": 1,
      "patching_rect": [
       140,
-      660,
+      730,
       70,
       22
      ],
@@ -1067,7 +1067,7 @@
      "numoutlets": 1,
      "patching_rect": [
       140,
-      690,
+      760,
       260,
       22
      ],
@@ -1085,7 +1085,7 @@
      "numoutlets": 1,
      "patching_rect": [
       420,
-      660,
+      730,
       70,
       22
      ],
@@ -1103,7 +1103,7 @@
      "numoutlets": 1,
      "patching_rect": [
       420,
-      690,
+      760,
       200,
       22
      ],
@@ -1121,7 +1121,7 @@
      "numoutlets": 0,
      "patching_rect": [
       140,
-      716,
+      786,
       270,
       20
      ],
@@ -1136,7 +1136,7 @@
      "numoutlets": 0,
      "patching_rect": [
       420,
-      716,
+      786,
       300,
       20
      ],
@@ -1151,12 +1151,46 @@
      "numoutlets": 0,
      "patching_rect": [
       20,
-      746,
+      816,
       1000,
       62
      ],
      "text": "Outlet (on get, or every frame with @output 1): loudness M S I LRA, max M S TP, time <s>, rms / peak / peak_max / channel_loudness <one value per channel>, energy / energy_low / energy_mid / energy_high <az el r>. get_spectrum <ch> (0 = power sum) -> spectrum <ch> <dB per band>; get_bands -> bands <centre Hz ...>. -inf is output as -200. Levels: 0 dB = full-scale square (a full-scale sine is -3.01 dB RMS) unless @aes17 1.",
      "linecount": 4
+    }
+   },
+   {
+    "box": {
+     "maxclass": "attrui",
+     "attr": "bypass_ui",
+     "numinlets": 1,
+     "numoutlets": 1,
+     "outlettype": [
+      ""
+     ],
+     "patching_rect": [
+      20,
+      432,
+      160,
+      22
+     ],
+     "parameter_enable": 0,
+     "id": "obj-66"
+    }
+   },
+   {
+    "box": {
+     "maxclass": "comment",
+     "text": "bypass_ui: stop drawing (the audio / measurement goes on)",
+     "numinlets": 1,
+     "numoutlets": 0,
+     "patching_rect": [
+      186,
+      432,
+      330,
+      20
+     ],
+     "id": "obj-67"
     }
    }
   ],
@@ -1721,6 +1755,18 @@
      ],
      "destination": [
       "obj-62",
+      0
+     ]
+    }
+   },
+   {
+    "patchline": {
+     "source": [
+      "obj-66",
+      0
+     ],
+     "destination": [
+      "obj-54",
       0
      ]
     }

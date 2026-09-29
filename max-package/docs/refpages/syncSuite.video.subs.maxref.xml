@@ -318,6 +318,16 @@
                 UDP link the device uses to stream text/style updates into this object.
             </description>
         </method>
+        <method name="dimComposite">
+            <arglist>
+                <arg name="width" optional="0" type="int" />
+                <arg name="height" optional="0" type="int" />
+            </arglist>
+            <digest>Reference composite dimensions, in pixels</digest>
+            <description>Width and height, in pixels, used as the reference size when converting
+                "positionInPixels" coordinates to the object's normalized position space. Default
+                1920 1080.</description>
+        </method>
     </methodlist>
 
     <!--ATTRIBUTES-->

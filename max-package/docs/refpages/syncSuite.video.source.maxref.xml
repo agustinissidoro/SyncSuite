@@ -553,19 +553,7 @@
             </description>
         </attribute>
 
-        <attribute name="source" get="1" set="1" type="symbol" size="1">
-            <digest>Internal player or external matrix/texture</digest>
-            <description>
-                Same as the "source" message. Default "internal".
-            </description>
-        </attribute>
 
-        <attribute name="loop" get="1" set="1" type="int32" size="1">
-            <digest>Loops the current video</digest>
-            <description>
-                Same as the "loop" message. Default 0.
-            </description>
-        </attribute>
     </attributelist>
 
     <!--DISCUSSION-->

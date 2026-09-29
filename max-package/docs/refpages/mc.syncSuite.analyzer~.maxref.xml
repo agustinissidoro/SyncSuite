@@ -22,6 +22,11 @@
 
     <!--MESSAGES-->
     <methodlist>
+        <method name="signal">
+            <arglist />
+            <digest>Speaker feeds</digest>
+            <description>One multichannel signal, channel i = speaker i. Up to 128 channels.</description>
+        </method>
         <method name="reset">
             <arglist />
             <digest>Restart the loudness measurement</digest>
@@ -49,106 +54,295 @@
             <digest>Output band centre frequencies</digest>
             <description>bands f1 f2 ... (Hz), matching get_spectrum.</description>
         </method>
-        <method name="signal">
-            <arglist />
-            <digest>Speaker feeds</digest>
-            <description>One multichannel signal, channel i = speaker i. Up to 128 channels.</description>
-        </method>
     </methodlist>
 
     <!--ATTRIBUTES-->
     <attributelist>
         <attribute name="speaker_coords" get="1" set="1" type="float64" size="128">
-            <digest>Speaker azimuths</digest>
+            <digest>Speaker azimuths (deg, 0 = front, clockwise)</digest>
             <description>One azimuth per channel (deg, 0 = front, clockwise), the same message syncSuite.nodes uses and outputs (get_speakers). Empty = an even ring of the non-LFE channels. An azimuth given for an LFE channel is ignored; channels past the end of the list have no position (they are metered, and count in the loudness with weight 1, but not in the energy vectors).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Speaker azimuths (deg, 0 = front, clockwise)" />
+            </attributelist>
         </attribute>
         <attribute name="speaker_elevations" get="1" set="1" type="float64" size="128">
-            <digest>Speaker elevations</digest>
+            <digest>Speaker elevations (deg, up)</digest>
             <description>Degrees, up, per channel (missing = 0). Used by the energy vectors, the BS.1770 weights (elevated speakers get 1) and the field (elevated speakers are drawn nearer the centre, at cos(elevation)).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Speaker elevations (deg, up)" />
+            </attributelist>
         </attribute>
         <attribute name="lfe" get="1" set="1" type="int" size="128">
-            <digest>LFE channels</digest>
+            <digest>LFE channels (1-based)</digest>
             <description>1-based channel numbers. Excluded from the loudness and the energy vectors, drawn in purple. lfe with no values = none.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="LFE channels (1-based)" />
+            </attributelist>
         </attribute>
         <attribute name="loudness_weights" get="1" set="1" type="int" size="1">
-            <digest>Channel weights: bs1770 or flat</digest>
-            <description>bs1770 (default): 1.41 for speakers at 60-120 degrees (either side) below 30 degrees elevation, 1 elsewhere, only when speaker_coords are given. flat: 1 for every non-LFE channel.</description>
-        </attribute>
-        <attribute name="view" get="1" set="1" type="int" size="1">
-            <digest>all, field, meters, spectrum, loudness</digest>
-            <description>all: the panels side by side (those that do not fit are left out); the others fill the box with one panel. The loudness view adds a graph of the last minute (momentary and short-term, target line).</description>
-        </attribute>
-        <attribute name="field_mode" get="1" set="1" type="int" size="1">
-            <digest>spectral, levels</digest>
-            <description>spectral (default): polar spectrum with the per-band energy directions. levels: RMS radar with the broadband and low / mid / high energy vectors.</description>
-        </attribute>
-        <attribute name="field_scale" get="1" set="1" type="int" size="1">
-            <digest>peak, absolute, band</digest>
-            <description>Colour scale of the spectral field. peak (default): the loudest direction / band at the top, field_range dB below it at the bottom. absolute: spectrum_min to spectrum_max, the same scale as the heat map. band: every frequency ring against its own loudest direction (field_range dB), which shows direction only, whatever the band's level (bands below spectrum_min stay dark).</description>
-        </attribute>
-        <attribute name="field_range" get="1" set="1" type="float64" size="1">
-            <digest>Spectral field range (dB)</digest>
-            <description>Range of the peak and band scales. Default 48.</description>
-        </attribute>
-        <attribute name="spectrum_view" get="1" set="1" type="int" size="1">
-            <digest>both, curve, heatmap</digest>
-            <description>What the spectrum panel shows. both: curve above, heat map below (curve only when the panel is shorter than 90 pixels).</description>
-        </attribute>
-        <attribute name="select" get="1" set="1" type="int" size="1">
-            <digest>Channel shown in the spectrum curve</digest>
-            <description>0 (default) = power sum of all channels. Also set by clicking.</description>
-        </attribute>
-        <attribute name="resolution" get="1" set="1" type="int" size="1">
-            <digest>Bands per octave</digest>
-            <description>1, 3, 6 (default), 12 or 24. 1 and 3 are drawn as bars, finer ones as a curve. Bands from 20 Hz to 20 kHz (or Nyquist).</description>
+            <digest>Loudness channel weights</digest>
+            <description>bs1770 (default): 1.41 for speakers at 60-120 degrees (either side) below 30 degrees elevation, 1 elsewhere, only when speaker_coords are given. flat: 1 for every non-LFE channel. Values: 0 = bs1770, 1 = flat (a number or the name).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Layout" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Loudness channel weights" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="2">
+                    <enumlist>
+                        <enum name="bs1770"><digest>bs1770</digest></enum>
+                        <enum name="flat"><digest>flat</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
         </attribute>
         <attribute name="fftsize" get="1" set="1" type="int" size="1">
-            <digest>FFT size</digest>
+            <digest>FFT size (1024 - 16384)</digest>
             <description>1024 to 16384 (default), rounded up to a power of two. Bands narrower than the FFT's resolution (low frequencies, fine resolution, small FFT) share a bin with their neighbours: use 16384 for 1/12 or 1/24 octave below 100 Hz.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="FFT size (1024 - 16384)" />
+            </attributelist>
+        </attribute>
+        <attribute name="resolution" get="1" set="1" type="int" size="1">
+            <digest>Bands per octave (1, 3, 6, 12, 24)</digest>
+            <description>1, 3, 6 (default), 12 or 24. 1 and 3 are drawn as bars, finer ones as a curve. Bands from 20 Hz to 20 kHz (or Nyquist).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Bands per octave (1, 3, 6, 12, 24)" />
+            </attributelist>
         </attribute>
         <attribute name="spectrum_avg" get="1" set="1" type="float64" size="1">
-            <digest>Spectrum averaging (ms)</digest>
+            <digest>Spectrum averaging time constant (ms)</digest>
             <description>Time constant of the exponential average of the band powers. 0 = none. Default 300.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Spectrum averaging time constant (ms)" />
+            </attributelist>
         </attribute>
         <attribute name="rms_window" get="1" set="1" type="float64" size="1">
             <digest>RMS window (ms)</digest>
             <description>Rectangular window of the RMS meters and the field, 10 to 3000 ms. Default 300.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="RMS window (ms)" />
+            </attributelist>
         </attribute>
         <attribute name="peak_hold" get="1" set="1" type="float64" size="1">
             <digest>Peak hold (ms)</digest>
             <description>How long the hold line stays before it follows the peak down. Default 2000.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Peak hold (ms)" />
+            </attributelist>
         </attribute>
         <attribute name="truepeak" get="1" set="1" type="int" size="1">
-            <digest>True peak on / off</digest>
-            <description>On (default): peaks are measured on the oversampled signal (dBTP). Off: sample peak (dBFS), cheaper.</description>
+            <digest>True peak (oversampled)</digest>
+            <description>On (default): peaks are measured on the oversampled signal (dBTP). Off: sample peak (dBFS), cheaper. Default: 1.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="True peak (oversampled)" />
+            </attributelist>
         </attribute>
         <attribute name="aes17" get="1" set="1" type="int" size="1">
-            <digest>AES17 RMS convention</digest>
+            <digest>AES17 RMS (+3.01 dB: full-scale sine = 0 dB)</digest>
             <description>Adds 3.01 dB to RMS readings and spectra, so a full-scale sine reads 0 dB. Off by default. Loudness and peaks are not affected.</description>
-        </attribute>
-        <attribute name="target" get="1" set="1" type="float64" size="1">
-            <digest>Integrated loudness target (LUFS)</digest>
-            <description>The integrated value turns green within 1 LU of it, amber within 2 LU, red beyond. Default -23 (EBU R128).</description>
-        </attribute>
-        <attribute name="meter_min" get="1" set="1" type="float64" size="1">
-            <digest>Meter floor (dB)</digest>
-            <description>Bottom of the meters and centre of the field's radar. Default -60.</description>
-        </attribute>
-        <attribute name="spectrum_min" get="1" set="1" type="float64" size="1">
-            <digest>Spectrum floor (dB)</digest>
-            <description>Default -100.</description>
-        </attribute>
-        <attribute name="spectrum_max" get="1" set="1" type="float64" size="1">
-            <digest>Spectrum ceiling (dB)</digest>
-            <description>Default 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="AES17 RMS (+3.01 dB: full-scale sine = 0 dB)" />
+            </attributelist>
         </attribute>
         <attribute name="output" get="1" set="1" type="int" size="1">
-            <digest>Output every frame</digest>
-            <description>On: the get messages are output at every refresh with new data. Off (default): only on get.</description>
+            <digest>Output measurements every frame</digest>
+            <description>On: the get messages are output at every refresh with new data. Off (default): only on get. Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Output measurements every frame" />
+            </attributelist>
+        </attribute>
+        <attribute name="bypass_ui" get="1" set="1" type="int" size="1">
+            <digest>Stop drawing (measurement and output go on)</digest>
+            <description>1: nothing is drawn and the display timer stops; the audio and the message output are not affected (use it when the box is hidden or while performing). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Stop drawing (measurement and output go on)" />
+            </attributelist>
         </attribute>
         <attribute name="interval" get="1" set="1" type="int" size="1">
             <digest>Refresh interval (ms)</digest>
             <description>Display / output rate. Default 33. The measurements do not depend on it.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Measurement" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Refresh interval (ms)" />
+            </attributelist>
+        </attribute>
+        <attribute name="view" get="1" set="1" type="int" size="1">
+            <digest>View</digest>
+            <description>all: the panels side by side (those that do not fit are left out); the others fill the box with one panel. The loudness view adds a graph of the last minute (momentary and short-term, target line). Values: 0 = all, 1 = field, 2 = meters, 3 = spectrum, 4 = loudness (a number or the name). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="View" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="5">
+                    <enumlist>
+                        <enum name="all"><digest>all</digest></enum>
+                        <enum name="field"><digest>field</digest></enum>
+                        <enum name="meters"><digest>meters</digest></enum>
+                        <enum name="spectrum"><digest>spectrum</digest></enum>
+                        <enum name="loudness"><digest>loudness</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
+        </attribute>
+        <attribute name="spectrum_view" get="1" set="1" type="int" size="1">
+            <digest>Spectrum display</digest>
+            <description>What the spectrum panel shows. both: curve above, heat map below (curve only when the panel is shorter than 90 pixels). Values: 0 = both, 1 = curve, 2 = heatmap (a number or the name).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Spectrum display" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="3">
+                    <enumlist>
+                        <enum name="both"><digest>both</digest></enum>
+                        <enum name="curve"><digest>curve</digest></enum>
+                        <enum name="heatmap"><digest>heatmap</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
+        </attribute>
+        <attribute name="field_mode" get="1" set="1" type="int" size="1">
+            <digest>Field display</digest>
+            <description>spectral (default): polar spectrum with the per-band energy directions. levels: RMS radar with the broadband and low / mid / high energy vectors. Values: 0 = spectral, 1 = levels (a number or the name). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Field display" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="2">
+                    <enumlist>
+                        <enum name="spectral"><digest>spectral</digest></enum>
+                        <enum name="levels"><digest>levels</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
+        </attribute>
+        <attribute name="field_scale" get="1" set="1" type="int" size="1">
+            <digest>Spectral field colour scale</digest>
+            <description>Colour scale of the spectral field. peak (default): the loudest direction / band at the top, field_range dB below it at the bottom. absolute: spectrum_min to spectrum_max, the same scale as the heat map. band: every frequency ring against its own loudest direction (field_range dB), which shows direction only, whatever the band's level (bands below spectrum_min stay dark). Values: 0 = peak, 1 = absolute, 2 = band (a number or the name). Default: 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Spectral field colour scale" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="enumindex" />
+                <attribute name="enumvals" get="1" set="1" type="atom" size="3">
+                    <enumlist>
+                        <enum name="peak"><digest>peak</digest></enum>
+                        <enum name="absolute"><digest>absolute</digest></enum>
+                        <enum name="band"><digest>band</digest></enum>
+                    </enumlist>
+                </attribute>
+            </attributelist>
+        </attribute>
+        <attribute name="field_range" get="1" set="1" type="float64" size="1">
+            <digest>Spectral field range (dB, peak / band scales)</digest>
+            <description>Range of the peak and band scales. Default 48.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Spectral field range (dB, peak / band scales)" />
+            </attributelist>
+        </attribute>
+        <attribute name="select" get="1" set="1" type="int" size="1">
+            <digest>Spectrum channel (0 = all)</digest>
+            <description>0 (default) = power sum of all channels. Also set by clicking.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Spectrum channel (0 = all)" />
+            </attributelist>
+        </attribute>
+        <attribute name="target" get="1" set="1" type="float64" size="1">
+            <digest>Integrated loudness target (LUFS)</digest>
+            <description>The integrated value turns green within 1 LU of it, amber within 2 LU, red beyond. Default -23 (EBU R128).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Integrated loudness target (LUFS)" />
+            </attributelist>
+        </attribute>
+        <attribute name="meter_min" get="1" set="1" type="float64" size="1">
+            <digest>Meter / field floor (dB)</digest>
+            <description>Bottom of the meters and centre of the field's radar. Default -60.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Meter / field floor (dB)" />
+            </attributelist>
+        </attribute>
+        <attribute name="spectrum_min" get="1" set="1" type="float64" size="1">
+            <digest>Spectrum floor (dB)</digest>
+            <description>Default -100.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Spectrum floor (dB)" />
+            </attributelist>
+        </attribute>
+        <attribute name="spectrum_max" get="1" set="1" type="float64" size="1">
+            <digest>Spectrum ceiling (dB)</digest>
+            <description>Default 0.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Display" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Spectrum ceiling (dB)" />
+            </attributelist>
+        </attribute>
+        <attribute name="bgcolor" get="1" set="1" type="float64" size="4">
+            <digest>Background Color</digest>
+            <description>Box background (syncSuite style: near black).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Background Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="panelcolor" get="1" set="1" type="float64" size="4">
+            <digest>Panel Color</digest>
+            <description>Panel background.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Panel Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="textcolor" get="1" set="1" type="float64" size="4">
+            <digest>Text Color</digest>
+            <description>Labels and numbers.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Text Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="gridcolor" get="1" set="1" type="float64" size="4">
+            <digest>Grid Color</digest>
+            <description>Scales and guides.</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Grid Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="color" get="1" set="1" type="float64" size="4">
+            <digest>Signal Color</digest>
+            <description>Main signal colour (syncSuite hot pink).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Signal Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
+        </attribute>
+        <attribute name="overcolor" get="1" set="1" type="float64" size="4">
+            <digest>Over Color</digest>
+            <description>Overs and clips (acid yellow).</description>
+            <attributelist>
+                <attribute name="category" get="1" set="1" type="symbol" size="1" value="Color" />
+                <attribute name="label" get="1" set="1" type="symbol" size="1" value="Over Color" />
+                <attribute name="style" get="1" set="1" type="symbol" size="1" value="rgba" />
+            </attributelist>
         </attribute>
     </attributelist>
 

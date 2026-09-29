@@ -13,7 +13,7 @@
    60,
    60,
    1030,
-   854
+   924
   ],
   "gridsize": [
    15,
@@ -936,7 +936,7 @@
      "numoutlets": 2,
      "patching_rect": [
       20,
-      424,
+      494,
       980,
       190
      ],
@@ -954,7 +954,7 @@
      "numoutlets": 1,
      "patching_rect": [
       20,
-      624,
+      694,
       190,
       22
      ],
@@ -972,7 +972,7 @@
      "numoutlets": 1,
      "patching_rect": [
       20,
-      654,
+      724,
       66,
       22
      ],
@@ -990,7 +990,7 @@
      "numoutlets": 0,
      "patching_rect": [
       20,
-      684,
+      754,
       84,
       22
      ],
@@ -1005,7 +1005,7 @@
      "numoutlets": 0,
      "patching_rect": [
       215,
-      624,
+      694,
       360,
       20
      ],
@@ -1020,7 +1020,7 @@
      "numoutlets": 0,
      "patching_rect": [
       120,
-      674,
+      744,
       45,
       45
      ]
@@ -1034,7 +1034,7 @@
      "numoutlets": 0,
      "patching_rect": [
       620,
-      624,
+      694,
       105,
       22
      ],
@@ -1049,7 +1049,7 @@
      "numoutlets": 3,
      "patching_rect": [
       620,
-      654,
+      724,
       170,
       22
      ],
@@ -1069,7 +1069,7 @@
      "numoutlets": 1,
      "patching_rect": [
       620,
-      684,
+      754,
       70,
       22
      ],
@@ -1087,7 +1087,7 @@
      "numoutlets": 1,
      "patching_rect": [
       620,
-      714,
+      784,
       220,
       22
      ],
@@ -1105,7 +1105,7 @@
      "numoutlets": 1,
      "patching_rect": [
       850,
-      684,
+      754,
       70,
       22
      ],
@@ -1123,7 +1123,7 @@
      "numoutlets": 1,
      "patching_rect": [
       850,
-      714,
+      784,
       120,
       22
      ],
@@ -1141,7 +1141,7 @@
      "numoutlets": 0,
      "patching_rect": [
       620,
-      740,
+      810,
       380,
       34
      ],
@@ -1157,12 +1157,80 @@
      "numoutlets": 0,
      "patching_rect": [
       20,
-      780,
+      850,
       980,
       48
      ],
      "text": "Outlet 2 (on get, or every frame with @output 1): gr / gr_max / in_peak_max / out_peak_max <per channel, dB>, gr_band <band> <per channel>, image <shift width az_in az_out>, stats <gr_max reducing_% seconds clips>, latency <samples ms> (also whenever it changes). Gain reduction = the gain actually multiplied into the audio (excluding make-up / drive).",
      "linecount": 3
+    }
+   },
+   {
+    "box": {
+     "maxclass": "attrui",
+     "attr": "bypass_ui",
+     "numinlets": 1,
+     "numoutlets": 1,
+     "outlettype": [
+      ""
+     ],
+     "patching_rect": [
+      20,
+      430,
+      160,
+      22
+     ],
+     "parameter_enable": 0,
+     "id": "obj-66"
+    }
+   },
+   {
+    "box": {
+     "maxclass": "comment",
+     "text": "bypass_ui: stop drawing (the audio / measurement goes on)",
+     "numinlets": 1,
+     "numoutlets": 0,
+     "patching_rect": [
+      186,
+      430,
+      330,
+      20
+     ],
+     "id": "obj-67"
+    }
+   },
+   {
+    "box": {
+     "maxclass": "comment",
+     "text": "@no_ui 1 (type it with the object): a standard object box, no display, no timer ->",
+     "numinlets": 1,
+     "numoutlets": 0,
+     "patching_rect": [
+      20,
+      460,
+      470,
+      20
+     ],
+     "id": "obj-68"
+    }
+   },
+   {
+    "box": {
+     "maxclass": "mc.syncSuite.multiband~",
+     "numinlets": 1,
+     "numoutlets": 2,
+     "outlettype": [
+      "multichannelsignal",
+      ""
+     ],
+     "patching_rect": [
+      500,
+      458,
+      226.4,
+      22
+     ],
+     "no_ui": 1,
+     "id": "obj-69"
     }
    }
   ],
@@ -1787,6 +1855,18 @@
      ],
      "destination": [
       "obj-63",
+      0
+     ]
+    }
+   },
+   {
+    "patchline": {
+     "source": [
+      "obj-66",
+      0
+     ],
+     "destination": [
+      "obj-52",
       0
      ]
     }
