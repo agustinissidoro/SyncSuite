@@ -92,15 +92,27 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '/vendor/pdfjs/pdf.worker.min.js';
 let scoreName = location.pathname.replace(/^\//, '');
 
 // =======================================================================
-// PDF rendering — prerender every page to an ImageBitmap on load, so any
-// page jump is an instant draw call, not a decode.
+// PDF rendering — prerender the pages around the current one to
+// ImageBitmaps, so a page turn is an instant draw call, not a decode.
+//
+// Memory: each bitmap is a full-screen RGBA image (~9 MB on a retina
+// laptop), so caching every page of a long score used to exhaust the tab
+// and Chrome killed it ("Aw, Snap!", error code 5). The cache is now a
+// window of CACHE_RADIUS pages either side of the current page; bitmaps
+// that fall out of it are closed explicitly (GC alone reclaims them far
+// too late). `renderGen` cancels in-flight prerender loops whenever a new
+// load or resize makes their output stale, so they never pile up.
 // =======================================================================
 const canvas = document.getElementById('pdf-canvas');
 const ctx = canvas.getContext('2d', { alpha: false });
 const pageWrap = document.getElementById('page-wrap');
 
+const CACHE_RADIUS = 3;
+
 let pdfDoc = null;
+let loadedUrl = null;
 let currentPage = 1;
+let renderGen = 0;
 const pageCache = new Map(); // page number -> ImageBitmap
 const loadErrorEl = document.getElementById('load-error');
 
@@ -116,16 +128,52 @@ function clearLoadError() {
   loadErrorEl.style.display = 'none';
 }
 
+function clearPageCache() {
+  pageCache.forEach(bitmap => bitmap.close());
+  pageCache.clear();
+}
+
+function inCacheWindow(num) {
+  return Math.abs(num - currentPage) <= CACHE_RADIUS;
+}
+
+function evictOutsideWindow() {
+  pageCache.forEach((bitmap, num) => {
+    if (!inCacheWindow(num)) { bitmap.close(); pageCache.delete(num); }
+  });
+}
+
+// Stores a freshly rendered bitmap, unless it's stale (a newer load/resize
+// started) or no longer near the current page — then it's dropped at once.
+function cacheBitmap(num, bitmap, gen) {
+  if (gen !== renderGen || !inCacheWindow(num) || pageCache.has(num)) {
+    bitmap.close();
+    return false;
+  }
+  pageCache.set(num, bitmap);
+  return true;
+}
+
 async function loadScore(url) {
+  // A WebSocket reconnect re-sends the full state, pdfUrl included — don't
+  // re-download and re-render a score that's already loaded.
+  if (url === loadedUrl && pdfDoc) return;
+  const gen = ++renderGen;
+  loadedUrl = url;
+  clearPageCache();
+  if (pdfDoc) { pdfDoc.destroy(); pdfDoc = null; }
   try {
-    pageCache.clear();
-    pdfDoc = await pdfjsLib.getDocument(url).promise;
+    const doc = await pdfjsLib.getDocument(url).promise;
+    if (gen !== renderGen) { doc.destroy(); return; }
+    pdfDoc = doc;
     clearLoadError();
     sendWS({ type: 'pageCount', pageCount: pdfDoc.numPages });
     await renderPage(currentPage || 1);
-    prerenderRemaining();
+    prerenderAround();
   } catch (err) {
+    if (gen !== renderGen) return;
     pdfDoc = null;
+    loadedUrl = null;
     showLoadError(err);
   }
 }
@@ -143,8 +191,13 @@ async function renderToBitmap(num) {
   const off = document.createElement('canvas');
   off.width = viewport.width;
   off.height = viewport.height;
-  await page.render({ canvasContext: off.getContext('2d'), viewport }).promise;
-  return createImageBitmap(off);
+  try {
+    await page.render({ canvasContext: off.getContext('2d'), viewport }).promise;
+    return await createImageBitmap(off);
+  } finally {
+    off.width = off.height = 0; // release the backing store now, not at GC
+    page.cleanup();
+  }
 }
 
 function drawBitmap(bitmap) {
@@ -160,49 +213,71 @@ function drawBitmap(bitmap) {
 async function renderPage(num) {
   if (!pdfDoc || num < 1 || num > pdfDoc.numPages) return;
   currentPage = num;
+  evictOutsideWindow();
   if (pageCache.has(num)) {
     drawBitmap(pageCache.get(num));
+    prerenderAround();
     return;
   }
+  const gen = renderGen;
   try {
     const bitmap = await renderToBitmap(num);
-    pageCache.set(num, bitmap);
-    if (currentPage === num) drawBitmap(bitmap); // still the wanted page after the await
+    if (cacheBitmap(num, bitmap, gen) && currentPage === num) drawBitmap(bitmap); // still the wanted page after the await
   } catch (err) {
-    showLoadError(err);
+    if (gen === renderGen) showLoadError(err);
   }
+  prerenderAround();
 }
 
-// Renders outward from currentPage (n, n+1, n-1, n+2, n-2, ...) instead of
-// strictly 1..numPages, so an immediate page turn right after loading is
-// far more likely to already be cached instead of stalling on a decode.
+// Renders outward from currentPage (n+1, n-1, n+2, n-2, ...) up to
+// CACHE_RADIUS, favoring forward pages, so the next turn is already cached.
 function prerenderOrder(from, numPages) {
-  const order = [from];
-  for (let offset = 1; order.length < numPages; offset++) {
-    const fwd = from + offset;
-    const back = from - offset;
-    if (fwd <= numPages) order.push(fwd);
-    if (back >= 1) order.push(back);
+  const order = [];
+  for (let offset = 1; offset <= CACHE_RADIUS; offset++) {
+    if (from + offset <= numPages) order.push(from + offset);
+    if (from - offset >= 1) order.push(from - offset);
   }
   return order;
 }
 
-async function prerenderRemaining() {
-  if (!pdfDoc) return;
-  for (const n of prerenderOrder(currentPage, pdfDoc.numPages)) {
-    if (pageCache.has(n)) continue;
-    try {
-      const bitmap = await renderToBitmap(n);
-      pageCache.set(n, bitmap);
-      if (currentPage === n) drawBitmap(bitmap);
-    } catch (e) { /* ignore, will fall back to on-demand render */ }
+// Only one prerender loop runs at a time; a call while one is running just
+// asks it to start over from the (new) current page once it's done.
+let prerendering = false;
+let prerenderAgain = false;
+
+async function prerenderAround() {
+  if (prerendering) { prerenderAgain = true; return; }
+  prerendering = true;
+  try {
+    do {
+      prerenderAgain = false;
+      const gen = renderGen;
+      if (!pdfDoc) break;
+      for (const n of prerenderOrder(currentPage, pdfDoc.numPages)) {
+        if (gen !== renderGen || prerenderAgain) break;
+        if (pageCache.has(n) || !inCacheWindow(n)) continue;
+        try {
+          const bitmap = await renderToBitmap(n);
+          if (cacheBitmap(n, bitmap, gen) && currentPage === n) drawBitmap(bitmap);
+        } catch (e) { /* ignore, will fall back to on-demand render */ }
+      }
+    } while (prerenderAgain);
+  } finally {
+    prerendering = false;
   }
 }
 
+// Entering fullscreen fires several resizes in a row — debounce so the
+// cache is only rebuilt once, at the final size.
+let resizeTimer = null;
 window.addEventListener('resize', () => {
-  pageCache.clear();
-  if (pdfDoc) { renderPage(currentPage); prerenderRemaining(); }
   fitBarBeat();
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    renderGen++;
+    clearPageCache();
+    if (pdfDoc) renderPage(currentPage);
+  }, 150);
 });
 
 // =======================================================================
