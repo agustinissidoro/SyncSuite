@@ -9,7 +9,7 @@ syncSuite is a **macOS-only** package (Max, Live, web browsers) that offers solu
 ## Repository contents
 
 - **`max-package/`** — the Max package containing the underlying Max objects, patchers, JS scripts, externals (including `jit.pdfmatrix`), help files, and reference docs used by the M4L devices. Install this into your Max Packages folder to make the objects and abstractions available to Max and Live.
-- **`m4l-devices/`** — the ready-to-use Max for Live devices (`.amxd`): `CueSync`, `LiveSync`, `OSCSync`, `ScoreSync` (part/server), `SubSync`, `VideoSync`. Drop these into an Ableton Live set to use SyncSuite directly.
+- **`m4l-devices/`** — the ready-to-use Max for Live devices (`.amxd`): `CueSync`, `LiveSync`, `OSCSync`, `ScoreSync` (part/server), `SubSync`, `VideoSync`, `VideoSyncOutput`. Drop these into an Ableton Live set to use SyncSuite directly.
 - **`ableton-project/`** — an example/demo Ableton Live project (`syncSuite-help1.als`) showing the devices in use, along with supporting media (movies, subtitle styles, backups).
 
 ## Max objects
@@ -23,6 +23,7 @@ The Max package (`max-package/`) exposes the following objects/abstractions, eac
 | `syncSuite.video.context` | Video rendering context. Wrapper around `jit.world` for easier and extended functionality. |
 | `syncSuite.video.source` | Utility for rendering textures, matrices, playing video files and compositing controls. |
 | `syncSuite.video.subs` | Utility for rendering text in the SyncSuite video context. |
+| `syncSuite.netscan` | Reports your machine's own IP/mask and discovers live devices on a subnet via a ping sweep. |
 | `jit.pdfmatrix` | Renders a page of a PDF file into a Jitter matrix (macOS-only external). |
 
 ## M4L devices
@@ -38,6 +39,7 @@ The ready-to-use Max for Live devices in `m4l-devices/`:
 | `ScoreSync.part.amxd` | Client device that receives and displays the page-turning score from `ScoreSync.server`. |
 | `SubSync.amxd` | Displays synchronized subtitles/captions during playback. |
 | `VideoSync.amxd` | Plays and synchronizes video within a Live set. |
+| `VideoSyncOutput.amxd` | Controls the video output window (enable, fullscreen, position, fps). |
 
 ## Installation
 
@@ -79,6 +81,22 @@ Once the Max package is installed, open the devices in `m4l-devices/` from Ablet
 ### 4. Ableton project
 
 Open `ableton-project/syncSuite-help1.als` in Ableton Live to see a working example of the devices set up together, including sample video/subtitle assets.
+
+## Release notes
+
+### v0.0.1
+
+First public release of SyncSuite.
+
+- **Max for Live devices:** `CueSync`, `LiveSync`, `OSCSync`, `ScoreSync.server`, `ScoreSync.part`, `SubSync`, `VideoSync`, `VideoSyncOutput`.
+- **Max package:** `syncSuite.scoreplayer`, `syncSuite.score.server`, `syncSuite.video.context`, `syncSuite.video.source`, `syncSuite.video.subs`, `syncSuite.netscan` and the `jit.pdfmatrix` external, each with a help patcher and reference page.
+- **Example project:** Ableton Live project with help and tutorial sets (CueSync, OSCSync, score, video), including sample videos and subtitle styles.
+- **Documentation:** `syncSuite_doc.pdf`.
+
+Known limitations:
+
+- macOS only; not tested on Windows.
+- Requires Max 9.
 
 ## Credits
 
