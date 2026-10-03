@@ -8,7 +8,7 @@ syncSuite is a **macOS-only** package (Max, Live, web browsers) that offers solu
 
 ## Repository contents
 
-- **`max-package/`** — the Max package containing the underlying Max objects, patchers, JS scripts, externals (including `jit.pdfmatrix`), help files, and reference docs used by the M4L devices. Install this into your Max Packages folder to make the objects and abstractions available to Max and Live.
+- **`max-package/`** — the Max package containing the underlying Max objects, patchers, JS scripts, externals (including `jit.pdfmatrix`), help files, and reference docs used by the M4L devices. Install the `syncSuite` folder inside it into your Max Packages folder to make the objects and abstractions available to Max and Live.
 - **`m4l-devices/`** — the ready-to-use Max for Live devices (`.amxd`): `CueSync`, `LiveSync`, `OSCSync`, `ScoreSync` (part/server), `SubSync`, `VideoSync`, `VideoSyncOutput`. Drop these into an Ableton Live set to use SyncSuite directly.
 - **`ableton-project/`** — an example/demo Ableton Live project (`syncSuite-help1.als`) showing the devices in use, along with supporting media (movies, subtitle styles, backups).
 
@@ -68,7 +68,7 @@ git lfs pull
 
 ### 2. Max package
 
-Copy (or symlink) the `max-package/` folder into your Max Packages directory (macOS) so its contents are picked up as a package named `syncSuite`:
+Copy the `max-package/syncSuite/` folder into your Max Packages directory (macOS):
 
 - `~/Documents/Max 9/Packages/`
 
@@ -84,7 +84,14 @@ Open `ableton-project/syncSuite-help1.als` in Ableton Live to see a working exam
 
 ## Release notes
 
-### v0.0.1
+### v0.0.2
+
+- Reorganized the repository: the Max package now lives in `max-package/syncSuite/`.
+- Package version set to 0.0.2 and the unsupported Windows entry removed from `package-info.json`.
+- Corrected installation instructions.
+- Added `VideoSyncOutput` and `syncSuite.netscan` to the documentation.
+
+### v0.0.1 (tag `v.0.0.1`)
 
 First public release of SyncSuite.
 
