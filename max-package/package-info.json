@@ -1,7 +1,7 @@
 {
     "name": "syncSuite",
     "displayname": "syncSuite",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "author": "Agustin Issidoro",
     "authors": [
         "Agustin Issidoro"
@@ -24,12 +24,6 @@
             "platform": [
                 "x64",
                 "aarch64"
-            ]
-        },
-        "windows": {
-            "min_version": "none",
-            "platform": [
-                "x64"
             ]
         }
     },
