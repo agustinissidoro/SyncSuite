@@ -717,6 +717,50 @@
                                     "proportion": 0.5,
                                     "rounded": 12
                                 }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-9501",
+                                    "maxclass": "fpic",
+                                    "pic": "syncSuite_icon.png",
+                                    "autofit": 1,
+                                    "ignoreclick": 1,
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "jit_matrix" ],
+                                    "patching_rect": [ 861.5, 14.166666666666666, 44.0, 44.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-9502",
+                                    "maxclass": "fpic",
+                                    "pic": "HOOU_2023_farbig.png",
+                                    "autofit": 1,
+                                    "ignoreclick": 1,
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "jit_matrix" ],
+                                    "patching_rect": [ 834.0, 66.33333333333333, 99.0, 30.5 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-9503",
+                                    "maxclass": "panel",
+                                    "mode": 0,
+                                    "angle": 270.0,
+                                    "proportion": 0.5,
+                                    "background": 1,
+                                    "bgcolor": [ 0.969, 0.969, 0.976, 1.0 ],
+                                    "bordercolor": [ 0.969, 0.969, 0.976, 1.0 ],
+                                    "border": 0,
+                                    "rounded": 8,
+                                    "ignoreclick": 1,
+                                    "numinlets": 1,
+                                    "numoutlets": 0,
+                                    "patching_rect": [ 826.0, 6.0, 115.0, 99.0 ]
+                                }
                             }
                         ],
                         "lines": [

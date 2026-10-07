@@ -384,6 +384,50 @@
                     "patching_rect": [ 75.0, 72.0, 537.0, 34.0 ],
                     "text": "Open the Live session syncSuite-tutorial3 in the /ableton-project folder.\n"
                 }
+            },
+            {
+                "box": {
+                    "id": "obj-9501",
+                    "maxclass": "fpic",
+                    "pic": "syncSuite_icon.png",
+                    "autofit": 1,
+                    "ignoreclick": 1,
+                    "numinlets": 1,
+                    "numoutlets": 1,
+                    "outlettype": [ "jit_matrix" ],
+                    "patching_rect": [ 952.0, 11.6, 44.0, 44.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-9502",
+                    "maxclass": "fpic",
+                    "pic": "HOOU_2023_farbig.png",
+                    "autofit": 1,
+                    "ignoreclick": 1,
+                    "numinlets": 1,
+                    "numoutlets": 1,
+                    "outlettype": [ "jit_matrix" ],
+                    "patching_rect": [ 907.0, 59.2, 134.0, 41.2 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-9503",
+                    "maxclass": "panel",
+                    "mode": 0,
+                    "angle": 270.0,
+                    "proportion": 0.5,
+                    "background": 1,
+                    "bgcolor": [ 0.969, 0.969, 0.976, 1.0 ],
+                    "bordercolor": [ 0.969, 0.969, 0.976, 1.0 ],
+                    "border": 0,
+                    "rounded": 8,
+                    "ignoreclick": 1,
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 899.0, 8.0, 150.0, 96.0 ]
+                }
             }
         ],
         "lines": [
