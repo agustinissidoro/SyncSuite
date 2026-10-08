@@ -86,7 +86,10 @@ Open `ableton-project/syncSuite-help1.als` in Ableton Live to see a working exam
 
 ### v0.0.2
 
-- Reorganized the repository: the Max package now lives in `max-package/syncSuite/`.
+- New visual style (HOOU design) for all Max for Live devices, their INFO windows, the help patchers, the tutorials, the Overview patcher and the PDF documentation; the package now has its own icon.
+- `syncSuite.netscan`: `scan` is more reliable. It sweeps the subnet twice and also reads the system's ARP table, so devices that answer late or do not answer ping at all are no longer missed. Invalid addresses or masks are rejected with a message, and overlapping scans are queued.
+- Fixed `CueSync.amxd`.
+- Reorganized the repository: the Max package now lives in `max-package/syncSuite/` and the devices in `m4l-devices/syncSuite/`.
 - Package version set to 0.0.2 and the unsupported Windows entry removed from `package-info.json`.
 - Corrected installation instructions.
 - Added `VideoSyncOutput` and `syncSuite.netscan` to the documentation.

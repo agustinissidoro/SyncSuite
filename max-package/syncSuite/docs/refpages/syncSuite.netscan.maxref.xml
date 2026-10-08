@@ -87,8 +87,8 @@
         <outlet id="1" type="anything">
             <digest>Results of "scan" and "ping"</digest>
             <description>
-                For "scan", outputs "&lt;iface&gt; &lt;host1&gt; &lt;host2&gt; ..." listing every device that
-                answered the ping sweep on that subnet (or "&lt;iface&gt; none" if nobody answered). Sending
+                For "scan", outputs "&lt;iface&gt; &lt;host1&gt; &lt;host2&gt; ..." listing every device
+                found on that subnet (or "&lt;iface&gt; none" if nobody was found). Sending
                 "scan" with no arguments produces one such message per active interface, scanning each
                 interface's own subnet in turn. For "ping", outputs "&lt;ip&gt; &lt;0|1&gt;" — 1 if that host
                 answered, 0 if it didn't.
@@ -159,9 +159,13 @@
             </digest>
             <description>
                 Sent as "scan &lt;ip&gt; &lt;mask&gt;" (e.g. "scan 192.168.0.1 255.255.255.0"), pings every
-                host in that subnet and reports which ones answered on outlet 1, then bangs outlet 2. Sent as
+                host in that subnet twice over (a quick pass, then a slower one for whoever stayed silent),
+                adds the devices your system resolved a hardware address for but that don't answer ping, and
+                reports them all on outlet 1, then bangs outlet 2. A full 255.255.255.0 subnet takes roughly
+                10 seconds. Masks wider than 255.255.0.0 are refused, and scans requested while another one
+                is running are queued. Sent as
                 bare "scan" with no arguments, scans every currently active interface's own subnet in turn,
-                one report + bang per interface. A device answering the ping means it exists on the network —
+                one report + bang per interface. A device being reported means it exists on the network —
                 it does not by itself mean any particular UDP or TCP port on that device is reachable.
             </description>
         </method>
