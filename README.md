@@ -43,7 +43,12 @@ The ready-to-use Max for Live devices in `m4l-devices/`:
 
 ## Installation
 
-### 1. Git LFS
+There are two ways to get SyncSuite:
+
+- **Release zip (recommended).** Download `SyncSuite-v<version>.zip` from the [releases page](https://github.com/agustinissidoro/SyncSuite/releases) and skip to step 2. In the zip, the Ableton project carries its own copy of the devices, so `ableton-project/` and `m4l-devices/` can each be placed wherever you like.
+- **Cloning the repository.** Meant for development. Here the Live Sets use the devices in `m4l-devices/syncSuite/` directly, so `ableton-project/` and `m4l-devices/` have to stay next to each other, as they are in the repository. If you move one of them, Live will report the devices as missing and you will have to locate them by hand.
+
+### 1. Git LFS (only when cloning)
 
 This repository uses [Git LFS](https://git-lfs.com) to store large media files (e.g. files under `ableton-project/movies/`). Install Git LFS before cloning so those files download correctly instead of being checked out as small pointer files:
 
@@ -81,6 +86,8 @@ Once the Max package is installed, open the devices in `m4l-devices/` from Ablet
 ### 4. Ableton project
 
 Open `ableton-project/syncSuite-help1.als` in Ableton Live to see a working example of the devices set up together, including sample video/subtitle assets.
+
+The devices in these sets still need the Max package from step 2. If you cloned the repository, keep `ableton-project/` next to `m4l-devices/` (see the note at the top of this section).
 
 ## Release notes
 

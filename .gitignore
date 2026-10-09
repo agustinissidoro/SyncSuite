@@ -11,3 +11,5 @@ Thumbs.db
 
 # Max/Live temp files
 *.amxd.bak
+# Local release tooling
+scripts/
