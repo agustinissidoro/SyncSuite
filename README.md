@@ -91,6 +91,16 @@ The devices in these sets still need the Max package from step 2. If you cloned 
 
 ## Release notes
 
+### v0.0.3
+
+- The Max for Live devices are now frozen (all except `ScoreSync.server`), so they carry what they need and work in Live without the Max package. `ScoreSync.server` still needs the syncSuite Max package and the [odot](https://github.com/CNMAT/CNMAT-odot/releases) package; its INFO window and the one of `ScoreSync.part` now say that the package is required.
+- The automatable parameters of `LiveSync`, `OSCSync`, `ScoreSync.part`, `ScoreSync.server` and `VideoSyncOutput` have proper names (`send_tempo`, `page`, `source1_scale`…) instead of `live.toggle[3]`. Live Sets saved with an earlier version will load these parameters at their default values.
+- `VideoSync`: with an unsaved Live Set the device no longer loads a file list from somewhere else on the computer.
+- `syncSuite.video.source`: the crop shader is now part of the patcher. It was a separate file that was missing from the package.
+- Example project: the release zip carries its own copy of the devices, so `ableton-project/` opens from any location; added `syncSuite-help2.als`; removed four unused audio files.
+- Score server dependencies updated (express 5.3.0, ws 8.22.0).
+- Installation instructions explain the difference between the release zip and cloning the repository.
+
 ### v0.0.2
 
 - New visual style (HOOU design) for all Max for Live devices, their INFO windows, the help patchers, the tutorials, the Overview patcher and the PDF documentation; the package now has its own icon.
