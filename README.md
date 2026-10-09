@@ -93,7 +93,7 @@ The devices in these sets still need the Max package from step 2. If you cloned 
 
 ### v0.0.3
 
-- The Max for Live devices are now frozen (all except `ScoreSync.server`), so they carry what they need and work in Live without the Max package. `ScoreSync.server` still needs the syncSuite Max package and the [odot](https://github.com/CNMAT/CNMAT-odot/releases) package; its INFO window and the one of `ScoreSync.part` now say that the package is required.
+- The Max for Live devices are now frozen (all except `ScoreSync.server`), so they carry what they need and work in Live without the Max package. `ScoreSync.server` still needs the syncSuite Max package; its INFO window and the one of `ScoreSync.part` now say so. An unused leftover subpatcher was removed from it, so it no longer asks for the odot package.
 - The automatable parameters of `LiveSync`, `OSCSync`, `ScoreSync.part`, `ScoreSync.server` and `VideoSyncOutput` have proper names (`send_tempo`, `page`, `source1_scale`…) instead of `live.toggle[3]`. Live Sets saved with an earlier version will load these parameters at their default values.
 - `VideoSync`: with an unsaved Live Set the device no longer loads a file list from somewhere else on the computer.
 - `syncSuite.video.source`: the crop shader is now part of the patcher. It was a separate file that was missing from the package.
