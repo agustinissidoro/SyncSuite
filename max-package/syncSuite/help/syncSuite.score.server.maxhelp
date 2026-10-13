@@ -3,13 +3,13 @@
         "fileversion": 1,
         "appversion": {
             "major": 9,
-            "minor": 1,
-            "revision": 4,
+            "minor": 2,
+            "revision": 0,
             "architecture": "x64",
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 506.0, 234.0, 955.0, 853.0 ],
+        "rect": [ 120.0, 205.0, 955.0, 853.0 ],
         "description": "Node-for-Max server that streams a page-turning score to remote devices.",
         "digest": "Score server for remote page-turning devices",
         "showrootpatcherontab": 0,
@@ -25,13 +25,13 @@
                         "fileversion": 1,
                         "appversion": {
                             "major": 9,
-                            "minor": 1,
-                            "revision": 4,
+                            "minor": 2,
+                            "revision": 0,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 506.0, 260.0, 955.0, 827.0 ],
+                        "rect": [ 0.0, 26.0, 955.0, 827.0 ],
                         "showontab": 1,
                         "boxes": [
                             {
@@ -87,8 +87,8 @@
                                         "fileversion": 1,
                                         "appversion": {
                                             "major": 9,
-                                            "minor": 1,
-                                            "revision": 4,
+                                            "minor": 2,
+                                            "revision": 0,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -154,11 +154,13 @@
                                 "box": {
                                     "dontreplace": 1,
                                     "id": "obj-43",
+                                    "linecount": 4,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 560.0, 701.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 560.0, 701.0, 50.0, 62.0 ],
+                                    "text": "192.168.178.192:8111/mozart"
                                 }
                             },
                             {
@@ -169,7 +171,8 @@
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 625.0, 722.0, 50.0, 22.0 ]
+                                    "patching_rect": [ 625.0, 722.0, 50.0, 22.0 ],
+                                    "text": "0"
                                 }
                             },
                             {
@@ -336,8 +339,8 @@
                                         "fileversion": 1,
                                         "appversion": {
                                             "major": 9,
-                                            "minor": 1,
-                                            "revision": 4,
+                                            "minor": 2,
+                                            "revision": 0,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -585,11 +588,13 @@
                                 "box": {
                                     "dontreplace": 1,
                                     "id": "obj-15",
+                                    "linecount": 2,
                                     "maxclass": "message",
                                     "numinlets": 2,
                                     "numoutlets": 1,
                                     "outlettype": [ "" ],
-                                    "patching_rect": [ 414.0, 264.0, 111.0, 22.0 ]
+                                    "patching_rect": [ 414.0, 264.0, 111.0, 35.0 ],
+                                    "text": "192.168.178.192:8111"
                                 }
                             },
                             {
@@ -720,46 +725,43 @@
                             },
                             {
                                 "box": {
+                                    "autofit": 1,
                                     "id": "obj-9501",
-                                    "maxclass": "fpic",
-                                    "pic": "syncSuite_icon.png",
-                                    "autofit": 1,
                                     "ignoreclick": 1,
+                                    "maxclass": "fpic",
                                     "numinlets": 1,
                                     "numoutlets": 1,
                                     "outlettype": [ "jit_matrix" ],
-                                    "patching_rect": [ 861.5, 14.166666666666666, 44.0, 44.0 ]
+                                    "patching_rect": [ 861.5, 14.166666666666666, 44.0, 44.0 ],
+                                    "pic": "syncSuite_icon.png"
                                 }
                             },
                             {
                                 "box": {
+                                    "autofit": 1,
                                     "id": "obj-9502",
-                                    "maxclass": "fpic",
-                                    "pic": "HOOU_2023_farbig.png",
-                                    "autofit": 1,
                                     "ignoreclick": 1,
+                                    "maxclass": "fpic",
                                     "numinlets": 1,
                                     "numoutlets": 1,
                                     "outlettype": [ "jit_matrix" ],
-                                    "patching_rect": [ 834.0, 66.33333333333333, 99.0, 30.5 ]
+                                    "patching_rect": [ 834.0, 66.33333333333333, 99.0, 30.5 ],
+                                    "pic": "HOOU_2023_farbig.png"
                                 }
                             },
                             {
                                 "box": {
-                                    "id": "obj-9503",
-                                    "maxclass": "panel",
-                                    "mode": 0,
                                     "angle": 270.0,
-                                    "proportion": 0.5,
                                     "background": 1,
                                     "bgcolor": [ 0.969, 0.969, 0.976, 1.0 ],
                                     "bordercolor": [ 0.969, 0.969, 0.976, 1.0 ],
-                                    "border": 0,
-                                    "rounded": 8,
-                                    "ignoreclick": 1,
+                                    "id": "obj-9503",
+                                    "maxclass": "panel",
+                                    "mode": 0,
                                     "numinlets": 1,
                                     "numoutlets": 0,
-                                    "patching_rect": [ 826.0, 6.0, 115.0, 99.0 ]
+                                    "patching_rect": [ 826.0, 6.0, 115.0, 99.0 ],
+                                    "proportion": 0.5
                                 }
                             }
                         ],
@@ -891,8 +893,8 @@
                         "fileversion": 1,
                         "appversion": {
                             "major": 9,
-                            "minor": 1,
-                            "revision": 4,
+                            "minor": 2,
+                            "revision": 0,
                             "architecture": "x64",
                             "modernui": 1
                         },
@@ -1168,8 +1170,8 @@
                                         "fileversion": 1,
                                         "appversion": {
                                             "major": 9,
-                                            "minor": 1,
-                                            "revision": 4,
+                                            "minor": 2,
+                                            "revision": 0,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1241,8 +1243,8 @@
                                         "fileversion": 1,
                                         "appversion": {
                                             "major": 9,
-                                            "minor": 1,
-                                            "revision": 4,
+                                            "minor": 2,
+                                            "revision": 0,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1583,8 +1585,8 @@
                                         "fileversion": 1,
                                         "appversion": {
                                             "major": 9,
-                                            "minor": 1,
-                                            "revision": 4,
+                                            "minor": 2,
+                                            "revision": 0,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -1769,8 +1771,8 @@
                                         "fileversion": 1,
                                         "appversion": {
                                             "major": 9,
-                                            "minor": 1,
-                                            "revision": 4,
+                                            "minor": 2,
+                                            "revision": 0,
                                             "architecture": "x64",
                                             "modernui": 1
                                         },
@@ -2198,15 +2200,37 @@
                         "fileversion": 1,
                         "appversion": {
                             "major": 9,
-                            "minor": 1,
-                            "revision": 4,
+                            "minor": 2,
+                            "revision": 0,
                             "architecture": "x64",
                             "modernui": 1
                         },
                         "classnamespace": "box",
-                        "rect": [ 0.0, 26.0, 955.0, 827.0 ],
+                        "rect": [ 120.0, 231.0, 955.0, 827.0 ],
                         "showontab": 2,
                         "boxes": [
+                            {
+                                "box": {
+                                    "id": "obj-1",
+                                    "maxclass": "toggle",
+                                    "numinlets": 1,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "int" ],
+                                    "parameter_enable": 0,
+                                    "patching_rect": [ 795.0, 243.0, 24.0, 24.0 ]
+                                }
+                            },
+                            {
+                                "box": {
+                                    "id": "obj-3",
+                                    "maxclass": "message",
+                                    "numinlets": 2,
+                                    "numoutlets": 1,
+                                    "outlettype": [ "" ],
+                                    "patching_rect": [ 795.0, 295.0, 83.0, 22.0 ],
+                                    "text": "invertColor $1"
+                                }
+                            },
                             {
                                 "box": {
                                     "id": "obj-66",
@@ -2435,6 +2459,12 @@
                         "lines": [
                             {
                                 "patchline": {
+                                    "destination": [ "obj-3", 0 ],
+                                    "source": [ "obj-1", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
                                     "destination": [ "obj-9", 0 ],
                                     "source": [ "obj-11", 0 ]
                                 }
@@ -2488,6 +2518,13 @@
                                 "patchline": {
                                     "destination": [ "obj-24", 0 ],
                                     "source": [ "obj-27", 0 ]
+                                }
+                            },
+                            {
+                                "patchline": {
+                                    "destination": [ "obj-6", 0 ],
+                                    "midpoints": [ 804.5, 383.3125, 37.5, 383.3125 ],
+                                    "source": [ "obj-3", 0 ]
                                 }
                             },
                             {
