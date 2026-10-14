@@ -16,7 +16,7 @@ Max on each run, same as at first launch.
 ## Setup
 
 ```
-cd js
+cd javascript
 npm install
 ```
 

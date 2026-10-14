@@ -91,6 +91,12 @@ The devices in these sets still need the Max package from step 2. If you cloned 
 
 ## Release notes
 
+### v0.0.4
+
+- Fixed `syncSuite.score.server` and `syncSuite.netscan` not finding their scripts on a fresh install. The Node scripts were in a `js/` folder, which Max does not add to the search path; they are now in `javascript/`, a folder Max does search.
+- Small updates to the `syncSuite.score.server` help patcher, the "Centralizing Multimedia Control" tutorial and `OSCSync`.
+- Package version set to 0.0.4.
+
 ### v0.0.3
 
 - The Max for Live devices are now frozen (all except `ScoreSync.server`), so they carry what they need and work in Live without the Max package. `ScoreSync.server` still needs the syncSuite Max package; its INFO window and the one of `ScoreSync.part` now say so. An unused leftover subpatcher was removed from it, so it no longer asks for the odot package.
