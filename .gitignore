@@ -13,3 +13,7 @@ Thumbs.db
 *.amxd.bak
 # Local release tooling
 /scripts/
+
+# Devices kept out of the repository
+/m4l-devices/syncSuite/PlayerSync.amxd
+/m4l-devices/syncSuite/MultiPlayerSync.amxd
