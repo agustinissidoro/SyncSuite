@@ -93,8 +93,11 @@ The devices in these sets still need the Max package from step 2. If you cloned 
 
 ### v0.0.4
 
-- Fixed `syncSuite.score.server` and `syncSuite.netscan` not finding their scripts on a fresh install. The Node scripts were in a `js/` folder, which Max does not add to the search path; they are now in `javascript/`, a folder Max does search.
-- Small updates to the `syncSuite.score.server` help patcher, the "Centralizing Multimedia Control" tutorial and `OSCSync`.
+- Fixed `syncSuite.score.server` and `syncSuite.netscan` not finding their Node scripts on a fresh install, so the score server did not start (in the help patchers, the tutorials and the `ScoreSync.server` device). The scripts were in a `js/` folder, which Max does not add to its search path; they are now in `javascript/`, a folder Max does search. The Node dependencies moved with them, so nothing has to be installed. When upgrading from v0.0.3, replace the whole `syncSuite` folder instead of merging it into the old one, so the old `js/` folder doesn't stay behind.
+- "Centralizing Multimedia Control" tutorial: the nested routing example is simpler. The message no longer starts with a redundant `media` (the `s media` / `r media` pair already carries that name), the extra `route media` is gone, and the routed value is now shown in a message box.
+- `syncSuite.score.server` help: the "messages to server" tab has a toggle for `invertColor`.
+- `OSCSync`: adjusted the colour of the "num cues" display.
+- No parameters were renamed: Live Sets saved with v0.0.3 open as they are.
 - Package version set to 0.0.4.
 
 ### v0.0.3
