@@ -17,3 +17,12 @@ Thumbs.db
 # Devices kept out of the repository
 /m4l-devices/syncSuite/PlayerSync.amxd
 /m4l-devices/syncSuite/MultiPlayerSync.amxd
+
+# jit.gl.mask / jit.gl.maskrender / jit.mask: private objects built from ../jit.gl.mask-package, never uploaded
+/max-package/syncSuite/externals/jit.gl.mask*
+/max-package/syncSuite/externals/jit.mask*
+/max-package/syncSuite/jitter/jit.gl.mask*
+/max-package/syncSuite/help/jit.gl.mask*
+/max-package/syncSuite/help/jit.mask*
+/max-package/syncSuite/docs/refpages/jit.gl.mask*
+/max-package/syncSuite/docs/refpages/jit.mask*
